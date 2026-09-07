@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80" role="img" aria-label="marketing">
+  <circle cx="40" cy="40" r="40" fill="#CED2D7"/>
+  <g fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M23 40 L40 25 L57 40"/>
+    <path d="M28 38 V55 H52 V38"/>
+    <path d="M37 55 V46 H43 V55"/>
+  </g>
+</svg>

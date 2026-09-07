@@ -1,0 +1,414 @@
+/* =============================================================
+   common.css
+   - 리셋(reset) + 사이트 전체 공통 스타일
+   - 헤더 / 푸터 / 이미지 슬롯 / 컨테이너 등 모든 페이지 공용 요소
+   ============================================================= */
+
+/* -----------------------------------------------------------
+   RESET (브라우저 기본 스타일 초기화)
+   ----------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-base);
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-body);
+  line-height: var(--lh-normal);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+input {
+  font-family: inherit;
+}
+
+/* 키보드 포커스 표시 (접근성) */
+:focus-visible {
+  outline: 2px solid var(--color-main);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* -----------------------------------------------------------
+   LAYOUT (공통 레이아웃)
+   ----------------------------------------------------------- */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding-left: var(--container-padding);
+  padding-right: var(--container-padding);
+}
+
+/* 섹션 공통 세로 여백 */
+section {
+  padding-top: var(--section-gap);
+  padding-bottom: var(--section-gap);
+}
+
+/* 섹션 공통 제목 */
+.section-title {
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+  letter-spacing: -0.02em;
+}
+
+/* 화면에서는 숨기고 스크린리더만 읽는 텍스트 (접근성) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* -----------------------------------------------------------
+   IMAGE SLOT (이미지 자리표시자)
+   - 실제 이미지 대신 사용하는 빈 슬롯입니다.
+   - 추후 <img> 로 교체하거나 background-image 를 넣으면 됩니다.
+   ----------------------------------------------------------- */
+.img-slot {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-bg-gray);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  /* 대각선 패턴으로 "비어있는 슬롯"임을 표시 */
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 12px,
+    rgba(0, 0, 0, 0.02) 12px,
+    rgba(0, 0, 0, 0.02) 24px
+  );
+}
+
+.img-slot__label {
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.1em;
+  color: var(--color-text-sub);
+  user-select: none;
+}
+
+/* 어두운 버전 (Before 등) */
+.img-slot--dark {
+  background-color: var(--color-dark-slot);
+}
+.img-slot--dark .img-slot__label {
+  color: var(--color-dark-slot-label);
+}
+
+/* 구체(원형) 슬롯 - 히어로/슬로건 */
+.img-slot--sphere {
+  border-radius: var(--radius-full);
+  background-image: none;
+  background: var(--gradient-main);
+  box-shadow: var(--shadow-sphere);
+}
+.img-slot--sphere .img-slot__label {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* 아이콘 슬롯 (정사각형) */
+.img-slot--icon {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-md);
+}
+
+/* 작은 썸네일 */
+.img-slot--thumb {
+  border-radius: var(--radius-sm);
+}
+
+/* =============================================================
+   HEADER (공통 헤더)
+   ============================================================= */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  z-index: var(--z-header);
+  background-color: var(--color-header-bg);
+  backdrop-filter: var(--header-saturate) var(--header-blur);
+  -webkit-backdrop-filter: var(--header-saturate) var(--header-blur);
+  border-bottom: 1px solid var(--color-line);
+  transition: background-color var(--duration-normal) var(--ease-out),
+    transform var(--duration-normal) var(--ease-out),
+    opacity var(--duration-normal) var(--ease-out);
+}
+
+/* 첫 섹션에서는 헤더를 숨김 (위로 슬라이드 아웃) */
+.header.is-hidden {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header__logo {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-bold);
+  letter-spacing: -0.02em;
+}
+.header__logo-point {
+  color: var(--color-main);
+}
+
+.header__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--content-gap);
+}
+
+.header__link {
+  position: relative;
+  font-size: var(--fs-body);
+  font-weight: var(--fw-medium);
+  color: var(--color-text);
+  transition: color var(--duration-fast) var(--ease-out);
+}
+.header__link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0;
+  height: 2px;
+  background-color: var(--color-main);
+  transition: width var(--duration-normal) var(--ease-out);
+}
+.header__link:hover {
+  color: var(--color-main);
+}
+.header__link:hover::after {
+  width: 100%;
+}
+
+/* CONTACT 버튼 (검정 알약형) */
+.header__cta {
+  padding: 9px 20px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-text);
+  color: var(--color-white);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-medium);
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+.header__cta:hover {
+  background-color: var(--color-main);
+}
+
+/* 모바일 햄버거 버튼 */
+.header__toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  width: 28px;
+  height: 24px;
+  justify-content: center;
+}
+.header__toggle span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-text);
+  border-radius: var(--radius-full);
+  transition: transform var(--duration-normal) var(--ease-out),
+    opacity var(--duration-fast) var(--ease-out);
+}
+/* 햄버거 -> X 변형 */
+.header.is-open .header__toggle span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.header.is-open .header__toggle span:nth-child(2) {
+  opacity: 0;
+}
+.header.is-open .header__toggle span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* =============================================================
+   FOOTER (공통 푸터)
+   ============================================================= */
+.footer {
+  position: relative;
+  z-index: 1; /* 마케팅 구체가 푸터 뒤로 들어가도록 푸터를 앞에 둠 */
+  background-color: var(--color-text);
+  color: var(--color-white);
+  padding-top: 80px;
+  padding-bottom: 40px;
+}
+.footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--content-gap);
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.footer__brand {
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-bold);
+  letter-spacing: -0.02em;
+}
+.footer__brand-point {
+  color: var(--color-sub);
+}
+.footer__contact {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--color-on-dark);
+  font-size: var(--fs-body);
+}
+.footer__contact a:hover {
+  color: var(--color-white);
+}
+.footer__copy {
+  width: 100%;
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid var(--color-on-dark-line);
+  font-size: var(--fs-caption);
+  color: var(--color-on-dark-copy);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.footer__to-top {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  border: 1px solid var(--color-on-dark-line);
+  border-radius: var(--radius-full);
+  color: var(--color-on-dark);
+  font-weight: var(--fw-bold);
+  white-space: nowrap;
+  transition: color 0.25s, border-color 0.25s;
+}
+.footer__to-top:hover {
+  color: var(--color-white);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* =============================================================
+   반응형 - 공통 요소
+   ============================================================= */
+
+/* 태블릿 이하 */
+@media (max-width: 1199px) {
+  .img-slot--icon {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* 모바일 (767px 이하) */
+@media (max-width: 767px) {
+  /* 헤더: 데스크탑 메뉴 숨기고 햄버거 표시 */
+  .header__toggle {
+    display: flex;
+  }
+  .header__nav {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    width: 100%;
+    flex-direction: column;
+    gap: 0;
+    background-color: var(--color-bg);
+    border-bottom: 1px solid var(--color-line);
+    /* 닫힌 상태: 위로 접힘 */
+    transform: translateY(-150%);
+    transition: transform var(--duration-normal) var(--ease-out);
+  }
+  .header.is-open .header__nav {
+    transform: translateY(0);
+  }
+  .header__link {
+    width: 100%;
+    padding: 18px var(--container-padding);
+    border-bottom: 1px solid var(--color-line);
+  }
+  .header__link::after {
+    display: none;
+  }
+  /* 모바일에선 CONTACT 도 일반 메뉴 항목처럼 표시 */
+  .header__cta {
+    width: 100%;
+    padding: 18px var(--container-padding);
+    border-radius: 0;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    text-align: left;
+  }
+  .header__cta:hover {
+    background-color: var(--color-bg-soft);
+  }
+
+  /* 푸터: 세로 스택 */
+  .footer__inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

@@ -1,0 +1,198 @@
+/* =============================================================
+   variables.css
+   디자인 토큰(전역 변수) 모음 파일
+   - 모든 색상 / 간격 / 폰트 / 라운드 / 애니메이션 값을 여기서 관리합니다.
+   - 값을 바꾸고 싶을 때는 이 파일만 수정하면 사이트 전체에 반영됩니다.
+   ============================================================= */
+
+:root {
+  /* -----------------------------------------------------------
+     COLOR (색상)
+     ----------------------------------------------------------- */
+  /* 브랜드 팔레트 (주 사용 색상) */
+  --color-main1: #01033E;         /* 메인 컬러 1 (딥 네이비) */
+  --color-main2: #3700FF;         /* 메인 컬러 2 (퍼플) */
+  --color-sub1: #9780FF;          /* 서브 컬러 1 (연퍼플) */
+  --color-sub2: #D4D6E2;          /* 서브 컬러 2 (라이트 그레이) */
+
+  /* 폰트 컬러 (본문 텍스트) */
+  --color-font1: #040813;         /* 폰트 컬러 1 (기본 텍스트) */
+  --color-font2: #777777;         /* 폰트 컬러 2 (보조 텍스트 / 회색) */
+
+  /* 역할 기반 토큰 (위 팔레트를 매핑) */
+  --color-main: var(--color-main2);   /* 메인 강조 색 (퍼플) */
+  --color-sub: var(--color-sub1);     /* 서브 강조 색 */
+  --color-point: var(--color-sub2);   /* 포인트/연한 색 */
+  --color-bg: #FFFFFF;            /* 기본 배경색 */
+  --color-bg-soft: #F4F5FA;       /* 살짝 톤 들어간 배경 */
+  --color-bg-gray: #EDEDED;       /* 이미지 슬롯/카드 배경 */
+  --color-text: var(--color-font1);     /* 기본 텍스트 색 (#040813) */
+  --color-text-sub: var(--color-font2); /* 보조 텍스트 색 (#777777) */
+  --color-line: #E5E7EB;          /* 구분선 색 */
+  --color-white: #FFFFFF;         /* 흰색 (버튼/푸터 글자 등) */
+  --color-black: #000000;         /* 검정 (디바이스 목업 베젤 등) */
+
+  /* 어두운 배경 계열 (Before 슬롯 / 프로젝트 비주얼 / 디바이스) */
+  --color-dark-slot: #2A2A2A;     /* 어두운 이미지 슬롯 배경 */
+  --color-dark-slot-label: #9CA3AF; /* 어두운 슬롯 라벨 글자 */
+  --color-dark-visual: #1B2530;   /* 프로젝트 좌측 비주얼 기본 배경 */
+  --color-meta-bar: var(--color-main1); /* MODOO 하단 정보 바 배경(딥 네이비) */
+
+  /* MODOO(모두매쓰) 섹션 배경: 옅은 블루그레이 그라데이션 (시스템치과처럼) */
+  --gradient-modoo: linear-gradient(160deg, #F4F8FB 0%, #E4EEF6 100%);
+
+  /* TRACKSY 앱 프로젝트 */
+  --color-tracksy: #7C5CFF;       /* 앱 브랜드 퍼플 (사이트 퍼플과 조화) */
+  --gradient-tracksy: linear-gradient(160deg, #F5F2FF 0%, #E9E3FF 100%); /* 앱 섹션 배경 */
+  --shadow-app: 0 30px 70px rgba(60, 30, 160, 0.22); /* 앱 폰 목업 그림자 */
+
+  /* 시스템치과 웹 리뉴얼 프로젝트 (TRACKSY형 레이아웃)
+     브랜드 컬러: Burgundy #A12D2E / Soft Red #D33B3B / Light Gray #E9E6E2 */
+  --color-dental: #A12D2E;        /* 메인 액센트: 버건디 레드 */
+  --color-dental-soft: #D33B3B;   /* 보조: 소프트 레드 (hover 등) */
+  --color-dental-bar: #5A1C1D;    /* 하단 정보 바: 딥 버건디 (흰 글자/스와치 대비용) */
+  --gradient-dental: linear-gradient(160deg, #F7F5F3 0%, #E9E6E2 100%); /* 라이트 그레이 배경 */
+  --shadow-dental: 0 30px 70px rgba(120, 30, 30, 0.18); /* 치과 디바이스 그림자(레드 톤) */
+
+  /* 흰색 기반 반투명(다크 배경 위 텍스트/라인용) */
+  --color-on-dark: rgba(255, 255, 255, 0.7);   /* 다크 배경 위 보조 텍스트 */
+  --color-on-dark-faint: rgba(255, 255, 255, 0.55); /* 더 옅은 라벨 */
+  --color-on-dark-line: rgba(255, 255, 255, 0.15);  /* 다크 배경 위 구분선 */
+  --color-on-dark-copy: rgba(255, 255, 255, 0.5);   /* 카피라이트 글자 */
+  --color-on-dark-strong: rgba(255, 255, 255, 0.76); /* modoo dt 라벨 */
+
+  /* 헤더 글래스(반투명 + 블러) */
+  --color-header-bg: rgba(255, 255, 255, 0.7); /* 헤더 배경(반투명 흰색) */
+  --header-blur: blur(12px);      /* 헤더 배경 블러 강도 */
+  --header-saturate: saturate(180%); /* 헤더 배경 채도 */
+
+  /* 메인 그라데이션 (히어로 구체 등) */
+  --gradient-main: linear-gradient(135deg, #9780FF 0%, #3700FF 50%, #01033E 100%);
+
+  /* 그림자 */
+  --shadow-sphere: 0 30px 80px rgba(124, 58, 237, 0.35); /* 히어로 구체 그림자 */
+  --shadow-knob: 0 2px 6px rgba(0, 0, 0, 0.18);          /* 토글 손잡이 그림자 */
+
+  /* -----------------------------------------------------------
+     SPACING (간격)
+     ----------------------------------------------------------- */
+  --section-gap: 160px;           /* 섹션과 섹션 사이 세로 간격 */
+  --container-padding: 80px;      /* 컨테이너 좌우 안쪽 여백 */
+  --content-gap: 40px;            /* 콘텐츠 요소 사이 간격 */
+  --container-max: 1720px;        /* 콘텐츠 최대 너비 */
+
+  /* -----------------------------------------------------------
+     TYPOGRAPHY (타이포그래피)
+     ----------------------------------------------------------- */
+  /* 전역 폰트 패밀리 (Pretendard) */
+  --font-base: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui,
+    "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+
+  /* 폰트 크기 (clamp 로 반응형 자동 조절) */
+  --fs-display: clamp(48px, 9vw, 120px);  /* PORTFOLIO 같은 초대형 텍스트 */
+  --fs-h1: clamp(36px, 5vw, 64px);        /* 대제목 */
+  --fs-h2: clamp(28px, 3.5vw, 44px);      /* 섹션 제목 */
+  --fs-h3: clamp(20px, 2vw, 28px);        /* 소제목 */
+  --fs-body: clamp(15px, 1.1vw, 18px);    /* 본문 */
+  --fs-caption: clamp(12px, 0.9vw, 14px); /* 캡션/작은 글씨 */
+  --fs-slogan: 140px;                     /* 히어로 슬로건(SLOGAN) 텍스트 크기 */
+  --fs-modoo-title: clamp(26px, 2.5vw, 38px); /* MODOO 프로젝트 제목 */
+  --fs-modoo-btn: clamp(14px, 1.1vw, 18px);   /* MODOO 버튼(CTA) 글자 */
+
+  /* 폰트 굵기 */
+  --fw-light: 300;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-bold: 700;
+
+  /* 행간 */
+  --lh-tight: 1.1;
+  --lh-normal: 1.5;
+  --lh-loose: 1.8;
+
+  /* -----------------------------------------------------------
+     RADIUS (모서리 둥글기)
+     ----------------------------------------------------------- */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 40px;
+  --radius-full: 9999px;          /* 완전한 원/알약 모양 */
+  --radius-device: 18px;          /* MODOO 디바이스 목업 상단 라운드 */
+  --device-bezel: clamp(12px, 1.6vw, 20px); /* 디바이스 목업 베젤(테두리) 두께 */
+
+  /* -----------------------------------------------------------
+     ANIMATION (애니메이션 속도)
+     ----------------------------------------------------------- */
+  --duration-fast: 0.2s;
+  --duration-normal: 0.4s;
+  --duration-slow: 0.8s;
+  --scroll-duration: 8s;          /* 긴 이미지 hover 자동 스크롤 시간(길수록 천천히) */
+  --profile-cross: 0.5s;          /* 프로필 사진 hover 교차(pro_01→pro_02) 페이드 시간 */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);   /* 부드럽게 감속 */
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* -----------------------------------------------------------
+     LAYOUT (레이아웃 보조)
+     ----------------------------------------------------------- */
+  --header-height: 72px;          /* 헤더 높이 */
+  --z-header: 1000;               /* 헤더 z-index */
+
+  /* PROFILE 레이아웃 (사진 열 너비 / 사진-정보 간격)
+     - Experience 섹션 정렬에도 같은 값을 재사용합니다.
+       (Experience 본문이 Contact/Tools 열과 같은 라인에서 시작) */
+  --profile-photo: 320px;                       /* 프로필 사진 열 너비 */
+  --profile-gap: calc(var(--content-gap) * 1.5); /* 사진 ↔ 정보 간격 */
+
+  /* 프로필 ↔ 경력(Experience) 사이 세로 간격
+     - 두 섹션은 같은 사람 정보라 일반 섹션 간격보다 좁게 둡니다.
+     - 값을 키우면 사이가 넓어지고, 줄이면 좁아집니다. */
+  --gap-profile-exp: clamp(16px, 3vw, 44px);
+
+  /* 토글 스위치(Before/After) 크기 — 손잡이 이동거리는 자동 계산됩니다. */
+  --toggle-w: 64px;     /* 전체 너비 */
+  --toggle-h: 32px;     /* 전체 높이 */
+  --toggle-knob: 24px;  /* 손잡이 원 지름 */
+  --toggle-pad: 4px;    /* 손잡이 안쪽 여백 */
+}
+
+/* =============================================================
+   반응형 변수 재정의
+   - 화면 크기에 따라 간격/여백만 줄여줍니다.
+   - 폰트는 위에서 clamp 로 처리되므로 따로 건드리지 않습니다.
+   ============================================================= */
+
+/* 태블릿 (768 ~ 1199px) */
+@media (max-width: 1199px) {
+  :root {
+    --section-gap: 120px;
+    --container-padding: 48px;
+    --content-gap: 32px;
+    --profile-photo: 260px;            /* 태블릿: 사진 열 축소 */
+    --profile-gap: var(--content-gap); /* 태블릿: 간격 축소 */
+  }
+}
+
+/* 모바일 (767px 이하) */
+@media (max-width: 767px) {
+  :root {
+    --section-gap: 80px;
+    --container-padding: 20px;
+    --content-gap: 24px;
+    --header-height: 60px;
+    --toggle-w: 56px;     /* 모바일: 토글 살짝 더 작게 */
+    --toggle-h: 30px;
+    --toggle-knob: 22px;
+
+    /* 모바일 가독성: 좁은 화면에서 vw 값이 작아 글자가 너무 작아지는 문제 보정
+       → 최소값을 키우고 vw 기준을 화면폭에 맞게 재설정 */
+    --fs-display: clamp(44px, 13vw, 72px);  /* 초대형 텍스트 */
+    --fs-h1: clamp(30px, 8.5vw, 46px);      /* 대제목 */
+    --fs-h2: clamp(26px, 7vw, 36px);        /* 섹션 제목 */
+    --fs-h3: clamp(19px, 5.5vw, 26px);      /* 소제목 */
+    --fs-body: clamp(16px, 4.4vw, 18px);    /* 본문 */
+    --fs-caption: clamp(13px, 3.6vw, 15px); /* 캡션/작은 글씨 */
+    --fs-modoo-title: clamp(24px, 6.5vw, 32px); /* MODOO 프로젝트 제목 */
+    --fs-modoo-btn: clamp(15px, 4vw, 17px);     /* MODOO 버튼 글자 */
+  }
+}

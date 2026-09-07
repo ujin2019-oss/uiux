@@ -1,0 +1,35 @@
+<!-- =========================================================
+     공통 헤더 컴포넌트
+     - 모든 페이지에서 동일하게 사용됩니다.
+     - 메뉴를 추가/수정하려면 아래 <a> 항목만 고치면 됩니다.
+     ========================================================= -->
+<header class="header" id="header">
+  <div class="container header__inner">
+    <!-- 로고 (클릭 시 프로필 섹션으로 이동) -->
+    <a class="header__logo" href="#profile" aria-label="프로필로 이동">
+      PORT<span class="header__logo-point">FOLIO</span>
+    </a>
+
+    <!-- 메인 메뉴 (링크 대상 섹션 id 는 필요에 맞게 수정하세요) -->
+    <nav class="header__nav" aria-label="주요 메뉴">
+      <a class="header__link" href="#profile">PROFILE</a>
+      <a class="header__link" href="#allproject">ALL</a>
+      <a class="header__link" href="#jejustay">DESIGN</a>
+      <a class="header__link" href="./marketing_case.html" target="_blank" rel="noopener">MARKETING</a>
+      <!-- <a class="header__link" href="./data_design.html" target="_blank" rel="noopener">DATA</a> -->
+      <a class="header__cta" href="#footer">CONTACT</a>
+    </nav>
+
+    <!-- 모바일 햄버거 버튼 -->
+    <button
+      type="button"
+      class="header__toggle"
+      id="headerToggle"
+      aria-label="메뉴 열기"
+      aria-expanded="false"
+      aria-controls="header"
+    >
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>

@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<!--
+  =====================================================================
+  MARKETING — On·Off Line Brand 마케팅 포트폴리오 (서브페이지)
+  - 순수 HTML + Vanilla CSS + Vanilla JS (외부 CSS 라이브러리 미사용)
+  - 스크롤 등장: IntersectionObserver (.is-inview)
+  - 출처 콘텐츠: [마케팅 포트폴리오 PPT] 유진 — 내 포트폴리오 톤에 맞춰 재구성
+  - 시그니처 그라데이션(민트→틸→퍼플)은 원본 PPT 아이덴티티를 계승
+  - 수정: <style> 최상단 :root 변수 / 이미지 경로 ./images/marketing/*
+  =====================================================================
+-->
+<html lang="ko" class="js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MARKETING · On·Off Line Brand 마케팅 포트폴리오</title>
+  <meta name="description" content="상품 기획부터 카피라이팅·온라인 바이럴·오프라인 캠페인까지 — 데이터와 감성으로 '팔리는 경험'을 설계한 온·오프라인 브랜드 마케팅 포트폴리오" />
+
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+  <style>
+    /* =================================================================
+       1) DESIGN TOKENS — 마케팅 아이덴티티
+          · 포트폴리오 퍼플(#3700FF)을 강조색으로 유지해 사이트와 조화
+          · 그라데이션은 원본 PPT의 민트→틸→퍼플을 계승 (이 페이지만의 표정)
+       ================================================================= */
+    :root {
+      --color-primary: #3700FF;     /* 포트폴리오 메인 퍼플 (강조) */
+      --color-primary-deep: #2200A8;
+      --color-secondary: #9780FF;   /* 연퍼플 */
+      --color-mint: #34C6A8;        /* PPT 민트 */
+      --color-teal: #3C9BD8;        /* PPT 틸 */
+      --gradient-brand: linear-gradient(120deg, #34C6A8 0%, #3C9BD8 46%, #6B4BE6 100%);
+      --gradient-soft: linear-gradient(120deg, #E9FBF5 0%, #E8F3FC 50%, #EEEAFF 100%);
+
+      --color-light: #F4F2FF;       /* 옅은 퍼플 배경 */
+      --color-text: #131022;        /* 본문 텍스트 */
+      --color-white: #FFFFFF;
+      --color-bg: #FFFFFF;
+      --color-text-muted: #6A6680;
+      --color-line: rgba(19, 16, 34, 0.08);
+      --color-ink: #141229;         /* 다크 섹션 (딥 네이비퍼플) */
+
+      --font-base: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui,
+        "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      --fs-display: clamp(40px, 8vw, 96px);
+      --fs-h1: clamp(28px, 4.6vw, 56px);
+      --fs-h2: clamp(23px, 3vw, 40px);
+      --fs-h3: clamp(18px, 1.9vw, 24px);
+      --fs-body: clamp(15px, 1.15vw, 18px);
+      --fs-small: clamp(13px, 0.95vw, 15px);
+      --fs-num: clamp(38px, 6vw, 76px);
+
+      --fw-regular: 400; --fw-medium: 500; --fw-semibold: 600; --fw-bold: 700; --fw-black: 800;
+      --lh-tight: 1.12; --lh-normal: 1.6; --lh-loose: 1.85;
+
+      --section-gap: clamp(80px, 12vw, 168px);
+      --block-gap: clamp(28px, 4vw, 56px);
+      --pad-x: clamp(20px, 5vw, 88px);
+      --container: 1280px;
+      --container-wide: 1440px;
+
+      --radius-sm: 6px; --radius-md: 8px; --radius-lg: 10px; --radius-pill: 999px;
+      --shadow-card: 0 22px 54px rgba(70, 50, 150, 0.12);
+      --shadow-soft: 0 12px 32px rgba(70, 50, 150, 0.08);
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --header-h: 68px;
+    }
+
+    /* =================================================================
+       2) RESET
+       ================================================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body { font-family: var(--font-base); font-size: var(--fs-body); line-height: var(--lh-normal); color: var(--color-text); background: var(--color-bg); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; overflow-x: clip; }
+    img { display: block; max-width: 100%; height: auto; }
+    ul { list-style: none; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+    :focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+    /* =================================================================
+       3) 공통
+       ================================================================= */
+    .container { width: 100%; max-width: var(--container); margin: 0 auto; padding-left: var(--pad-x); padding-right: var(--pad-x); }
+    .section { padding-top: var(--section-gap); padding-bottom: var(--section-gap); }
+    .section--light { background: var(--color-light); }
+    .section--ink { background: var(--color-ink); color: #fff; }
+    .section--soft { background: var(--gradient-soft); }
+
+    .eyebrow { display: inline-flex; align-items: center; gap: 12px; font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-primary); margin-bottom: 18px; }
+    .eyebrow::before { content: ""; width: 26px; height: 2px; border-radius: 2px; background: var(--gradient-brand); }
+    .section--ink .eyebrow { color: #fff; }
+    .section-title { font-size: var(--fs-h1); font-weight: var(--fw-black); line-height: var(--lh-tight); letter-spacing: -0.025em; word-break: keep-all; }
+    .section-title em { font-style: normal; background: var(--gradient-brand); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .lead { max-width: 64ch; margin-top: 18px; line-height: var(--lh-loose); color: var(--color-text-muted); word-break: keep-all; }
+    .section--ink .lead { color: rgba(255,255,255,0.72); }
+    .head { max-width: 860px; margin-bottom: var(--block-gap); }
+
+    .btn { display: inline-flex; align-items: center; gap: 10px; padding: 15px 28px; border-radius: var(--radius-pill); font-weight: var(--fw-bold); transition: transform var(--ease) .3s, background-color .25s, color .25s, box-shadow .25s; }
+    .btn svg { width: 18px; height: 18px; }
+    .btn--primary { background: var(--color-primary); color: #fff; }
+    .btn--primary:hover { transform: translateY(-2px); box-shadow: 0 16px 34px rgba(55,0,255,0.34); }
+    .btn--ghost { border: 1.5px solid var(--color-primary); color: var(--color-primary); }
+    .btn--ghost:hover { background: var(--color-primary); color: #fff; }
+    .btn--grad { background: var(--gradient-brand); color: #fff; }
+    .btn--grad:hover { transform: translateY(-2px); box-shadow: 0 16px 34px rgba(60,90,200,0.34); }
+    .btn--light { background: rgba(255,255,255,0.14); color: #fff; border: 1px solid rgba(255,255,255,0.28); }
+    .btn--light:hover { background: rgba(255,255,255,0.24); }
+
+    /* 이미지 슬롯 (이미지 미배치 시 플레이스홀더) */
+    .img-slot { position: relative; width: 100%; display: flex; align-items: center; justify-content: center; background: #ECE9F6; border-radius: var(--radius-lg); overflow: hidden; color: #9A93B5; font-size: var(--fs-small); font-weight: var(--fw-bold); }
+    .img-slot:has(img) { background: none; }
+    .img-slot > img { display: block; width: 100%; height: auto; }
+
+    /* =================================================================
+       4) 플로팅 메뉴 (우측 하단) — 다른 서브페이지와 공통
+       ================================================================= */
+    .site-header { display: none; }
+    .float-menu { position: fixed; right: clamp(16px, 2.4vw, 32px); bottom: clamp(16px, 2.4vw, 32px); z-index: 1000; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+    .float-menu__btn { display: inline-flex; align-items: center; height: 56px; border-radius: 28px; overflow: hidden; box-shadow: var(--shadow-card); transition: transform .25s var(--ease), background-color .25s, border-color .25s, color .25s; }
+    .float-menu__btn:hover { transform: translateY(-2px); }
+    .fab__icon { width: 56px; height: 56px; flex: none; display: grid; place-items: center; }
+    .fab__icon svg { width: 22px; height: 22px; }
+    .fab__label { max-width: 0; opacity: 0; white-space: nowrap; font-size: var(--fs-small); font-weight: var(--fw-bold); padding-left: 0; transition: max-width .5s var(--ease), opacity .3s var(--ease), padding .5s var(--ease); }
+    .float-menu__btn:hover .fab__label, .float-menu__btn:focus-visible .fab__label { max-width: 220px; opacity: 1; padding-left: 20px; }
+    .float-menu__btn--ghost { background: rgba(255,255,255,0.95); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); color: var(--color-text); border: 1px solid var(--color-line); }
+    .float-menu__btn--ghost:hover { border-color: var(--color-primary); color: var(--color-primary); }
+    .float-menu__btn--live { background: var(--color-primary); color: #fff; }
+    .float-menu__btn--live:hover { background: var(--color-primary-deep); }
+
+    /* =================================================================
+       5) FOOTER — 다른 서브페이지와 공통 사이즈
+       ================================================================= */
+    .site-footer { background: var(--color-ink); color: rgba(255,255,255,0.7); padding: clamp(72px,9vw,104px) 0 48px; }
+    .site-footer .container { max-width: var(--container-wide); }
+    .site-footer__inner { display: flex; flex-wrap: wrap; gap: var(--block-gap); justify-content: space-between; align-items: flex-start; }
+    .site-footer__brand { font-size: 20px; font-weight: var(--fw-black); color: #fff; }
+    .site-footer__brand b { color: var(--color-secondary); }
+    .site-footer__tag { margin-top: 12px; font-size: 18px; color: rgba(255,255,255,0.55); max-width: 40ch; line-height: 1.5; }
+    .site-footer__label { font-size: 15px; font-weight: var(--fw-bold); letter-spacing: 0.08em; color: rgba(255,255,255,0.4); margin-bottom: 4px; }
+    .site-footer__contact { display: flex; flex-direction: column; gap: 8px; font-size: 18px; }
+    .site-footer__contact a:hover { color: #fff; }
+    .site-footer__copy { width: 100%; margin-top: 48px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.12); font-size: 15px; color: rgba(255,255,255,0.45); display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .site-footer__copy .to-top { display: inline-flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-weight: var(--fw-bold); border: 1px solid rgba(255,255,255,0.12); border-radius: var(--radius-pill); padding: 9px 16px; white-space: nowrap; transition: all .25s; }
+    .site-footer__copy .to-top:hover { color: #fff; border-color: rgba(255,255,255,0.3); }
+
+    /* =================================================================
+       01) HERO
+       ================================================================= */
+    .hero { position: relative; overflow: hidden; padding-top: calc(var(--header-h) + clamp(40px, 7vw, 96px)); padding-bottom: var(--section-gap); background: var(--gradient-soft); }
+    .hero::before, .hero::after { content: ""; position: absolute; border-radius: 50%; filter: blur(70px); opacity: 0.5; z-index: 0; pointer-events: none; }
+    .hero::before { width: 42vw; height: 42vw; top: -12vw; right: -8vw; background: radial-gradient(circle, rgba(52,198,168,0.55), transparent 70%); }
+    .hero::after { width: 38vw; height: 38vw; bottom: -14vw; left: -10vw; background: radial-gradient(circle, rgba(107,75,230,0.45), transparent 70%); }
+    .hero .container { position: relative; z-index: 1; max-width: var(--container-wide); }
+    .hero__grid { display: grid; grid-template-columns: 1fr; gap: var(--block-gap); align-items: center; }
+    .hero__eyebrow { display: inline-flex; align-items: center; gap: 12px; font-size: 15px; font-weight: var(--fw-bold); letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-primary); margin-bottom: 22px; }
+    .hero__eyebrow::before { content: ""; width: 30px; height: 2px; border-radius: 2px; background: var(--gradient-brand); }
+    .hero__title { font-size: clamp(32px, 4.4vw, 62px); font-weight: var(--fw-black); line-height: 1.14; letter-spacing: -0.025em; word-break: keep-all; }
+    .hero__title em { font-style: normal; background: var(--gradient-brand); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .hero__desc { margin-top: 24px; max-width: 540px; font-size: clamp(16px, 1.3vw, 21px); font-weight: var(--fw-medium); color: var(--color-text-muted); line-height: 1.7; word-break: keep-all; text-wrap: balance; }
+    .hero__stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(12px, 1.4vw, 18px); width: 100%; max-width: 580px; margin-top: var(--block-gap); }
+    .hstat { background: rgba(255,255,255,0.72); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,0.7); border-radius: var(--radius-md); padding: clamp(16px, 1.6vw, 22px); box-shadow: var(--shadow-soft); transition: transform .3s var(--ease), box-shadow .3s; }
+    .hstat:hover { transform: translateY(-4px); box-shadow: var(--shadow-card); }
+    .hstat__num { font-size: clamp(22px, 2.3vw, 30px); font-weight: var(--fw-black); background: var(--gradient-brand); -webkit-background-clip: text; background-clip: text; color: transparent; line-height: 1.1; letter-spacing: -0.02em; }
+    .hstat__label { font-size: clamp(15px, 1.1vw, 17px); font-weight: var(--fw-bold); color: var(--color-text); margin-top: 10px; }
+    .hstat__desc { font-size: 13px; color: var(--color-text-muted); margin-top: 5px; line-height: 1.45; word-break: keep-all; }
+    @media (max-width: 480px) { .hero__stats { grid-template-columns: 1fr; } }
+
+    /* 히어로 비주얼 — 상세페이지 포스터 + 제품 인서트 + 완판 배지 */
+    .hero__visual { position: relative; width: 100%; max-width: 380px; margin: 0 auto; aspect-ratio: 1 / 1.05; }
+    .hero__poster { position: absolute; left: 8%; top: 2%; width: 72%; border-radius: 10px; overflow: hidden; box-shadow: 0 34px 70px rgba(60,40,140,0.32); transform: rotate(-4deg); border: 6px solid #fff; }
+    .hero__poster img { width: 100%; display: block; }
+    .hero__insert { position: absolute; right: 2%; bottom: 6%; width: 46%; border-radius: 8px; overflow: hidden; box-shadow: 0 22px 44px rgba(60,40,140,0.28); transform: rotate(5deg); border: 5px solid #fff; background: #fff; }
+    .hero__insert img { width: 100%; display: block; }
+    .hero__badge { position: absolute; left: -2%; bottom: 20%; z-index: 3; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; width: clamp(90px, 11vw, 118px); height: clamp(90px, 11vw, 118px); color: #fff; transform: rotate(-8deg); }
+    .hero__badge-shape { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; filter: drop-shadow(0 12px 20px rgba(52,140,170,0.42)); }
+    .hero__badge b { position: relative; z-index: 1; font-size: clamp(19px, 2.2vw, 25px); font-weight: var(--fw-black); line-height: 1; }
+    .hero__badge span { position: relative; z-index: 1; font-size: 11px; font-weight: var(--fw-bold); letter-spacing: 0.12em; margin-top: 3px; opacity: 0.92; }
+
+    /* =================================================================
+       02) APPROACH (3 PILLAR — PPT INDEX 계승)
+       ================================================================= */
+    .pillars { display: grid; grid-template-columns: 1fr; gap: clamp(16px, 2vw, 24px); }
+    .pillar { background: #fff; border: 1px solid var(--color-line); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-soft); transition: transform var(--ease) .4s, box-shadow .3s; }
+    .pillar:hover { transform: translateY(-6px); box-shadow: var(--shadow-card); }
+    .pillar__head { display: flex; align-items: stretch; background: var(--gradient-brand); color: #fff; }
+    .pillar__no { display: grid; place-items: center; padding: 18px 22px; font-size: clamp(20px, 2vw, 26px); font-weight: var(--fw-black); background: rgba(0,0,0,0.16); clip-path: polygon(0 0, 100% 0, calc(100% - 16px) 100%, 0 100%); padding-right: 34px; }
+    .pillar__name { display: flex; align-items: center; padding: 18px 22px; font-size: var(--fs-h3); font-weight: var(--fw-bold); letter-spacing: -0.01em; }
+    .pillar__body { padding: clamp(22px, 2.6vw, 30px); }
+    .pillar__list { display: flex; flex-direction: column; gap: 12px; }
+    .pillar__list li { position: relative; padding-left: 22px; font-size: var(--fs-body); color: var(--color-text); font-weight: var(--fw-medium); }
+    .pillar__list li::before { content: ""; position: absolute; left: 2px; top: 0.62em; width: 8px; height: 8px; border-radius: 50%; background: var(--gradient-brand); }
+    .pillar__list small { display: block; margin-top: 3px; padding-left: 0; font-size: var(--fs-small); font-weight: var(--fw-regular); color: var(--color-text-muted); }
+
+    /* =================================================================
+       03) CASE — 팔리는 상품 기획 (Before → After + Sales Point)
+       ================================================================= */
+    .ba { display: grid; grid-template-columns: 1fr; gap: 18px; align-items: center; margin-top: var(--block-gap); }
+    .ba__card { position: relative; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-card); border: 1px solid var(--color-line); background: #fff; }
+    .ba__card img { width: 100%; display: block; }
+    .ba__tag { position: absolute; left: 16px; top: 16px; display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: var(--radius-pill); font-size: var(--fs-small); font-weight: var(--fw-black); letter-spacing: 0.04em; backdrop-filter: blur(4px); }
+    .ba__tag--before { background: rgba(20,18,41,0.78); color: #fff; }
+    .ba__tag--after { background: var(--gradient-brand); color: #fff; }
+    .ba__arrow { display: grid; place-items: center; color: var(--color-primary); }
+    .ba__arrow svg { width: 30px; height: 30px; transform: rotate(90deg); }
+    .ba__cap { margin-top: 12px; text-align: center; font-size: var(--fs-small); font-weight: var(--fw-bold); color: var(--color-text-muted); }
+
+    /* Sales Point 분석 표 */
+    .spt { margin-top: var(--block-gap); border: 1px solid var(--color-line); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-soft); }
+    .spt__head, .spt__row { display: grid; grid-template-columns: 1fr; }
+    .spt__head { background: var(--color-ink); color: #fff; }
+    .spt__head span { padding: 16px clamp(18px,2.4vw,28px); font-weight: var(--fw-bold); font-size: var(--fs-body); }
+    .spt__head span:first-child { background: rgba(255,255,255,0.06); }
+    .spt__head span:last-child { background: var(--gradient-brand); }
+    .spt__row { border-top: 1px solid var(--color-line); background: #fff; }
+    .spt__row:nth-child(even) { background: var(--color-light); }
+    .spt__miss, .spt__dev { padding: clamp(18px,2.2vw,26px) clamp(18px,2.4vw,28px); }
+    .spt__miss { color: var(--color-text-muted); font-weight: var(--fw-medium); display: flex; align-items: flex-start; gap: 12px; }
+    .spt__miss b { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: #EDEAF6; color: #9A93B5; font-size: 13px; font-weight: var(--fw-bold); }
+    .spt__dev { border-top: 1px dashed var(--color-line); }
+    .spt__dev b { display: block; font-size: var(--fs-h3); font-weight: var(--fw-bold); color: var(--color-text); letter-spacing: -0.01em; }
+    .spt__dev small { display: block; margin-top: 6px; font-size: var(--fs-small); color: var(--color-text-muted); }
+
+    /* =================================================================
+       04) BRANDING — 욕구 분석 + 가치
+       ================================================================= */
+    .insight-grid { display: grid; grid-template-columns: 1fr; gap: clamp(14px,2vw,20px); margin-top: var(--block-gap); }
+    .icard { padding: clamp(24px,2.8vw,34px); border-radius: var(--radius-lg); background: #fff; border: 1px solid var(--color-line); box-shadow: var(--shadow-soft); transition: transform var(--ease) .4s; }
+    .icard:hover { transform: translateY(-5px); }
+    .icard__label { display: inline-flex; align-items: center; gap: 8px; font-size: var(--fs-small); font-weight: var(--fw-black); letter-spacing: 0.04em; color: #fff; background: var(--gradient-brand); padding: 6px 14px; border-radius: var(--radius-pill); }
+    .icard__body { margin-top: 16px; font-size: var(--fs-h3); font-weight: var(--fw-bold); line-height: 1.4; letter-spacing: -0.01em; word-break: keep-all; }
+    .icard__body em { font-style: normal; color: var(--color-primary); }
+    .icard__sub { margin-top: 10px; font-size: var(--fs-small); color: var(--color-text-muted); line-height: 1.6; word-break: keep-all; }
+
+    .value { margin-top: var(--block-gap); display: grid; grid-template-columns: 1fr; gap: clamp(18px,2.4vw,28px); }
+    .value__col { display: flex; flex-direction: column; gap: clamp(16px, 2vw, 24px); } /* Core Value 박스 + 그 아래 배지 */
+    .value__core { padding: clamp(28px,3.4vw,44px); border-radius: var(--radius-lg); background: var(--color-ink); color: #fff; position: relative; overflow: hidden; }
+    .value__core::after { content: ""; position: absolute; right: -60px; top: -60px; width: 220px; height: 220px; border-radius: 50%; background: var(--gradient-brand); opacity: 0.4; filter: blur(20px); }
+    .value__core-label { position: relative; z-index: 1; font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.14em; color: rgba(255,255,255,0.7); text-transform: uppercase; }
+    .value__core-text { position: relative; z-index: 1; margin-top: 14px; font-size: clamp(22px,2.8vw,34px); font-weight: var(--fw-black); line-height: 1.34; letter-spacing: -0.02em; word-break: keep-all; }
+    .value__core-text em { font-style: normal; background: var(--gradient-brand); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .vlist { display: grid; grid-template-columns: 1fr; gap: 14px; }
+    .vitem { display: flex; align-items: flex-start; gap: 16px; padding: clamp(20px,2.4vw,26px); border-radius: var(--radius-md); background: #fff; border: 1px solid var(--color-line); box-shadow: var(--shadow-soft); }
+    .vitem__no { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--gradient-brand); color: #fff; font-weight: var(--fw-black); font-size: 15px; }
+    .vitem__t { font-size: var(--fs-body); font-weight: var(--fw-bold); }
+    .vbadges { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+    .vbadge { display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: var(--radius-pill); background: var(--color-light); border: 1px solid var(--color-line); font-size: var(--fs-small); font-weight: var(--fw-bold); color: var(--color-primary); }
+    .vbadge svg { width: 16px; height: 16px; }
+
+    /* =================================================================
+       05) COPYWRITING — Before → After 카피
+       ================================================================= */
+    .copies { display: grid; grid-template-columns: 1fr; gap: clamp(16px,2.2vw,22px); margin-top: var(--block-gap); }
+    .copy { padding: clamp(24px,2.8vw,34px); border-radius: var(--radius-lg); background: #fff; border: 1px solid var(--color-line); box-shadow: var(--shadow-soft); transition: transform var(--ease) .4s, box-shadow .3s; }
+    .copy:hover { transform: translateY(-5px); box-shadow: var(--shadow-card); }
+    .copy__tag { display: inline-flex; align-items: center; gap: 8px; font-size: var(--fs-small); font-weight: var(--fw-black); color: #fff; background: var(--gradient-brand); padding: 7px 15px; border-radius: var(--radius-pill); }
+    .copy__before { margin-top: 18px; padding-left: 16px; border-left: 3px solid var(--color-line); font-size: var(--fs-small); color: var(--color-text-muted); line-height: 1.6; word-break: keep-all; }
+    .copy__before b { font-weight: var(--fw-bold); color: #9A93B5; }
+    .copy__after { margin-top: 16px; display: flex; align-items: flex-start; gap: 12px; }
+    .copy__after-ic { flex: none; margin-top: 4px; color: var(--color-primary); }
+    .copy__after-ic svg { width: 20px; height: 20px; transform: rotate(90deg); }
+    .copy__after p { font-size: var(--fs-h3); font-weight: var(--fw-black); line-height: 1.42; letter-spacing: -0.015em; word-break: keep-all; }
+    .copy__after p em { font-style: normal; background: var(--gradient-brand); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+    /* =================================================================
+       06) DETAIL PAGE 디자인
+       ================================================================= */
+    .detail-grid { display: grid; grid-template-columns: 1fr; gap: clamp(16px,2.2vw,26px); margin-bottom: var(--block-gap); }
+    .detail-shot { border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-card); border: 1px solid var(--color-line); background: #fff; }
+    .detail-shot img { width: 100%; display: block; }
+    .detail-notes { display: grid; grid-template-columns: 1fr; gap: clamp(14px,2vw,20px); }
+    .dnote { padding: clamp(22px,2.6vw,30px); border-radius: var(--radius-lg); background: var(--color-light); border: 1px solid var(--color-line); }
+    .dnote__ic { width: 46px; height: 46px; border-radius: var(--radius-md); background: #fff; color: var(--color-primary); display: grid; place-items: center; box-shadow: var(--shadow-soft); margin-bottom: 16px; }
+    .dnote__ic svg { width: 22px; height: 22px; }
+    .dnote__t { font-size: var(--fs-h3); font-weight: var(--fw-bold); }
+    .dnote__d { margin-top: 8px; font-size: var(--fs-small); color: var(--color-text-muted); line-height: 1.6; word-break: keep-all; }
+    .swatches { display: flex; gap: 8px; margin-top: 14px; }
+    .swatch { width: 30px; height: 30px; border-radius: 8px; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06); }
+
+    /* =================================================================
+       07) ONLINE — SNS 채널 + 바이럴 flow
+       ================================================================= */
+    .channels { display: grid; grid-template-columns: 1fr; gap: clamp(16px,2.2vw,24px); margin-bottom: var(--block-gap); }
+    .channel { padding: clamp(24px,2.8vw,32px); border-radius: var(--radius-lg); background: #fff; border: 1px solid var(--color-line); box-shadow: var(--shadow-soft); transition: transform var(--ease) .4s; }
+    .channel:hover { transform: translateY(-5px); }
+    .channel__ic { width: 60px; height: 60px; border-radius: 10px; overflow: hidden; box-shadow: var(--shadow-soft); margin-bottom: 18px; }
+    .channel__ic img { width: 100%; height: 100%; object-fit: cover; }
+    .channel__name { font-size: var(--fs-h3); font-weight: var(--fw-black); }
+    .channel__role { margin-top: 4px; font-size: var(--fs-small); font-weight: var(--fw-bold); color: var(--color-primary); }
+    .channel__desc { margin-top: 12px; font-size: var(--fs-small); color: var(--color-text-muted); line-height: 1.6; word-break: keep-all; }
+
+    .vflow { display: grid; grid-template-columns: 1fr; gap: clamp(14px,2vw,8px); }
+    .vstep { display: grid; grid-template-columns: 1fr; border-radius: var(--radius-lg); overflow: hidden; background: #fff; border: 1px solid var(--color-line); box-shadow: var(--shadow-soft); }
+    .vstep__media { position: relative; aspect-ratio: 16/10; overflow: hidden; background: #fff; }
+    .vstep__media img { width: 100%; height: 100%; object-fit: cover; }
+    .vstep__no { position: absolute; left: 14px; top: 14px; width: 36px; height: 36px; border-radius: 50%; background: var(--gradient-brand); color: #fff; font-weight: var(--fw-black); display: grid; place-items: center; box-shadow: var(--shadow-soft); }
+    .vstep__body { padding: clamp(20px,2.4vw,26px); }
+    .vstep__t { font-size: var(--fs-h3); font-weight: var(--fw-bold); }
+    .vstep__d { margin-top: 8px; font-size: var(--fs-small); color: var(--color-text-muted); line-height: 1.6; word-break: keep-all; }
+    .vconn { display: none; place-items: center; color: var(--color-secondary); }
+    .vconn svg { width: 24px; height: 24px; }
+
+    /* =================================================================
+       08) RANKING (ink) — 상위노출 성과 + 블로그 캡처
+       ================================================================= */
+    .rank { display: grid; grid-template-columns: 1fr; gap: var(--block-gap); align-items: center; margin-top: var(--block-gap); }
+    .rank__shot { border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.12); background: #fff; }
+    .rank__shot img { width: 100%; display: block; }
+    .rank__kpis { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(14px,2vw,20px); margin-top: 26px; }
+    .rkpi { padding: clamp(20px,2.6vw,30px); border-radius: var(--radius-lg); background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); }
+    .rkpi__num { font-size: var(--fs-num); font-weight: var(--fw-black); line-height: 1; letter-spacing: -0.03em; background: var(--gradient-brand); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .rkpi__label { margin-top: 12px; font-size: var(--fs-small); font-weight: var(--fw-medium); color: rgba(255,255,255,0.82); word-break: keep-all; }
+    .rank__tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+    .rank__tags span { padding: 10px 18px; border-radius: var(--radius-pill); background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); font-size: var(--fs-small); font-weight: var(--fw-bold); }
+
+    /* =================================================================
+       09) OFFLINE — BTL 갤러리 + 계열사 협업
+       ================================================================= */
+    .gal { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(10px,1.4vw,16px); margin-top: var(--block-gap); }
+    .gal__item { position: relative; border-radius: var(--radius-md); overflow: hidden; aspect-ratio: 4/3; box-shadow: var(--shadow-soft); border: 1px solid var(--color-line); }
+    .gal__item img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s var(--ease); }
+    .gal__item:hover img { transform: scale(1.06); }
+    .gal__cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 26px 14px 12px; font-size: var(--fs-small); font-weight: var(--fw-bold); color: #fff; background: linear-gradient(to top, rgba(0,0,0,0.66), transparent); }
+
+    .collab { display: grid; grid-template-columns: 1fr; gap: clamp(16px,2.2vw,24px); margin-top: var(--block-gap); }
+    .ccard { border-radius: var(--radius-lg); overflow: hidden; background: #fff; border: 1px solid var(--color-line); box-shadow: var(--shadow-soft); transition: transform var(--ease) .4s; }
+    .ccard:hover { transform: translateY(-5px); }
+    .ccard__media { aspect-ratio: 16/9; overflow: hidden; background: var(--color-light); }
+    .ccard__media img { width: 100%; height: 100%; object-fit: cover; }
+    .ccard__body { padding: clamp(20px,2.4vw,26px); }
+    .ccard__t { font-size: var(--fs-h3); font-weight: var(--fw-bold); }
+    .ccard__d { margin-top: 8px; font-size: var(--fs-small); color: var(--color-text-muted); line-height: 1.6; word-break: keep-all; }
+
+    /* =================================================================
+       10) CLOSING
+       ================================================================= */
+    .closing { text-align: center; background: var(--gradient-soft); position: relative; overflow: hidden; }
+    .closing::before { content: ""; position: absolute; left: 50%; top: -10vw; width: 46vw; height: 46vw; transform: translateX(-50%); border-radius: 50%; background: radial-gradient(circle, rgba(107,75,230,0.22), transparent 68%); filter: blur(40px); pointer-events: none; }
+    .closing__inner { position: relative; z-index: 1; }
+    .closing__fin { font-size: var(--fs-small); font-weight: var(--fw-black); letter-spacing: 0.3em; color: var(--color-primary); }
+    .closing__title { margin-top: 16px; font-size: clamp(34px, 6vw, 76px); font-weight: var(--fw-black); letter-spacing: -0.02em; line-height: 1.1; }
+    .closing__title em { font-style: normal; background: var(--gradient-brand); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .closing__sub { margin-top: 20px; font-size: var(--fs-body); color: var(--color-text-muted); line-height: 1.8; word-break: keep-all; }
+    .closing__cta { margin-top: var(--block-gap); display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+    /* =================================================================
+       REVEAL
+       ================================================================= */
+    .js [data-reveal] { opacity: 0; transform: translateY(42px); transition: opacity .9s ease, transform .9s cubic-bezier(0.16, 1, 0.3, 1); will-change: transform, opacity; }
+    .js [data-reveal-scale] { opacity: 0; transform: scale(0.94); transition: opacity .9s ease, transform .9s cubic-bezier(0.16, 1, 0.3, 1); will-change: transform, opacity; }
+    .js [data-reveal].is-inview, .js [data-reveal-scale].is-inview { opacity: 1; transform: none; }
+    .no-anim [data-reveal], .no-anim [data-reveal-scale] { opacity: 1 !important; transform: none !important; }
+    @media (prefers-reduced-motion: reduce) { .js [data-reveal], .js [data-reveal-scale] { opacity: 1 !important; transform: none !important; } }
+    /* 그리드 묶음 내 스태거 */
+    .js [data-stagger] > * { opacity: 0; transform: translateY(34px); transition: opacity .8s ease, transform .8s var(--ease); }
+    .js [data-stagger].is-inview > * { opacity: 1; transform: none; }
+    .js [data-stagger].is-inview > *:nth-child(1) { transition-delay: .04s; }
+    .js [data-stagger].is-inview > *:nth-child(2) { transition-delay: .12s; }
+    .js [data-stagger].is-inview > *:nth-child(3) { transition-delay: .2s; }
+    .js [data-stagger].is-inview > *:nth-child(4) { transition-delay: .28s; }
+    .js [data-stagger].is-inview > *:nth-child(5) { transition-delay: .36s; }
+    .js [data-stagger].is-inview > *:nth-child(6) { transition-delay: .44s; }
+    .no-anim [data-stagger] > * { opacity: 1 !important; transform: none !important; }
+
+    /* =================================================================
+       반응형
+       ================================================================= */
+    @media (min-width: 768px) {
+      .hero__grid { grid-template-columns: 1.05fr 0.95fr; }
+      .hero__visual { max-width: 440px; }
+      .pillars { grid-template-columns: repeat(3, 1fr); }
+      .ba { grid-template-columns: 1fr auto 1fr; }
+      .ba__arrow svg { transform: rotate(0deg); }
+      .spt__head, .spt__row { grid-template-columns: 1fr 1.25fr; }
+      .spt__dev { border-top: none; border-left: 1px dashed var(--color-line); }
+      .insight-grid { grid-template-columns: repeat(2, 1fr); }
+      .value { grid-template-columns: 1fr 1fr; align-items: start; }
+      .copies { grid-template-columns: repeat(2, 1fr); }
+      .detail-grid { grid-template-columns: repeat(3, 1fr); }
+      .detail-notes { grid-template-columns: repeat(3, 1fr); }
+      .channels { grid-template-columns: repeat(3, 1fr); }
+      .vflow { grid-template-columns: 1fr auto 1fr auto 1fr; align-items: stretch; gap: 0; }
+      .vconn { display: grid; padding: 0 clamp(6px,1vw,14px); }
+      .rank { grid-template-columns: 1fr 1fr; }
+      .gal { grid-template-columns: repeat(3, 1fr); }
+      .collab { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (min-width: 768px) and (max-width: 1100px) {
+      .hero__grid { grid-template-columns: 1fr; }
+      .hero__visual { order: -1; margin-bottom: 8px; }
+    }
+
+    /* =================================================================
+       09) META ADS 퍼포먼스 섹션 (.mads-*)  — 삽입
+       ================================================================= */
+/* ====== 02 Meta Ads 퍼포먼스 케이스 (.mads-*) ====== */
+.mads-top{
+  display:grid;
+  grid-template-columns:minmax(0,0.92fr) minmax(0,1.08fr);
+  gap:clamp(20px,3vw,40px);
+  align-items:stretch;
+}
+
+/* --- 광고 목업 (실제 폰 이미지) --- */
+.mads-phone{
+  display:flex; align-items:center; justify-content:center;
+  padding:clamp(0px,1vw,12px) 0;
+}
+.mads-phone img{
+  width:auto; max-width:100%;
+  max-height:clamp(460px,56vw,660px);
+  filter:drop-shadow(0 26px 54px rgba(70,50,150,.22));
+}
+
+/* --- 프로젝트 개요 --- */
+.mads-overview{
+  background:var(--color-white);
+  border:1px solid var(--color-line);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-soft);
+  padding:clamp(24px,3.4vw,44px);
+  display:flex; flex-direction:column;
+}
+.mads-overview__title{
+  font-size:var(--fs-h3); font-weight:var(--fw-bold); letter-spacing:-.01em;
+  padding-bottom:18px; margin-bottom:6px;
+  border-bottom:1px solid var(--color-line);
+}
+.mads-ov-list{ display:flex; flex-direction:column; flex:1; justify-content:center; }
+.mads-ov-row{
+  display:grid; grid-template-columns:128px 1fr; gap:18px;
+  align-items:baseline; padding:18px 0;
+  border-bottom:1px solid var(--color-line);
+}
+.mads-ov-row:last-child{ border-bottom:0; }
+.mads-ov-row dt{
+  font-size:var(--fs-small); font-weight:var(--fw-bold);
+  color:var(--color-primary); letter-spacing:.01em;
+}
+.mads-ov-row dd{ font-size:var(--fs-body); font-weight:var(--fw-medium); color:var(--color-text); line-height:1.5; }
+.mads-ov-row dd em{ font-style:normal; color:var(--color-text-muted); font-weight:var(--fw-regular); }
+.mads-ov-tag{
+  display:inline-block; margin-left:6px;
+  background:var(--color-light); color:var(--color-primary-deep);
+  font-size:12px; font-weight:var(--fw-semibold);
+  padding:3px 9px; border-radius:var(--radius-pill);
+}
+
+/* --- KPI strip --- */
+.mads-kpis{
+  display:grid; grid-template-columns:repeat(5,1fr);
+  gap:clamp(12px,1.4vw,18px);
+  margin-top:var(--block-gap);
+}
+.mads-kpi{
+  background:var(--color-white);
+  border:1px solid var(--color-line);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-soft);
+  padding:clamp(20px,2vw,26px) clamp(16px,1.6vw,22px);
+  display:flex; flex-direction:column; gap:10px;
+  transition:transform .3s var(--ease), box-shadow .3s var(--ease);
+}
+.mads-kpi:hover{ transform:translateY(-4px); box-shadow:var(--shadow-card); }
+.mads-kpi__ico{
+  width:40px; height:40px; border-radius:var(--radius-md);
+  display:inline-flex; align-items:center; justify-content:center;
+  background:var(--color-light); color:var(--color-primary);
+}
+.mads-kpi__num{
+  font-size:clamp(24px,2.6vw,36px); font-weight:var(--fw-black);
+  letter-spacing:-.03em; line-height:1.05; color:var(--color-text);
+}
+.mads-kpi__num i{ font-style:normal; font-size:.42em; font-weight:var(--fw-bold); color:var(--color-text-muted); margin-left:3px; }
+.mads-kpi__label{ font-size:var(--fs-small); font-weight:var(--fw-semibold); color:var(--color-text-muted); }
+.mads-kpi__label small{ font-weight:var(--fw-medium); }
+.mads-kpi--hl{ background:var(--gradient-brand); border:none; box-shadow:0 18px 40px rgba(70,50,150,.24); }
+.mads-kpi--hl .mads-kpi__ico{ background:rgba(255,255,255,.22); color:#fff; }
+.mads-kpi--hl .mads-kpi__num{ color:#fff; }
+.mads-kpi--hl .mads-kpi__num i,
+.mads-kpi--hl .mads-kpi__label{ color:rgba(255,255,255,.9); }
+
+/* --- analytics row --- */
+.mads-analytics{
+  display:grid; grid-template-columns:minmax(0,0.86fr) minmax(0,1.14fr);
+  gap:clamp(18px,2.4vw,32px);
+  margin-top:var(--block-gap);
+}
+.mads-card{
+  background:var(--color-white);
+  border:1px solid var(--color-line);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-card);
+  padding:clamp(24px,3vw,40px);
+  display:flex; flex-direction:column;
+}
+.mads-card__ey{
+  font-size:var(--fs-small); font-weight:var(--fw-bold);
+  letter-spacing:.1em; text-transform:uppercase; color:var(--color-primary);
+  margin-bottom:18px;
+}
+
+/* 도넛 */
+.mads-funnel__body{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px; }
+.mads-donut{ position:relative; width:clamp(180px,18vw,220px); aspect-ratio:1/1; }
+/* 죽은 transition 제거 -> .is-inview 시 실제로 채워지는 그리기 애니메이션 */
+.mads-donut__arc{ transition:stroke-dashoffset 1.2s var(--ease); }
+.mads-funnel.is-inview .mads-donut__arc{ stroke-dashoffset:0; }
+.mads-donut__center{
+  position:absolute; inset:0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center;
+}
+.mads-donut__center strong{
+  font-size:clamp(40px,5vw,56px); font-weight:var(--fw-black); line-height:1;
+  letter-spacing:-.03em;
+  background:var(--gradient-brand); -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.mads-donut__center strong i{ font-style:normal; font-size:.45em; }
+.mads-donut__center span{ margin-top:8px; font-size:var(--fs-small); font-weight:var(--fw-semibold); color:var(--color-text-muted); line-height:1.4; }
+.mads-funnel__text{ text-align:center; display:flex; flex-direction:column; align-items:center; gap:14px; }
+.mads-funnel__cap{ font-size:var(--fs-body); font-weight:var(--fw-medium); color:var(--color-text); line-height:1.6; max-width:34ch; }
+.mads-badge{
+  display:inline-flex; align-items:center; gap:7px;
+  background:var(--color-light); color:var(--color-primary-deep);
+  font-size:var(--fs-small); font-weight:var(--fw-bold);
+  padding:9px 16px; border-radius:var(--radius-pill);
+}
+
+/* 연령 막대 (인라인 SVG + 진짜 베이스라인) */
+.mads-ages__title{ font-size:var(--fs-h3); font-weight:var(--fw-bold); line-height:1.35; letter-spacing:-.01em; word-break:keep-all; margin-bottom:24px; }
+.mads-ages__title em{ font-style:normal; background:var(--gradient-brand); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.mads-bars{ display:flex; flex-direction:column; gap:10px; }
+.mads-bars__svg{
+  display:block; width:100%;
+  height:clamp(180px,20vw,224px);
+}
+/* 모든 막대: 바닥(y=200) 기준으로 scaleY 0 -> 1 성장 */
+.mads-bar{
+  transform:scaleY(0);
+  transform-origin:center 200px;
+  transition:transform 1s var(--ease);
+}
+.mads-ages.is-inview .mads-bar{ transform:scaleY(1); }
+.mads-ages.is-inview .mads-bar:nth-of-type(1){ transition-delay:.05s; }
+.mads-ages.is-inview .mads-bar:nth-of-type(2){ transition-delay:.12s; }
+.mads-ages.is-inview .mads-bar:nth-of-type(3){ transition-delay:.19s; }
+.mads-ages.is-inview .mads-bar:nth-of-type(4){ transition-delay:.26s; }
+.mads-ages.is-inview .mads-bar--top{ transition-delay:.33s; }
+.mads-ages.is-inview .mads-bar:nth-of-type(6){ transition-delay:.4s; }
+.mads-bar--top{ filter:drop-shadow(0 10px 20px rgba(70,50,150,.28)); }
+.mads-bars__labels{
+  display:grid; grid-template-columns:repeat(6,1fr);
+  gap:clamp(4px,1vw,12px);
+  text-align:center;
+}
+.mads-bars__labels li{
+  font-size:12px; font-weight:var(--fw-semibold);
+  color:var(--color-text-muted); white-space:nowrap;
+}
+.mads-bars__lab--top{ color:var(--color-primary) !important; font-weight:var(--fw-bold) !important; }
+.mads-ages__note{ margin-top:auto; padding-top:20px; border-top:1px solid var(--color-line); font-size:var(--fs-small); line-height:1.7; color:var(--color-text-muted); word-break:keep-all; }
+
+/* --- 우측 컬럼 (개요 + 요약) --- */
+.mads-top__col{ display:flex; flex-direction:column; gap:clamp(16px,2vw,24px); }
+
+/* --- Summary (개요 옆 · 강조 다크 카드) --- */
+.mads-summary{
+  flex:1;
+  position:relative; overflow:hidden;
+  background:var(--color-ink); color:#fff;
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-card);
+  padding:clamp(24px,2.6vw,36px);
+  display:flex; flex-direction:column; justify-content:center; gap:14px;
+}
+.mads-summary::before{ content:""; position:absolute; inset:0; background:var(--gradient-brand); opacity:.14; }
+.mads-summary::after{ content:""; position:absolute; left:0; top:0; bottom:0; width:6px; background:var(--gradient-brand); }
+.mads-summary__ey{ position:relative; font-size:var(--fs-small); font-weight:var(--fw-bold); letter-spacing:.16em; text-transform:uppercase; color:var(--color-mint); }
+.mads-summary__txt{ position:relative; font-size:clamp(17px,1.7vw,22px); font-weight:var(--fw-semibold); line-height:1.62; letter-spacing:-.01em; color:#fff; word-break:keep-all; }
+.mads-summary__txt b{ font-weight:var(--fw-black); color:var(--color-mint); }
+
+/* --- PART 1 : 서브 히어로 (밝고 시원한 인트로) --- */
+.mads-hero{ position:relative; }
+.mads-hero > *{ position:relative; z-index:1; }
+.mads-hero::before, .mads-hero::after{ content:""; position:absolute; border-radius:50%; filter:blur(72px); z-index:0; pointer-events:none; opacity:.5; }
+.mads-hero::before{ width:38vw; height:38vw; top:-12vw; right:-7vw; background:radial-gradient(circle, rgba(52,198,168,.5), transparent 70%); }
+.mads-hero::after{ width:34vw; height:34vw; bottom:-14vw; left:-8vw; background:radial-gradient(circle, rgba(107,75,230,.34), transparent 70%); }
+.mads-hero .head{ max-width:none; margin-bottom:clamp(36px,5vw,68px); }
+.mads-hero .section-title{ font-size:clamp(34px,5.6vw,70px); line-height:1.08; }
+.mads-hero .lead{ font-size:clamp(16px,1.35vw,21px); max-width:58ch; }
+
+/* --- PART 2 : 성과 리포트 패널 (KPI + 차트를 한 덩어리로) --- */
+.mads-report{ margin-top:clamp(44px,6vw,84px); background:var(--color-white); border:1px solid var(--color-line); border-radius:var(--radius-lg); box-shadow:var(--shadow-card); padding:clamp(22px,3.2vw,46px); }
+.mads-report__head{ display:flex; align-items:flex-end; justify-content:space-between; gap:14px 24px; flex-wrap:wrap; padding-bottom:clamp(18px,2.2vw,26px); margin-bottom:clamp(22px,3vw,34px); border-bottom:1px solid var(--color-line); }
+.mads-report__ey{ font-size:var(--fs-small); font-weight:var(--fw-bold); letter-spacing:.14em; text-transform:uppercase; color:var(--color-primary); display:inline-flex; align-items:center; gap:10px; }
+.mads-report__ey::before{ content:""; width:22px; height:2px; border-radius:2px; background:var(--gradient-brand); }
+.mads-report__title{ margin-top:10px; font-size:var(--fs-h3); font-weight:var(--fw-black); letter-spacing:-.01em; }
+.mads-report__meta{ font-size:var(--fs-small); font-weight:var(--fw-semibold); color:var(--color-text-muted); }
+.mads-report .mads-kpis{ margin-top:0; }
+.mads-report .mads-analytics{ margin-top:clamp(16px,2.2vw,28px); }
+.mads-report .mads-kpi{ background:var(--color-light); border-color:transparent; box-shadow:none; }
+.mads-report .mads-kpi:hover{ box-shadow:var(--shadow-soft); }
+.mads-report .mads-kpi__ico{ background:var(--color-white); }
+.mads-report .mads-kpi--hl{ background:var(--gradient-brand); }
+.mads-report .mads-kpi--hl .mads-kpi__ico{ background:rgba(255,255,255,.22); }
+.mads-report .mads-card{ background:var(--color-light); border-color:transparent; box-shadow:none; }
+.mads-report .mads-kpi__num{ white-space:nowrap; font-size:clamp(20px,2.3vw,33px); letter-spacing:-.04em; }
+
+/* 모션 최소화 환경: 차트도 즉시 최종 상태로 */
+@media (prefers-reduced-motion: reduce){
+  .mads-donut__arc{ stroke-dashoffset:0 !important; transition:none !important; }
+  .mads-bar{ transform:scaleY(1) !important; transition:none !important; }
+}
+
+/* ===== responsive ===== */
+@media (max-width:1024px){
+  .mads-kpis{ grid-template-columns:repeat(3,1fr); }
+}
+@media (max-width:980px){
+  .mads-top{ grid-template-columns:1fr; }
+  .mads-phone img{ max-height:clamp(420px,82vw,560px); }
+  .mads-analytics{ grid-template-columns:1fr; }
+}
+@media (max-width:768px){
+  .mads-kpis{ grid-template-columns:repeat(2,1fr); }
+  .mads-kpi--hl{ grid-column:span 2; }
+  .mads-ov-row{ grid-template-columns:104px 1fr; gap:12px; }
+}
+@media (max-width:480px){
+  .mads-kpis{ grid-template-columns:1fr; }
+  .mads-kpi--hl{ grid-column:auto; }
+  .mads-ov-row{ grid-template-columns:1fr; gap:4px; }
+  .mads-bars__labels li{ font-size:11px; }
+}
+
+/* ====== 03 연간 광고비 효율 (.yads-*) — 채널별 비교 ====== */
+.yads-tot{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(12px,1.4vw,20px); margin-top:clamp(30px,3.8vw,56px); }
+.yads-tot__item{ background:var(--color-light); border-radius:var(--radius-lg); padding:clamp(20px,2.3vw,32px); display:flex; flex-direction:column; gap:10px; }
+.yads-tot__item--hl{ background:var(--gradient-brand); color:#fff; }
+.yads-tot__lbl{ font-size:var(--fs-small); font-weight:var(--fw-semibold); color:var(--color-text-muted); }
+.yads-tot__item--hl .yads-tot__lbl{ color:rgba(255,255,255,.85); }
+.yads-tot__num{ font-size:clamp(26px,3.4vw,46px); font-weight:var(--fw-black); letter-spacing:-.03em; line-height:1; font-variant-numeric:tabular-nums; }
+.yads-tot__num i{ font-style:normal; font-size:.4em; font-weight:var(--fw-bold); margin-left:5px; color:var(--color-text-muted); }
+.yads-tot__item--hl .yads-tot__num i{ color:rgba(255,255,255,.85); }
+
+.yads-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(12px,1.4vw,20px); margin-top:clamp(14px,1.6vw,20px); }
+.yads-card{ background:var(--color-white); border:1px solid var(--color-line); border-radius:var(--radius-lg); padding:clamp(18px,2vw,26px); display:flex; flex-direction:column; gap:14px; box-shadow:var(--shadow-soft); }
+.yads-card--hl{ background:var(--gradient-brand); border:none; color:#fff; box-shadow:var(--shadow-card); }
+.yads-card__top{ display:flex; align-items:center; justify-content:space-between; }
+.yads-card__ch{ font-size:var(--fs-h3); font-weight:var(--fw-black); letter-spacing:-.01em; }
+.yads-card__badge{ font-size:11px; font-weight:var(--fw-bold); letter-spacing:.06em; padding:4px 9px; border-radius:var(--radius-pill); background:rgba(255,255,255,.22); color:#fff; }
+.yads-card__conv{ display:flex; align-items:baseline; gap:6px; }
+.yads-card__conv b{ font-size:clamp(34px,4vw,52px); font-weight:var(--fw-black); letter-spacing:-.03em; line-height:1; font-variant-numeric:tabular-nums; }
+.yads-card__conv i{ font-style:normal; font-size:var(--fs-small); font-weight:var(--fw-bold); color:var(--color-text-muted); }
+.yads-card--hl .yads-card__conv i{ color:rgba(255,255,255,.85); }
+.yads-card__bar{ height:6px; border-radius:999px; background:rgba(19,16,34,.08); overflow:hidden; }
+.yads-card--hl .yads-card__bar{ background:rgba(255,255,255,.28); }
+.yads-card__bar span{ display:block; height:100%; border-radius:999px; background:var(--gradient-brand); }
+.yads-card--hl .yads-card__bar span{ background:#fff; }
+.yads-card__dl{ display:flex; flex-direction:column; gap:8px; margin-top:2px; }
+.yads-card__dl > div{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; }
+.yads-card__dl dt{ font-size:var(--fs-small); color:var(--color-text-muted); }
+.yads-card--hl .yads-card__dl dt{ color:rgba(255,255,255,.8); }
+.yads-card__dl dd{ font-size:var(--fs-small); font-weight:var(--fw-bold); font-variant-numeric:tabular-nums; }
+.yads-card__dl dd.best{ color:var(--color-primary); font-weight:var(--fw-black); }
+.yads-card--hl .yads-card__dl dd.best{ color:#fff; }
+.yads-card__dl dd.none{ color:var(--color-text-muted); font-weight:var(--fw-semibold); }
+
+@media (max-width:860px){
+  .yads-tot{ grid-template-columns:1fr 1fr; }
+  .yads-tot__item--hl{ grid-column:1 / -1; }
+  .yads-grid{ grid-template-columns:repeat(2,1fr); }
+}
+@media (max-width:520px){
+  .yads-tot{ grid-template-columns:1fr; }
+  .yads-grid{ grid-template-columns:1fr; }
+}
+  </style>
+</head>
+
+<body>
+  <!-- ============ HEADER (숨김 · 접근성용 앵커) ============ -->
+  <header class="site-header" id="top"></header>
+
+  <!-- ============ 플로팅 메뉴 (우측 하단) ============ -->
+  <div class="float-menu" aria-label="바로가기">
+    <a class="float-menu__btn float-menu__btn--ghost" href="./index.html#marketing" aria-label="메인 마케팅 파트로 가기">
+      <span class="fab__label">메인으로 가기</span>
+      <span class="fab__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></span>
+    </a>
+    <a class="float-menu__btn float-menu__btn--live" href="tel:01020774869" aria-label="전화 연락하기">
+      <span class="fab__label">연락하기</span>
+      <span class="fab__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+    </a>
+  </div>
+
+  <main>
+    <!-- ============ 01 HERO ============ -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero__grid">
+          <div class="hero__intro">
+            <span class="hero__eyebrow" data-reveal>On·Off Line Brand · Marketing</span>
+            <h1 class="hero__title" data-reveal>온·오프라인을 잇는<br /><em>브랜드 마케팅</em></h1>
+            <p class="hero__desc" data-reveal>상품 기획부터 카피라이팅, 온라인 바이럴, 오프라인 캠페인까지. 데이터로 문제를 찾고 감성으로 설득해, ‘팔리는 경험’을 설계합니다.</p>
+            <div class="hero__stats" data-reveal data-stagger>
+              <div class="hstat">
+                <div class="hstat__num">0 → 완판</div>
+                <div class="hstat__label">상품 기획</div>
+                <p class="hstat__desc">악성재고 0개 상품을 완판으로 전환</p>
+              </div>
+              <div class="hstat">
+                <div class="hstat__num">50%+</div>
+                <div class="hstat__label">바이럴</div>
+                <p class="hstat__desc">전문직 키워드 블로그 상위노출</p>
+              </div>
+              <div class="hstat">
+                <div class="hstat__num">대기업</div>
+                <div class="hstat__label">BTL 캠페인</div>
+                <p class="hstat__desc">아모레·르노삼성·SK 등 협업</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero__visual" data-reveal-scale>
+            <div class="hero__poster"><img src="./images/marketing/detail_2.png" alt="‘마미온’ 유모차 온열시트 상세페이지 — 한국탄소기술원에서도 인정한 국민 온열라이너" /></div>
+            <div class="hero__insert"><img src="./images/marketing/product.png" alt="‘마미온’ 유모차 온열시트 제품" /></div>
+            <span class="hero__badge" aria-hidden="true"><svg class="hero__badge-shape" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="heroBadgeGrad" gradientUnits="userSpaceOnUse" x1="8" y1="8" x2="92" y2="78"><stop offset="0" stop-color="#34C6A8" /><stop offset="0.46" stop-color="#3C9BD8" /><stop offset="1" stop-color="#6B4BE6" /></linearGradient></defs><path fill="url(#heroBadgeGrad)" d="M 92.20 50.00 C 92.20 51.21 91.87 52.46 91.40 53.62 C 90.93 54.78 90.10 55.89 89.39 56.95 C 88.68 58.00 87.78 58.95 87.13 59.95 C 86.49 60.95 85.90 61.88 85.52 62.93 C 85.14 63.98 84.99 65.07 84.84 66.25 C 84.70 67.43 84.77 68.74 84.64 70.00 C 84.51 71.26 84.43 72.65 84.04 73.84 C 83.65 75.02 83.10 76.20 82.33 77.13 C 81.55 78.05 80.49 78.80 79.38 79.38 C 78.28 79.97 76.93 80.29 75.71 80.64 C 74.49 80.99 73.19 81.14 72.05 81.49 C 70.92 81.84 69.87 82.18 68.90 82.74 C 67.93 83.29 67.12 84.03 66.25 84.84 C 65.38 85.65 64.60 86.70 63.68 87.59 C 62.77 88.47 61.81 89.48 60.76 90.14 C 59.70 90.80 58.52 91.35 57.33 91.56 C 56.14 91.77 54.84 91.66 53.62 91.40 C 52.40 91.14 51.16 90.52 50.00 90.00 C 48.84 89.48 47.74 88.76 46.65 88.30 C 45.56 87.84 44.54 87.42 43.44 87.23 C 42.34 87.03 41.24 87.07 40.05 87.13 C 38.86 87.19 37.59 87.50 36.32 87.59 C 35.05 87.68 33.67 87.84 32.44 87.66 C 31.20 87.49 29.95 87.15 28.90 86.55 C 27.85 85.94 26.93 85.02 26.16 84.04 C 25.40 83.06 24.85 81.78 24.29 80.64 C 23.73 79.50 23.36 78.24 22.82 77.18 C 22.27 76.13 21.76 75.15 21.04 74.30 C 20.33 73.44 19.46 72.77 18.51 72.05 C 17.56 71.33 16.39 70.75 15.36 70.00 C 14.33 69.25 13.17 68.49 12.34 67.56 C 11.50 66.63 10.76 65.57 10.34 64.43 C 9.93 63.30 9.82 62.00 9.86 60.76 C 9.90 59.51 10.30 58.18 10.61 56.95 C 10.91 55.71 11.44 54.51 11.70 53.35 C 11.97 52.19 12.20 51.12 12.20 50.00 C 12.20 48.88 11.97 47.81 11.70 46.65 C 11.44 45.49 10.91 44.29 10.61 43.05 C 10.30 41.82 9.90 40.49 9.86 39.24 C 9.82 38.00 9.93 36.70 10.34 35.57 C 10.76 34.43 11.50 33.37 12.34 32.44 C 13.17 31.51 14.33 30.75 15.36 30.00 C 16.39 29.25 17.56 28.67 18.51 27.95 C 19.46 27.23 20.33 26.56 21.04 25.70 C 21.76 24.85 22.27 23.87 22.82 22.82 C 23.36 21.76 23.73 20.50 24.29 19.36 C 24.85 18.22 25.40 16.94 26.16 15.96 C 26.93 14.98 27.85 14.06 28.90 13.45 C 29.95 12.85 31.20 12.51 32.44 12.34 C 33.67 12.16 35.05 12.32 36.32 12.41 C 37.59 12.50 38.86 12.81 40.05 12.87 C 41.24 12.93 42.34 12.97 43.44 12.77 C 44.54 12.58 45.56 12.16 46.65 11.70 C 47.74 11.24 48.84 10.52 50.00 10.00 C 51.16 9.48 52.40 8.86 53.62 8.60 C 54.84 8.34 56.14 8.23 57.33 8.44 C 58.52 8.65 59.70 9.20 60.76 9.86 C 61.81 10.52 62.77 11.53 63.68 12.41 C 64.60 13.30 65.38 14.35 66.25 15.16 C 67.12 15.97 67.93 16.71 68.90 17.26 C 69.87 17.82 70.92 18.16 72.05 18.51 C 73.19 18.86 74.49 19.01 75.71 19.36 C 76.93 19.71 78.28 20.03 79.38 20.62 C 80.49 21.20 81.55 21.95 82.33 22.87 C 83.10 23.80 83.65 24.98 84.04 26.16 C 84.43 27.35 84.51 28.74 84.64 30.00 C 84.77 31.26 84.70 32.57 84.84 33.75 C 84.99 34.93 85.14 36.02 85.52 37.07 C 85.90 38.12 86.49 39.05 87.13 40.05 C 87.78 41.05 88.68 42.00 89.39 43.05 C 90.10 44.11 90.93 45.22 91.40 46.38 C 91.87 47.54 92.20 48.79 92.20 50.00 Z" /></svg><b>완판</b><span>SOLD OUT</span></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 02 APPROACH (3 PILLAR) ============ -->
+    <section class="section" id="overview">
+      <div class="container">
+        <div class="head">
+          <p class="eyebrow" data-reveal>Approach</p>
+          <h2 class="section-title" data-reveal>기획 · 온라인 · 오프라인,<br /><em>세 축으로 브랜드를 키웁니다</em></h2>
+          <p class="lead" data-reveal>하나의 상품을 시장에 안착시키기 위해 ‘마케팅 기획’부터 ‘어떻게 알릴지’, <br> ‘어디서 결제할지’까지. 세 영역을 유기적으로 연결해 결과를 만들었습니다.</p>
+        </div>
+
+        <div class="pillars" data-reveal data-stagger>
+          <article class="pillar">
+            <div class="pillar__head"><span class="pillar__no">01</span><span class="pillar__name">마케팅 기획</span></div>
+            <div class="pillar__body">
+              <ul class="pillar__list">
+                <li>팔리는 상품 기획<small>세일즈 포인트 분석 · 리포지셔닝</small></li>
+                <li>브랜드 카피라이팅 기획<small>고객 욕구 분석 · 핵심가치 도출</small></li>
+                <li>상세페이지 디자인 제작<small>설득 프로세스 기반 구성</small></li>
+              </ul>
+            </div>
+          </article>
+          <article class="pillar">
+            <div class="pillar__head"><span class="pillar__no">02</span><span class="pillar__name">온라인 마케팅</span></div>
+            <div class="pillar__body">
+              <ul class="pillar__list">
+                <li>SNS 채널 기획<small>블로그 · 인스타그램 · 카페 설계</small></li>
+                <li>SNS 발행 · 체험단 운영 · 상위 노출<small>네이버 로직 기반 콘텐츠</small></li>
+                <li>연간 광고비 효율 개선<small>새로운 채널 도입 및 효율적인 광고 운영</small></li>
+              </ul>
+            </div>
+          </article>
+          <article class="pillar">
+            <div class="pillar__head"><span class="pillar__no">03</span><span class="pillar__name">오프라인 연계 캠페인</span></div>
+            <div class="pillar__body">
+              <ul class="pillar__list">
+                <li>기업 자체 행사 참가자 모객<small>Meta Ads 기반 신규 고객 확보</small></li>
+                <li>BTL 마케팅 기획 · 연출<small>판촉 · 사회공헌 · 콘서트 · 시상식</small></li>
+                <li>계열사 및 협업 광고<small>그룹사 제휴 · 사회공헌</small></li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 03 CASE — 팔리는 상품 기획 ============ -->
+    <section class="section section--light" id="planning">
+      <div class="container">
+        <div class="head">
+          <p class="eyebrow" data-reveal>01 — 마케팅 기획 · Case Study</p>
+          <h2 class="section-title" data-reveal>악성재고 였던<br /><em>‘마미온’ 유모차 온열시트 완판</em>으로</h2>
+          <p class="lead" data-reveal>판매량 0개의 악성재고였던 유모차 온열시트. 타겟·신뢰·카피·상세페이지<br>네 가지 ‘세일즈 포인트’를 다시 설계해, 완판이라는 결과로 바꿨습니다.</p>
+        </div>
+
+        <div class="ba" data-reveal>
+          <figure class="ba__card">
+            <span class="ba__tag ba__tag--before">BEFORE · 악성재고</span>
+            <img src="./images/marketing/product.png" alt="리뉴얼 전 — 판매량 0개의 유모차 온열시트 제품 사진" />
+            <figcaption class="ba__cap">기능은 좋지만 ‘왜 사야 하는지’가 보이지 않던 제품</figcaption>
+          </figure>
+          <div class="ba__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          <figure class="ba__card">
+            <span class="ba__tag ba__tag--after">AFTER · 완판</span>
+            <img src="./images/marketing/soldout.png" alt="리뉴얼 후 — 특허·안전성을 강조해 완판된 상세 비주얼" />
+            <figcaption class="ba__cap">특허·안전성을 전면에 — 사야 할 이유가 분명해진 제품</figcaption>
+          </figure>
+        </div>
+
+        <div class="spt" data-reveal>
+          <div class="spt__head"><span>Miss Sales Point — 놓친 지점</span><span>Develop Sales Point — 살린 지점</span></div>
+          <div class="spt__row">
+            <div class="spt__miss"><b>1</b><span>명확하지 않은 타겟</span></div>
+            <div class="spt__dev"><b>타겟의 명확화</b><small>30대, 신생아 아이를 둔 부모로 핵심 타겟 재설정</small></div>
+          </div>
+          <div class="spt__row">
+            <div class="spt__miss"><b>2</b><span>신뢰할 수 없는 상품 브랜드</span></div>
+            <div class="spt__dev"><b>높은 신뢰도</b><small>제품 기능과 직결된 기술 특허를 전면 어필</small></div>
+          </div>
+          <div class="spt__row">
+            <div class="spt__miss"><b>3</b><span>소비자에게 적합하지 않은 카피라이팅</span></div>
+            <div class="spt__dev"><b>고객이 이해할 수 있는 문구</b><small>공감과 필요가 생기는 상황 중심의 카피로 전환</small></div>
+          </div>
+          <div class="spt__row">
+            <div class="spt__miss"><b>4</b><span>어떤 제품인지 체감할 수 없는 상세 페이지</span></div>
+            <div class="spt__dev"><b>바로 사용할 수 있는 설명서</b><small>실제 사용 사진·기능 동영상으로 체감도 강화</small></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 04 BRANDING — 욕구 분석 + 가치 ============ -->
+    <section class="section" id="branding">
+      <div class="container">
+        <div class="head">
+          <p class="eyebrow" data-reveal>01 — 브랜드 기획</p>
+          <h2 class="section-title" data-reveal>고객의 ‘욕구’에서<br /><em>브랜드 가치</em>를 끌어냅니다</h2>
+          <p class="lead" data-reveal>타겟이 진짜 결핍을 느끼는 지점을 분석하고, <br>경쟁사와 자사를 비교해 우리만 말할 수 있는 가치를 정의했습니다.</p>
+        </div>
+
+        <div class="insight-grid" data-reveal data-stagger>
+          <article class="icard">
+            <span class="icard__label">타겟 연령</span>
+            <p class="icard__body">30대 남녀, 아기가 있는<br /><em>젊은 부부 및 지인 가족</em></p>
+            <p class="icard__sub">선물·직접 구매가 모두 일어나는 핵심 구매 타겟</p>
+          </article>
+          <article class="icard">
+            <span class="icard__label">욕구 분석</span>
+            <p class="icard__body">“아기와 외출할 때<br /><em>추위가 걱정된다</em>”</p>
+            <p class="icard__sub">매서운 추위 환경에 대한 결핍과 안전한 외출 방법 모색</p>
+          </article>
+          <article class="icard">
+            <span class="icard__label">경쟁사</span>
+            <p class="icard__body">아기자기한 디자인과<br />온도 조절 기능 탑재</p>
+            <p class="icard__sub">선택지는 많지만 ‘안전’의 근거는 약한 시장</p>
+          </article>
+          <article class="icard">
+            <span class="icard__label">자사 제품</span>
+            <p class="icard__body">디자인·온도조절은 없지만<br /><em>특허 · 공공기관 지원 제작</em></p>
+            <p class="icard__sub">화려함 대신 ‘검증된 안전’을 무기로</p>
+          </article>
+        </div>
+
+        <div class="value">
+          <div class="value__col">
+            <div class="value__core" data-reveal>
+              <p class="value__core-label">Core Value · 핵심가치</p>
+              <p class="value__core-text">신생아에게도 가장 <em>‘안전’</em>한<br />유모차 온열시트</p>
+            </div>
+            <div class="vbadges" data-reveal>
+              <span class="vbadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>특허 제품</span>
+              <span class="vbadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>극세사 보온</span>
+              <span class="vbadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>한국탄소기술원 지원 제작</span>
+            </div>
+          </div>
+          <div class="vlist" data-reveal data-stagger>
+            <div class="vitem"><span class="vitem__no">1</span><p class="vitem__t">저온 화상 걱정 없는 온열시트</p></div>
+            <div class="vitem"><span class="vitem__no">2</span><p class="vitem__t">신생아에게도 전자파 걱정 없는 제품</p></div>
+            <div class="vitem"><span class="vitem__no">3</span><p class="vitem__t">아기 몸에 딱 맞는 최적의 시트 온도</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 05 COPYWRITING ============ -->
+    <section class="section section--soft" id="copy">
+      <div class="container">
+        <div class="head">
+          <p class="eyebrow" data-reveal>01 — 카피라이팅 기획</p>
+          <h2 class="section-title" data-reveal>고객 ‘심리’를 파악한<br /><em>한 줄의 설득</em></h2>
+          <p class="lead" data-reveal>기능을 나열하던 문장을, 불안을 건드리고 신뢰로 끝맺는 카피로 다시 썼습니다. </p>
+        </div>
+
+        <div class="copies" data-reveal data-stagger>
+          <article class="copy">
+            <span class="copy__tag">신뢰감 있는 브랜드</span>
+            <p class="copy__before"><b>BEFORE</b> · 제품 진입 초창기, 생소한 제품군에 대한 불신을 제거해야 했다</p>
+            <div class="copy__after"><span class="copy__after-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span><p>“직접, <em>10일 동안</em> 사용해보세요!”</p></div>
+          </article>
+          <article class="copy">
+            <span class="copy__tag">감성으로 결핍 자극</span>
+            <p class="copy__before"><b>BEFORE</b> · 원적외선이 피부에 닿아 봄볕처럼 따뜻합니다</p>
+            <div class="copy__after"><span class="copy__after-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span><p>“아무리 따뜻하게 입어도, <em>면역력 약한 우리 아기</em>에겐 너무 차갑다”</p></div>
+          </article>
+          <article class="copy">
+            <span class="copy__tag">감성으로 결핍 자극</span>
+            <p class="copy__before"><b>BEFORE</b> · 저가 브랜드가 많은 시장에서 우위의 가치를 어필해 브랜드 방어</p>
+            <div class="copy__after"><span class="copy__after-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span><p>“그렇다고, <em>저가 제품은 위험</em>합니다”</p></div>
+          </article>
+          <article class="copy">
+            <span class="copy__tag">핵심가치 증명 &amp; 설득</span>
+            <p class="copy__before"><b>BEFORE</b> · 넓게 발열하는 원적외선 발열체로 안전합니다</p>
+            <div class="copy__after"><span class="copy__after-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span><p>“<em>한국탄소기술원</em>에서도 인정한 국민 온열라이너”</p></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 06 DETAIL PAGE ============ -->
+    <section class="section" id="detail">
+      <div class="container">
+        <div class="head">
+          <p class="eyebrow" data-reveal>01 — 상세페이지 디자인 제작</p>
+          <h2 class="section-title" data-reveal>설득 순서대로 읽히는<br /><em>상세페이지</em></h2>
+          <p class="lead" data-reveal>복잡한 설명은 덜어내고, 고객이 설득되는 순서대로 화면을 구성했습니다.</p>
+        </div>
+
+        <div class="detail-grid" data-reveal data-stagger>
+          <figure class="detail-shot"><img src="./images/marketing/detail_1.png" alt="상세페이지 — 직접 10일 체험 제안" /></figure>
+          <figure class="detail-shot"><img src="./images/marketing/detail_2.png" alt="상세페이지 — 한국탄소기술원 인정 국민 온열라이너" /></figure>
+          <figure class="detail-shot"><img src="./images/marketing/detail_3.png" alt="상세페이지 — 탄소섬유 발열체 기술특허 인증" /></figure>
+        </div>
+
+        <div class="detail-notes" data-reveal data-stagger>
+          <article class="dnote">
+            <span class="dnote__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h10M4 18h7"/></svg></span>
+            <h3 class="dnote__t">구성</h3>
+            <p class="dnote__d">복잡한 설명은 삭제하고 심플한 상품 설명으로, 고객 설득 프로세스에 맞춰 상세페이지 순서를 구성했습니다.</p>
+          </article>
+          <article class="dnote">
+            <span class="dnote__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V5h16v2M9 19h6M12 5v14"/></svg></span>
+            <h3 class="dnote__t">문구</h3>
+            <p class="dnote__d">편안하고 가독성 있는 폰트를 선정, KEY Message가 되는 카피에 주목할 수 있도록 크기·굵기를 차별화했습니다.</p>
+          </article>
+          <article class="dnote">
+            <span class="dnote__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18"/></svg></span>
+            <h3 class="dnote__t">컬러</h3>
+            <p class="dnote__d">제품 아이덴티티를 나타내는 연한 하늘색과, 고급스러움을 더하는 로즈골드를 메인 컬러로 선정했습니다.</p>
+            <div class="swatches" aria-hidden="true">
+              <span class="swatch" style="background:#BFE0F2"></span>
+              <span class="swatch" style="background:#8FC3E6"></span>
+              <span class="swatch" style="background:#E6C7B8"></span>
+              <span class="swatch" style="background:#C9A28C"></span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 07 ONLINE — SNS 채널 + 바이럴 ============ -->
+    <section class="section section--light" id="online">
+      <div class="container">
+        <div class="head">
+          <p class="eyebrow" data-reveal>02 — 온라인 마케팅</p>
+          <h2 class="section-title" data-reveal>검색의 접점에서<br /><em>신뢰를 만드는 SNS</em></h2>
+          <p class="lead" data-reveal>구매를 고민하는 순간 고객이 머무는 채널을 찾아,<br>블로그로 신뢰를 쌓고 카페·인스타그램으로 확산시켰습니다.</p>
+        </div>
+
+        <div class="channels" data-reveal data-stagger>
+          <article class="channel">
+            <div class="channel__ic"><img src="./images/marketing/ch_blog.png" alt="네이버 블로그" /></div>
+            <h3 class="channel__name">네이버 블로그</h3>
+            <p class="channel__role">신뢰 · 상위노출</p>
+            <p class="channel__desc">구매 접점에 있는 네이버 검색 고객을 찾아 홍보하고, 가장 신뢰도를 줄 수 있는 육아 블로그를 중심으로 운영합니다.</p>
+          </article>
+          <article class="channel">
+            <div class="channel__ic"><img src="./images/marketing/ch_insta.png" alt="인스타그램" /></div>
+            <h3 class="channel__name">인스타그램</h3>
+            <p class="channel__role">확산 · 브랜딩</p>
+            <p class="channel__desc">감성 비주얼과 이벤트로 브랜드를 노출·저장·공유가 일어나도록 콘텐츠를 기획해 확산을 만듭니다.</p>
+          </article>
+          <article class="channel">
+            <div class="channel__ic"><img src="./images/marketing/ch_cafe.png" alt="네이버 카페" /></div>
+            <h3 class="channel__name">네이버 카페</h3>
+            <p class="channel__role">커뮤니티 · 후기</p>
+            <p class="channel__desc">육아 커뮤니티 안에서 실사용 후기와 이벤트로 확산할 수 있는 접점을 만들어 입소문을 유도합니다.</p>
+          </article>
+        </div>
+
+        <div class="head" style="margin-top: var(--block-gap); margin-bottom: clamp(20px,2.6vw,32px);">
+          <h3 class="section-title" style="font-size: var(--fs-h2);" data-reveal>Blog 체험단 중심, <em>바이럴 운영</em></h3>
+        </div>
+        <div class="vflow" data-reveal data-stagger>
+          <article class="vstep">
+            <div class="vstep__media"><span class="vstep__no">1</span><img src="./images/marketing/viral_recruit.png" alt="육아 블로거 분석·컨택" /></div>
+            <div class="vstep__body"><h4 class="vstep__t">모집</h4><p class="vstep__d">육아 블로거의 카테고리·노출 가능성을 분석해 컨택하고, 검토 후 최종 협찬을 진행합니다.</p></div>
+          </article>
+          <div class="vconn" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          <article class="vstep">
+            <div class="vstep__media"><span class="vstep__no">2</span><img src="./images/marketing/viral_guide.png" alt="키워드·작성 flow 가이드" /></div>
+            <div class="vstep__body"><h4 class="vstep__t">가이드</h4><p class="vstep__d">지수에 맞는 노출 키워드를 제안하고, 키워드에 따른 전개 스토리와 작성 flow를 제공합니다.</p></div>
+          </article>
+          <div class="vconn" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          <article class="vstep">
+            <div class="vstep__media"><span class="vstep__no">3</span><img src="./images/marketing/blogpost.png" alt="최종 발행·상위노출 검토" /></div>
+            <div class="vstep__body"><h4 class="vstep__t">발행</h4><p class="vstep__d">최종 발행 후 상위노출을 검토하고, 추가 바이럴 마케팅을 제안해 노출을 이어갑니다.</p></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 08 RANKING (ink) ============ -->
+    <section class="section section--ink" id="ranking">
+      <div class="container">
+        <div class="head">
+          <p class="eyebrow" data-reveal>02 — SNS 발행 / 상위 노출</p>
+          <h2 class="section-title" data-reveal>네이버 로직을 적용한,<br /><em>상위노출 글쓰기</em></h2>
+          <p class="lead" data-reveal>온라인 마케팅 대행 1위 ‘이상한마케팅’의 블로그 글쓰기 단(프블단)에 참여해, <br>네이버 블로그 로직을 적용한 콘텐츠로 상위노출을 만들었습니다.</p>
+        </div>
+
+        <div class="rank">
+          <figure class="rank__shot" data-reveal-scale>
+            <img src="./images/marketing/blogpost.png" alt="‘블로그 글 잘쓰는법’ 상위노출 글 — 프블단 발행 콘텐츠" />
+          </figure>
+          <div data-reveal>
+            <div class="rank__kpis" data-stagger>
+              <div class="rkpi"><div class="rkpi__num">50%+</div><p class="rkpi__label">전문직 키워드 상위노출 달성</p></div>
+              <div class="rkpi"><div class="rkpi__num">1위</div><p class="rkpi__label">온라인 마케팅 대행사 ‘프블단’ 참여</p></div>
+            </div>
+            <div class="rank__tags">
+              <span>네이버 블로그 로직 적용</span>
+              <span>이슈·세부 키워드 설계</span>
+              <span>전개 스토리 구성</span>
+              <span>지속 가능한 발행 운영</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 03 연간 광고비 효율 (채널별 비교) ============ -->
+    <section class="section" id="annual-ads">
+      <div class="container">
+        <div class="head">
+          <p class="eyebrow" data-reveal>02 — 연간 광고비 효율</p>
+          <h2 class="section-title" data-reveal>광고비 효율을 위해<br /><em>새로운 채널 확장</em>을 주도하다</h2>
+          <p class="lead" data-reveal>기존 네이버·구글·다음 채널의 낮은 전환 효율을 개선하기 위해,<br><strong>새로운 채널로 메타 광고를 직접 도입하고 확장을 주도</strong>했습니다. 그 결과 메타는 전체 예산의<br>약 10%만으로 전환의 80%를 만들며, 가장 높은 전환과 압도적인 효율을 기록했습니다.</p>
+        </div>
+
+        <div class="yads-tot" data-reveal>
+          <div class="yads-tot__item"><span class="yads-tot__lbl">총 광고비</span><span class="yads-tot__num">55,928,075<i>원</i></span></div>
+          <div class="yads-tot__item"><span class="yads-tot__lbl">총 전환수</span><span class="yads-tot__num">477<i>건</i></span></div>
+          <div class="yads-tot__item yads-tot__item--hl"><span class="yads-tot__lbl">메타 전환 비중</span><span class="yads-tot__num">80.7<i>%</i></span></div>
+        </div>
+
+        <div class="yads-grid" data-reveal>
+          <article class="yads-card">
+            <div class="yads-card__top"><span class="yads-card__ch">네이버</span></div>
+            <div class="yads-card__conv"><b>92</b><i>전환</i></div>
+            <div class="yads-card__bar"><span style="width:19.3%"></span></div>
+            <div class="yads-card__dl">
+              <div><dt>연 광고비</dt><dd>41,761,941원</dd></div>
+              <div><dt>전환당 비용</dt><dd>453,934원</dd></div>
+            </div>
+          </article>
+          <article class="yads-card">
+            <div class="yads-card__top"><span class="yads-card__ch">구글</span></div>
+            <div class="yads-card__conv"><b>0</b><i>전환</i></div>
+            <div class="yads-card__bar"><span style="width:0%"></span></div>
+            <div class="yads-card__dl">
+              <div><dt>연 광고비</dt><dd>5,469,000원</dd></div>
+              <div><dt>전환당 비용</dt><dd class="none">전환 없음</dd></div>
+            </div>
+          </article>
+          <article class="yads-card">
+            <div class="yads-card__top"><span class="yads-card__ch">다음</span></div>
+            <div class="yads-card__conv"><b>0</b><i>전환</i></div>
+            <div class="yads-card__bar"><span style="width:0%"></span></div>
+            <div class="yads-card__dl">
+              <div><dt>연 광고비</dt><dd>3,053,093원</dd></div>
+              <div><dt>전환당 비용</dt><dd class="none">전환 없음</dd></div>
+            </div>
+          </article>
+          <article class="yads-card yads-card--hl">
+            <div class="yads-card__top"><span class="yads-card__ch">메타</span><span class="yads-card__badge">BEST</span></div>
+            <div class="yads-card__conv"><b>385</b><i>전환</i></div>
+            <div class="yads-card__bar"><span style="width:80.7%"></span></div>
+            <div class="yads-card__dl">
+              <div><dt>연 광고비</dt><dd>5,644,041원</dd></div>
+              <div><dt>전환당 비용</dt><dd class="best">14,660원</dd></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         03 — Meta Ads 퍼포먼스 케이스 (건축시공 오픈하우스 신규 고객 모객)
+         - 100% 인라인 SVG (외부 이미지 없음) / .mads-* 프리픽스
+         - 도넛·연령 막대 차트 모두 인라인 SVG, .is-inview 시 실제로 채워짐
+         ===================================================================== -->
+    <section class="section section--soft" id="meta-ads">
+      <div class="container">
+
+        <!-- HEAD -->
+        <!-- PART 1 · 서브 히어로 -->
+        <div class="mads-hero">
+        <div class="head" data-reveal>
+          <p class="eyebrow">03 — Meta Ads 퍼포먼스</p>
+          <h2 class="section-title">계약 희망자만 모아 <em>자체 행사 초대</em></h2>
+          <p class="lead">Facebook · Instagram 광고를 직접 기획·운영해, <br>건축시공 오픈하우스 방문·상담을 데이터 기반으로 확보했습니다.</p>
+        </div>
+
+        <!-- ROW 1 : IG 광고 목업  |  프로젝트 개요 -->
+        <div class="mads-top" data-stagger>
+
+          <!-- IG 광고 목업 (실제 폰 목업 이미지) -->
+          <figure class="mads-phone" data-reveal-scale>
+            <img src="./images/marketing/ad_mockup.png" alt="Instagram 광고 — 이 집, 얼마예요? 상세 견적까지 한번에 해결. 건축 오픈하우스 광고 소재" />
+          </figure>
+
+          <!-- 오른쪽 컬럼: 프로젝트 개요 + 요약(Summary) -->
+          <div class="mads-top__col">
+            <!-- 프로젝트 개요 -->
+            <article class="mads-overview" data-reveal>
+              <h3 class="mads-overview__title">Project Overview</h3>
+              <dl class="mads-ov-list">
+                <div class="mads-ov-row">
+                  <dt>운영 채널</dt>
+                  <dd>Meta <span class="mads-ov-tag">Facebook</span><span class="mads-ov-tag">Instagram</span></dd>
+                </div>
+                <div class="mads-ov-row">
+                  <dt>운영 기간</dt>
+                  <dd>2024.10</dd>
+                </div>
+                <div class="mads-ov-row">
+                  <dt>목표</dt>
+                  <dd>오픈하우스 방문·상담 예약 확보 <br><em>(신규 고객 + 브랜드 인지도)</em></dd>
+                </div>
+                <div class="mads-ov-row">
+                  <dt>운영 역할</dt>
+                  <dd>광고 기획 · 세팅 · 운영 · 성과 분석 · 리포팅</dd>
+                </div>
+              </dl>
+            </article>
+
+            <!-- SUMMARY (개요와 한 묶음 · 강조) -->
+            <div class="mads-summary" data-reveal-scale>
+              <p class="mads-summary__ey">Summary · 핵심 성과</p>
+              <p class="mads-summary__txt">Meta 광고를 직접 운영해 약 <b>4만 회 노출</b>, <b>1,524회 클릭</b>, <b>40건의 오픈하우스 상담</b>을 확보했으며, 데이터 기반으로 성과를 분석·관리했습니다.</p>
+            </div>
+          </div>
+        </div>
+        </div><!-- /mads-hero -->
+
+        <!-- PART 2 · 성과 리포트 패널 -->
+        <div class="mads-report" data-reveal>
+          <div class="mads-report__head">
+            <div>
+              <p class="mads-report__ey">Performance Report</p>
+              <h3 class="mads-report__title">데이터로 본 캠페인 성과</h3>
+            </div>
+            <span class="mads-report__meta">Meta Ads · 2024.10</span>
+          </div>
+
+        <!-- KPI STRIP (5-up) -->
+        <ul class="mads-kpis" data-stagger>
+          <li class="mads-kpi" data-reveal>
+            <span class="mads-kpi__ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12Z" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="1.7"/></svg>
+            </span>
+            <span class="mads-kpi__num">39,862<i>회</i></span>
+            <span class="mads-kpi__label">노출수</span>
+          </li>
+          <li class="mads-kpi" data-reveal>
+            <span class="mads-kpi__ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 3 19 12l-6 1.6L16 21l-3 1.2-3-7.2L5 19V3Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="mads-kpi__num">1,524<i>회</i></span>
+            <span class="mads-kpi__label">클릭수</span>
+          </li>
+          <li class="mads-kpi mads-kpi--hl" data-reveal>
+            <span class="mads-kpi__ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22"><path d="M20 6 9 17l-5-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="mads-kpi__num">40<i>건</i></span>
+            <span class="mads-kpi__label">상담 예약 <small>(전환)</small></span>
+          </li>
+          <li class="mads-kpi" data-reveal>
+            <span class="mads-kpi__ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M14.5 9.2C14 8.2 13 7.7 12 7.7c-1.7 0-2.6 1-2.6 2 0 2.6 5.2 1.4 5.2 4 0 1.1-1 2.1-2.6 2.1-1.2 0-2.2-.5-2.7-1.6M12 6.3v1.4M12 16.3v1.4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </span>
+            <span class="mads-kpi__num">892,894<i>원</i></span>
+            <span class="mads-kpi__label">총 광고비</span>
+          </li>
+          <li class="mads-kpi" data-reveal>
+            <span class="mads-kpi__ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22"><path d="M3 20V8M9 20V4M15 20v-7M21 20v-10" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
+            </span>
+            <span class="mads-kpi__num">22,322<i>원</i></span>
+            <span class="mads-kpi__label">전환당 비용 <small>(CPA)</small></span>
+          </li>
+        </ul>
+
+        <!-- ANALYTICS ROW : 도넛 퍼널  |  연령 막대 -->
+        <div class="mads-analytics" data-stagger>
+
+          <!-- 도넛 퍼널 -->
+          <article class="mads-card mads-funnel" data-reveal>
+            <p class="mads-card__ey">Conversion Funnel</p>
+            <div class="mads-funnel__body">
+              <div class="mads-donut" role="img" aria-label="Meta 광고가 전체 상담의 52%에 기여">
+                <svg viewBox="0 0 200 200" width="100%" height="100%" aria-hidden="true">
+                  <defs>
+                    <linearGradient id="madsArc" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0" stop-color="#34C6A8"/><stop offset=".5" stop-color="#3C9BD8"/><stop offset="1" stop-color="#6B4BE6"/>
+                    </linearGradient>
+                  </defs>
+                  <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(19,16,34,.08)" stroke-width="22"/>
+                  <!-- 52% : 둘레 502.65, dash = 261.4 / 초기 offset 261.4 -> .is-inview 시 0 으로 그려짐 -->
+                  <circle class="mads-donut__arc" cx="100" cy="100" r="80" fill="none"
+                    stroke="url(#madsArc)" stroke-width="22" stroke-linecap="round"
+                    stroke-dasharray="261.4 502.65" stroke-dashoffset="261.4"
+                    transform="rotate(-90 100 100)"/>
+                </svg>
+                <div class="mads-donut__center">
+                  <strong>52<i>%</i></strong>
+                  <span>전체 상담의<br>50% 이상 기여</span>
+                </div>
+              </div>
+              <div class="mads-funnel__text">
+                <p class="mads-funnel__cap">Meta 광고 하나로 전체 상담의<br>절반 이상을 만들어냈습니다.</p>
+                <span class="mads-badge">
+                  <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+                  효율적인 예산으로 최대 성과 달성
+                </span>
+              </div>
+            </div>
+          </article>
+
+          <!-- 연령 막대 (인라인 SVG) -->
+          <article class="mads-card mads-ages" data-reveal>
+            <p class="mads-card__ey">Target Analysis · 연령대 성과</p>
+            <h3 class="mads-ages__title">55~64세 <em>(실수요 건축주)</em> 타겟이 가장 높은 성과</h3>
+
+            <div class="mads-bars" role="img" aria-label="연령대별 성과: 18~24세 28, 25~34세 42, 35~44세 56, 45~54세 72, 55~64세 100(최고), 65세 이상 50">
+              <svg class="mads-bars__svg" viewBox="0 0 360 220" preserveAspectRatio="none" aria-hidden="true">
+                <defs>
+                  <linearGradient id="madsBarHot" x1="0" y1="1" x2="0" y2="0">
+                    <stop offset="0" stop-color="#34C6A8"/><stop offset=".5" stop-color="#3C9BD8"/><stop offset="1" stop-color="#6B4BE6"/>
+                  </linearGradient>
+                  <linearGradient id="madsBarDim" x1="0" y1="1" x2="0" y2="0">
+                    <stop offset="0" stop-color="#C9BEFF"/><stop offset="1" stop-color="#9780FF"/>
+                  </linearGradient>
+                </defs>
+                <!-- 베이스라인 -->
+                <line x1="0" y1="200" x2="360" y2="200" stroke="rgba(19,16,34,.10)" stroke-width="1.5"/>
+                <!-- 막대: 트랙 높이 200, scaleY 0->1 (.is-inview) -->
+                <g class="mads-bars__g">
+                  <rect class="mads-bar" x="14"  y="144"  width="34" height="56" rx="5" fill="url(#madsBarDim)" style="--bh:56"/>
+                  <rect class="mads-bar" x="72"  y="116" width="34" height="84"  rx="5" fill="url(#madsBarDim)" style="--bh:84"/>
+                  <rect class="mads-bar" x="130" y="88"  width="34" height="112" rx="5" fill="url(#madsBarDim)" style="--bh:112"/>
+                  <rect class="mads-bar" x="188" y="56"  width="34" height="144" rx="5" fill="url(#madsBarDim)" style="--bh:144"/>
+                  <rect class="mads-bar mads-bar--top" x="246" y="0" width="34" height="200" rx="5" fill="url(#madsBarHot)" style="--bh:200"/>
+                  <rect class="mads-bar" x="304" y="100" width="34" height="100" rx="5" fill="url(#madsBarDim)" style="--bh:100"/>
+                </g>
+              </svg>
+              <ul class="mads-bars__labels" aria-hidden="true">
+                <li>18~24</li><li>25~34</li><li>35~44</li><li>45~54</li>
+                <li class="mads-bars__lab--top">55~64</li><li>65↑</li>
+              </ul>
+            </div>
+
+            <p class="mads-ages__note">예상보다 고연령 실수요층의 반응이 가장 좋았고, 타겟에 예산을 집중하는 전략이 효과적이었습니다. 추후 데이터 기반 최적화로 전환이 꾸준히 증가했습니다.</p>
+          </article>
+        </div>
+        </div><!-- /mads-report -->
+
+      </div>
+    </section>
+
+    <!-- ============ 09 OFFLINE — BTL + 협업 ============ -->
+    <section class="section" id="offline">
+      <div class="container">
+        <div class="head">
+          <p class="eyebrow" data-reveal>03 — 오프라인 캠페인</p>
+          <h2 class="section-title" data-reveal>브랜드를 ‘경험’으로<br /><em>오프라인 BTL</em></h2>
+          <p class="lead" data-reveal>판촉·캠페인·콘서트·시상식·포럼까지. 아모레퍼시픽, 르노삼성자동차, SK플래닛 등 <br>브랜드 이미지와 캠페인 목적에 어울리는 컨셉을 제안하고 실행했습니다.</p>
+        </div>
+
+        <div class="gal" data-reveal data-stagger>
+          <figure class="gal__item"><img src="./images/marketing/btl_1.png" alt="현장 판촉 캠페인" /><figcaption class="gal__cap">사회공헌 캠페인</figcaption></figure>
+          <figure class="gal__item"><img src="./images/marketing/btl_2.png" alt="브랜드 전시·부스 운영" /><figcaption class="gal__cap">전시 · 부스</figcaption></figure>
+          <figure class="gal__item"><img src="./images/marketing/btl_3.png" alt="브랜드 콘서트 연출" /><figcaption class="gal__cap">콘서트 연출</figcaption></figure>
+          <figure class="gal__item"><img src="./images/marketing/btl_4.png" alt="시상식 행사 운영" /><figcaption class="gal__cap">시상식</figcaption></figure>
+          <figure class="gal__item"><img src="./images/marketing/btl_5.png" alt="브랜드 캠페인 콘텐츠" /><figcaption class="gal__cap">캠페인</figcaption></figure>
+          <figure class="gal__item"><img src="./images/marketing/btl_6.png" alt="현장 프로모션" /><figcaption class="gal__cap">현장 프로모션</figcaption></figure>
+        </div>
+
+        <div class="head" style="margin-top: var(--section-gap); margin-bottom: clamp(20px,2.6vw,32px);">
+          <p class="eyebrow" data-reveal>03 — 계열사 및 협업 광고</p>
+          <h3 class="section-title" style="font-size: var(--fs-h2);" data-reveal>제휴와 사회공헌으로 <em>넓힌 접점</em></h3>
+        </div>
+        <div class="collab" data-reveal data-stagger>
+          <article class="ccard">
+            <div class="ccard__media"><img src="./images/marketing/collab_1.png" alt="대학생 온라인 서포터즈 운영" /></div>
+            <div class="ccard__body"><h4 class="ccard__t">대학생 서포터즈</h4><p class="ccard__d">SNS 채널 운영과 함께 대학생 기자단·서포터즈를 모집·관리하며 브랜드 접점을 확장했습니다.</p></div>
+          </article>
+          <article class="ccard">
+            <div class="ccard__media"><img src="./images/marketing/collab_2.png" alt="사회공헌 캠페인 업무협약" /></div>
+            <div class="ccard__body"><h4 class="ccard__t">사회공헌 · 협업</h4><p class="ccard__d">공익 목적의 서울시 협력 사회공헌 전시회와 그린 캠페인 업무협약을 기획·운영했습니다.</p></div>
+          </article>
+          <article class="ccard">
+            <div class="ccard__media"><img src="./images/marketing/collab_3.png" alt="그룹사 제휴 마케팅" /></div>
+            <div class="ccard__body"><h4 class="ccard__t">그룹사 제휴</h4><p class="ccard__d">매거진·멤버스·카드 협찬 등 그룹사 제휴 마케팅으로 노출 채널을 다각화했습니다.</p></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 10 CLOSING ============ -->
+    <section class="section closing" id="closing">
+      <div class="container">
+        <div class="closing__inner">
+          <p class="closing__fin" data-reveal>FIN.</p>
+          <h2 class="closing__title" data-reveal>보기보다 <em>본질</em>을<br />먼저 생각합니다</h2>
+          <p class="closing__sub" data-reveal>예쁘기만한 디자인보다, 팔리는 이유를 먼저 설계하는 마케터.<br />상품의 본질에서 출발해 온·오프라인을 잇는 경험을 만듭니다.</p>
+          <div class="closing__cta" data-reveal>
+            <a class="btn btn--grad" href="./index.html#allproject">다른 프로젝트 보기
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a class="btn btn--ghost" href="tel:01020774869">지원자에게 연락하기</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <div class="site-footer__brand-box">
+        <p class="site-footer__brand">PORT<b>FOLIO</b></p>
+        <p class="site-footer__tag">On·Off Line Brand 마케팅 포트폴리오.</p>
+      </div>
+      <address class="site-footer__contact">
+        <span class="site-footer__label">CONTACT</span>
+        <a href="mailto:ujin2019@gmail.com">ujin2019@gmail.com</a>
+        <a href="tel:01020774869">010.2077.4869</a>
+        <span>Seoul, Korea</span>
+      </address>
+      <p class="site-footer__copy"><span>© 2026 PORTFOLIO. On·Off Line Brand Marketing.</span><a class="to-top" href="#" onclick="window.scrollTo({ top: 0, behavior: 'smooth' }); return false;">맨 위로 ↑</a></p>
+    </div>
+  </footer>
+
+  <!-- ===== 스크립트 (Vanilla JS) ===== -->
+  <script>
+    (function () {
+      function initReveal() {
+        var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        var els = document.querySelectorAll("[data-reveal], [data-reveal-scale], [data-stagger]");
+        if (reduce || !("IntersectionObserver" in window)) {
+          document.documentElement.classList.add("no-anim");
+          return;
+        }
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) {
+              e.target.classList.add("is-inview");
+              io.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+        els.forEach(function (el) { io.observe(el); });
+      }
+      initReveal();
+    })();
+  </script>
+</body>
+</html>

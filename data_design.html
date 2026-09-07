@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ko" class="no-js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DATA DESIGN | 데이터 디자인 작업</title>
+  <meta name="description" content="데이터 대시보드 · 학습 플랫폼 · 인포그래픽 등 데이터 기반 디자인 작업 모음" />
+
+  <!-- Pretendard 폰트 (CDN) -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+  />
+
+  <!-- 공통 CSS (변수 → 공통 → 메인) -->
+  <link rel="stylesheet" href="./css/variables.css" />
+  <link rel="stylesheet" href="./css/common.css" />
+  <link rel="stylesheet" href="./css/main.css" />
+
+  <!-- =========================================================
+       이 페이지 전용 스타일 (data_design)
+       - 공통 토큰(variables.css)을 그대로 사용합니다.
+       - 클래스에 dd- 접두사를 붙여 다른 페이지와 충돌을 막습니다.
+       ========================================================= -->
+  <style>
+    .dd-page { background: var(--color-bg); }
+
+    /* ── 히어로 ── */
+    .dd-hero {
+      padding: calc(var(--header-height) + 80px) 0 60px;
+      background: var(--gradient-modoo);
+      border-bottom: 1px solid var(--color-line);
+    }
+    .dd-hero__eyebrow {
+      display: inline-block;
+      font-size: var(--fs-caption);
+      font-weight: var(--fw-bold);
+      letter-spacing: 0.2em;
+      color: var(--color-main);
+      margin-bottom: 16px;
+    }
+    .dd-hero__title {
+      font-size: var(--fs-h1);
+      font-weight: var(--fw-bold);
+      line-height: var(--lh-tight);
+      color: var(--color-text);
+      margin-bottom: 18px;
+    }
+    .dd-hero__title span { color: var(--color-main); }
+    .dd-hero__desc {
+      max-width: 640px;
+      font-size: var(--fs-body);
+      line-height: var(--lh-loose);
+      color: var(--color-text-sub);
+    }
+
+    /* ── 작업 그리드 ── */
+    .dd-works {
+      padding: 72px 0 120px;
+    }
+    .dd-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 36px;
+    }
+
+    /* ── 카드 ── */
+    .dd-card {
+      display: flex;
+      flex-direction: column;
+      background: var(--color-bg);
+      border: 1px solid var(--color-line);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: transform var(--duration-normal) var(--ease-out),
+                  box-shadow var(--duration-normal) var(--ease-out);
+    }
+    .dd-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 50px rgba(1, 3, 62, 0.12);
+    }
+
+    /* PDF 미리보기 영역 */
+    .dd-card__preview {
+      position: relative;
+      height: 240px;
+      background: var(--color-bg-soft);
+      border-bottom: 1px solid var(--color-line);
+      overflow: hidden;
+    }
+    .dd-card__preview iframe {
+      position: absolute;
+      /* iframe을 컨테이너보다 상·하·좌·우로 모두 넘치게 만들어,
+         PDF 뷰어가 페이지 가장자리에 만드는 여백/그림자 띠와 스크롤바가
+         카드 영역(overflow:hidden) 바깥으로 잘려나가도록 함 */
+      top: -14px;
+      left: -16px;
+      width: calc(100% + 44px);   /* 좌 16 + 우 28 넘침 */
+      height: calc(100% + 90px);  /* 상 14 + 하 76 넘침 */
+      border: 0;
+      pointer-events: none;      /* 미리보기는 클릭 통과 (카드 링크 우선) */
+    }
+    .dd-card__index {
+      position: absolute;
+      top: 14px; left: 14px;
+      z-index: 2;
+      width: 34px; height: 34px;
+      display: grid; place-items: center;
+      background: var(--color-main);
+      color: var(--color-white);
+      font-size: 14px;
+      font-weight: var(--fw-bold);
+      border-radius: var(--radius-full);
+    }
+
+    /* 카드 본문 */
+    .dd-card__body {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      padding: 24px 24px 26px;
+    }
+    .dd-card__tag {
+      align-self: flex-start;
+      font-size: 12px;
+      font-weight: var(--fw-bold);
+      letter-spacing: 0.06em;
+      color: var(--color-main);
+      background: rgba(55, 0, 255, 0.08);
+      padding: 5px 12px;
+      border-radius: var(--radius-full);
+      margin-bottom: 14px;
+    }
+    .dd-card__title {
+      font-size: var(--fs-h3);
+      font-weight: var(--fw-bold);
+      line-height: 1.3;
+      color: var(--color-text);
+      margin-bottom: 10px;
+    }
+    .dd-card__desc {
+      font-size: var(--fs-caption);
+      line-height: var(--lh-loose);
+      color: var(--color-text-sub);
+      margin-bottom: 18px;
+    }
+
+    /* 데이터 포인트 칩 */
+    .dd-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+    .dd-chip {
+      font-size: 12px;
+      font-weight: var(--fw-medium);
+      color: var(--color-text-sub);
+      background: var(--color-bg-soft);
+      border: 1px solid var(--color-line);
+      padding: 5px 10px;
+      border-radius: var(--radius-sm);
+    }
+
+    /* 메타 (숫자 요약) */
+    .dd-meta {
+      display: flex;
+      gap: 20px;
+      padding-top: 18px;
+      margin-top: auto;
+      border-top: 1px solid var(--color-line);
+      margin-bottom: 18px;
+    }
+    .dd-meta__item { display: flex; flex-direction: column; gap: 2px; }
+    .dd-meta__num {
+      font-size: 20px;
+      font-weight: var(--fw-bold);
+      color: var(--color-text);
+      line-height: 1;
+    }
+    .dd-meta__label {
+      font-size: 11px;
+      color: var(--color-text-sub);
+    }
+
+    /* 원본 열기 버튼 */
+    .dd-card__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      align-self: flex-start;
+      font-size: var(--fs-caption);
+      font-weight: var(--fw-bold);
+      color: var(--color-main);
+      text-decoration: none;
+      transition: gap var(--duration-fast) var(--ease-out);
+    }
+    .dd-card__link:hover { gap: 12px; }
+
+    /* ── 반응형 ── */
+    @media (max-width: 1199px) {
+      .dd-grid { grid-template-columns: repeat(2, 1fr); gap: 28px; }
+    }
+    @media (max-width: 767px) {
+      .dd-grid { grid-template-columns: 1fr; gap: 24px; }
+      .dd-works { padding: 48px 0 80px; }
+      .dd-hero { padding: calc(var(--header-height) + 48px) 0 40px; }
+    }
+  </style>
+</head>
+
+<body class="dd-page">
+  <!-- 공통 헤더 -->
+  <div data-include="./components/header.html"></div>
+
+  <main id="main">
+    <!-- ===== HERO ===== -->
+    <section class="dd-hero" aria-label="데이터 디자인 소개">
+      <div class="container">
+        <span class="dd-hero__eyebrow">DATA · DESIGN</span>
+        <h1 class="dd-hero__title">데이터를 <span>보기 쉽게</span> 설계한 작업</h1>
+        <p class="dd-hero__desc">
+          실시간 기상 데이터 대시보드, AI 학습 데이터 플랫폼, 상담 현황 인포그래픽까지.<br>
+          복잡한 데이터를 한눈에 읽히도록 정리한 디자인 작업을 모았습니다.
+        </p>
+      </div>
+    </section>
+
+    <!-- ===== WORKS ===== -->
+    <section class="dd-works" aria-label="데이터 디자인 작업 목록">
+      <div class="container">
+        <div class="dd-grid">
+
+          <!-- 01. 파주 재난안전 기상정보 대시보드 -->
+          <article class="dd-card">
+            <div class="dd-card__preview">
+              <span class="dd-card__index">01</span>
+              <iframe
+                src="./data/paju-weather.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
+                title="파주 재난안전 기상정보 대시보드 미리보기"
+                loading="lazy"
+              ></iframe>
+            </div>
+            <div class="dd-card__body">
+              <span class="dd-card__tag">DATA DASHBOARD · WEB UI</span>
+              <h2 class="dd-card__title">파주 재난안전<br />기상정보 대시보드</h2>
+              <p class="dd-card__desc">
+                재난안전대책본부용 실시간 기상 모니터링 화면. 지역별 강수·적설·수위
+                데이터를 표와 그래프로 동시에 확인하도록 설계했습니다.
+              </p>
+              <div class="dd-chips">
+                <span class="dd-chip">강수량</span>
+                <span class="dd-chip">적설량</span>
+                <span class="dd-chip">수위정보</span>
+                <span class="dd-chip">자동기상관측</span>
+              </div>
+              <div class="dd-meta">
+                <div class="dd-meta__item">
+                  <span class="dd-meta__num">4</span>
+                  <span class="dd-meta__label">데이터 카테고리</span>
+                </div>
+                <div class="dd-meta__item">
+                  <span class="dd-meta__num">6시간·3일</span>
+                  <span class="dd-meta__label">집계 단위</span>
+                </div>
+                <div class="dd-meta__item">
+                  <span class="dd-meta__num">실시간</span>
+                  <span class="dd-meta__label">차트 갱신</span>
+                </div>
+              </div>
+              <a class="dd-card__link" href="./data/paju-weather.pdf" target="_blank" rel="noopener">
+                원본 보기 →
+              </a>
+            </div>
+          </article>
+
+          <!-- 02. MODOO 학습 데이터 플랫폼 -->
+          <article class="dd-card">
+            <div class="dd-card__preview">
+              <span class="dd-card__index">02</span>
+              <iframe
+                src="./data/modoo-board.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
+                title="MODOO 학습 데이터 플랫폼 미리보기"
+                loading="lazy"
+              ></iframe>
+            </div>
+            <div class="dd-card__body">
+              <span class="dd-card__tag">EDTECH · PRODUCT UI</span>
+              <h2 class="dd-card__title">MODOO 모두매쓰<br />학습 데이터 플랫폼</h2>
+              <p class="dd-card__desc">
+                AI 맞춤형 수학 문제 생성 서비스의 사용자 페이지. 난이도·학년·단원을
+                선택해 문제를 만들고, 생성 이력과 오답노트를 데이터로 관리합니다.
+              </p>
+              <div class="dd-chips">
+                <span class="dd-chip">문제 생성</span>
+                <span class="dd-chip">학습 보드</span>
+                <span class="dd-chip">생성 이력</span>
+                <span class="dd-chip">AI 오답노트</span>
+              </div>
+              <div class="dd-meta">
+                <div class="dd-meta__item">
+                  <span class="dd-meta__num">4</span>
+                  <span class="dd-meta__label">주요 화면</span>
+                </div>
+                <div class="dd-meta__item">
+                  <span class="dd-meta__num">12학년</span>
+                  <span class="dd-meta__label">난이도 범위</span>
+                </div>
+                <div class="dd-meta__item">
+                  <span class="dd-meta__num">5탭</span>
+                  <span class="dd-meta__label">내 콘텐츠</span>
+                </div>
+              </div>
+              <a class="dd-card__link" href="./data/modoo-board.pdf" target="_blank" rel="noopener">
+                원본 보기 →
+              </a>
+            </div>
+          </article>
+
+          <!-- 03. 위(Wee) 클래스 안내 가이드 -->
+          <article class="dd-card">
+            <div class="dd-card__preview">
+              <span class="dd-card__index">03</span>
+              <iframe
+                src="./data/wee-class-guide.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
+                title="위(Wee) 클래스 안내 가이드 미리보기"
+                loading="lazy"
+              ></iframe>
+            </div>
+            <div class="dd-card__body">
+              <span class="dd-card__tag">INFORMATION DESIGN · 인포그래픽</span>
+              <h2 class="dd-card__title">위(Wee) 클래스<br />안내 가이드</h2>
+              <p class="dd-card__desc">
+                학교 상담실 소개용 프레젠테이션. 상담 현황 그래프와 진행 단계,
+                연계 기관 관계도를 인포그래픽으로 한눈에 정리했습니다.
+              </p>
+              <div class="dd-chips">
+                <span class="dd-chip">상담 현황 그래프</span>
+                <span class="dd-chip">진행 5단계</span>
+                <span class="dd-chip">기관 관계도</span>
+                <span class="dd-chip">심리검사</span>
+              </div>
+              <div class="dd-meta">
+                <div class="dd-meta__item">
+                  <span class="dd-meta__num">22p</span>
+                  <span class="dd-meta__label">슬라이드</span>
+                </div>
+                <div class="dd-meta__item">
+                  <span class="dd-meta__num">8</span>
+                  <span class="dd-meta__label">구성 섹션</span>
+                </div>
+                <div class="dd-meta__item">
+                  <span class="dd-meta__num">10+</span>
+                  <span class="dd-meta__label">연계 기관</span>
+                </div>
+              </div>
+              <a class="dd-card__link" href="./data/wee-class-guide.pdf" target="_blank" rel="noopener">
+                원본 보기 →
+              </a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 공통 푸터 -->
+  <div data-include="./components/footer.html"></div>
+
+  <!-- 공통 스크립트 (헤더/푸터 include + 헤더 동작) -->
+  <script src="./js/common.js"></script>
+</body>
+</html>

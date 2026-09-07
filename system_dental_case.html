@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<!--
+  =====================================================================
+  시스템치과 홈페이지 리뉴얼 — UX/UI Case Study (서브페이지)
+  - 순수 HTML + Vanilla CSS + Vanilla JS (CSS 라이브러리 미사용)
+  - 스크롤 인터랙션: GSAP + ScrollTrigger (CDN)
+  - 모든 이미지 영역은 플레이스홀더(.img-slot) — 슬롯을 <img>로 교체하세요.
+  - 수정: <style> 최상단 :root 변수 / 각 .img-slot 의 라벨 위치
+  =====================================================================
+-->
+<html lang="ko" class="js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>시스템치과 홈페이지 리뉴얼 | UX Case Study</title>
+  <meta name="description" content="가격이 아닌 신뢰를 전하는 — 21년 운영 시스템치과 홈페이지 UX/UI 리디자인 케이스 스터디" />
+
+  <!-- 폰트: 'A2Z'를 1순위로, A2Z 웹폰트(CDN/@font-face)가 있으면 추가하세요.
+       없으면 Pretendard(CDN) → 시스템 sans-serif 로 폴백됩니다. -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+  <style>
+    /* =================================================================
+       0) A2Z 웹폰트 (Design System 섹션 내용 전용)
+       ================================================================= */
+    @font-face { font-family: 'A2z'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-1Thin.woff2') format('woff2'); font-weight: 100; font-display: swap; }
+    @font-face { font-family: 'A2z'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-2ExtraLight.woff2') format('woff2'); font-weight: 200; font-display: swap; }
+    @font-face { font-family: 'A2z'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-3Light.woff2') format('woff2'); font-weight: 300; font-display: swap; }
+    @font-face { font-family: 'A2z'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-4Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+    @font-face { font-family: 'A2z'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-5Medium.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+    @font-face { font-family: 'A2z'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-6SemiBold.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+    @font-face { font-family: 'A2z'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-7Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+    @font-face { font-family: 'A2z'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-8ExtraBold.woff2') format('woff2'); font-weight: 800; font-display: swap; }
+    @font-face { font-family: 'A2z'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-9Black.woff2') format('woff2'); font-weight: 900; font-display: swap; }
+
+    /* =================================================================
+       1) DESIGN TOKENS — 여기 값만 바꾸면 전체 반영
+       ================================================================= */
+    :root {
+      /* 브랜드 컬러 */
+      --color-burgundy: #A12D2E;     /* Primary */
+      --color-soft-red: #D33B3B;     /* Secondary / Point */
+      --color-light-gray: #E9E6E2;   /* Light */
+      --color-white: #FFFFFF;
+      --color-text: #1B1614;         /* 본문(따뜻한 블랙) */
+
+      /* 역할 토큰 */
+      --color-bg: #FFFFFF;
+      --color-bg-soft: #FAF8F6;      /* 살짝 톤 */
+      --color-deep: #2A1011;         /* 다크(딥 버건디) 섹션 */
+      --color-text-muted: #837A74;   /* 보조 텍스트 */
+      --color-line: rgba(27, 22, 20, 0.10);
+      --gradient-brand: linear-gradient(135deg, #D33B3B 0%, #A12D2E 100%);
+
+      /* 타이포 (A2Z 우선) */
+      --font-base: "A2z", "Pretendard", -apple-system, BlinkMacSystemFont, system-ui,
+        "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      --fs-display: clamp(38px, 7vw, 88px);
+      --fs-h1: clamp(28px, 4.6vw, 56px);
+      --fs-h2: clamp(22px, 3vw, 40px);
+      --fs-h3: clamp(18px, 1.9vw, 24px);
+      --fs-body: clamp(15px, 1.15vw, 18px);
+      --fs-small: clamp(13px, 0.95vw, 15px);
+      --fs-num: clamp(40px, 6.5vw, 86px);
+
+      /* 타입 스케일에 맞춰 2단계 낮춤: HERO 600 / TITLE·UI 500 / BODY 400 */
+      --fw-regular: 400; --fw-medium: 500; --fw-semibold: 600; --fw-bold: 500; --fw-black: 500;
+      --lh-tight: 1.12; --lh-normal: 1.6; --lh-loose: 1.85;
+
+      /* 레이아웃 / 여백 (Apple 스타일: 넓게) */
+      --section-gap: clamp(64px, 9vw, 140px);
+      --block-gap: clamp(30px, 4.5vw, 60px);
+      --pad-x: clamp(20px, 5vw, 64px);
+      --container: 1280px;
+      --container-wide: 1440px;
+
+      /* 8px Grid 기반 라운드 */
+      --radius-sm: 2px; --radius-md: 2px; --radius-lg: 2px; --radius-pill: 999px;
+      --shadow-card: 0 24px 60px rgba(60, 25, 25, 0.10);
+      --shadow-soft: 0 12px 32px rgba(60, 25, 25, 0.07);
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --header-h: 68px;
+    }
+
+    /* =================================================================
+       2) RESET
+       ================================================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body { font-family: var(--font-base); font-size: var(--fs-body); line-height: var(--lh-normal); color: var(--color-text); background: var(--color-bg); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; overflow-x: hidden; }
+    img { display: block; max-width: 100%; height: auto; }
+    ul { list-style: none; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+    table { border-collapse: collapse; width: 100%; }
+    :focus-visible { outline: 2px solid var(--color-burgundy); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+    /* =================================================================
+       3) 공통
+       ================================================================= */
+    .container { width: 100%; max-width: var(--container); margin: 0 auto; padding-left: var(--pad-x); padding-right: var(--pad-x); }
+    .container--wide { max-width: var(--container-wide); }
+    .section { padding-top: var(--section-gap); padding-bottom: var(--section-gap); }
+    .section--soft { background: var(--color-bg-soft); }
+    .section--gray { background: var(--color-light-gray); }
+    .section--ink { background: var(--color-deep); color: #fff; }
+
+    .label { display: inline-flex; align-items: center; gap: 10px; font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-burgundy); margin-bottom: 20px; }
+    .label::before { display: none; }
+    .section--ink .label { color: var(--color-soft-red); }
+    .section--ink .label::before { background: var(--color-soft-red); }
+    .title { font-size: var(--fs-h1); font-weight: var(--fw-black); line-height: var(--lh-tight); letter-spacing: -0.025em; word-break: keep-all; }
+    .lead { max-width: 64ch; margin-top: 20px; line-height: var(--lh-loose); color: var(--color-text-muted); word-break: keep-all; }
+    .section--ink .lead { color: rgba(255,255,255,0.72); }
+    .head { max-width: 860px; margin-bottom: var(--block-gap); }
+
+    .btn { display: inline-flex; align-items: center; gap: 10px; padding: 15px 28px; border-radius: var(--radius-pill); font-weight: var(--fw-bold); transition: transform var(--ease) .3s, background-color .25s, color .25s, box-shadow .25s; }
+    .btn--primary { background: var(--color-burgundy); color: #fff; }
+    .btn--primary:hover { background: var(--color-soft-red); transform: translateY(-2px); box-shadow: 0 14px 30px rgba(161,45,46,0.35); }
+    .btn--ghost { border: 1.5px solid var(--color-burgundy); color: var(--color-burgundy); }
+    .btn--ghost:hover { background: var(--color-burgundy); color: #fff; }
+
+    /* 이미지 슬롯 (플레이스홀더) */
+    .img-slot { position: relative; width: 100%; display: flex; align-items: center; justify-content: center; background: #ECE7E3; border-radius: var(--radius-lg); overflow: hidden; color: #A89E97; font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.06em; text-align: center; background-image: repeating-linear-gradient(45deg, transparent, transparent 16px, rgba(161,45,46,0.04) 16px, rgba(161,45,46,0.04) 32px); }
+    .img-slot::after { content: "🖼  " attr(data-label); padding: 0 14px; opacity: .9; }
+    .img-slot--wide { aspect-ratio: 16 / 10; }
+    .img-slot--hero { aspect-ratio: 4 / 3; }
+    .img-slot--tall { aspect-ratio: 4 / 5; }
+    /* 슬롯에 실제 이미지를 넣으면 슬롯을 꽉 채우고(넘치면 크롭), 플레이스홀더 라벨은 숨김 */
+    .img-slot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .img-slot:has(img)::after { display: none; }
+
+    /* =================================================================
+       HEADER / FOOTER
+       ================================================================= */
+    .site-header { display: none; }
+
+    /* 플로팅 메뉴 (우측 하단) — 원형 아이콘, 호버 시 텍스트 펼침 */
+    .float-menu { position: fixed; right: clamp(16px, 2.4vw, 32px); bottom: clamp(16px, 2.4vw, 32px); z-index: 1000; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+    .float-menu__btn { display: inline-flex; align-items: center; height: 56px; border-radius: 28px; overflow: hidden; box-shadow: var(--shadow-card); transition: transform .25s var(--ease), background-color .25s, border-color .25s, color .25s; }
+    .float-menu__btn:hover { transform: translateY(-2px); }
+    .fab__icon { width: 56px; height: 56px; flex: none; display: grid; place-items: center; }
+    .fab__icon svg { width: 22px; height: 22px; }
+    .fab__label { max-width: 0; opacity: 0; white-space: nowrap; font-size: var(--fs-small); font-weight: var(--fw-bold); padding-left: 0; transition: max-width .5s var(--ease), opacity .3s var(--ease), padding .5s var(--ease); }
+    .float-menu__btn:hover .fab__label, .float-menu__btn:focus-visible .fab__label { max-width: 220px; opacity: 1; padding-left: 20px; }
+    .float-menu__btn--ghost { background: rgba(255,255,255,0.95); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); color: var(--color-text); border: 1px solid var(--color-line); }
+    .float-menu__btn--ghost:hover { border-color: var(--color-burgundy); color: var(--color-burgundy); }
+    .float-menu__btn--live { background: var(--color-burgundy); color: #fff; }
+    .float-menu__btn--live:hover { background: var(--color-soft-red); }
+
+    .site-header__inner { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+    .site-header__logo { font-size: var(--fs-h3); font-weight: var(--fw-black); letter-spacing: -0.02em; }
+    .site-header__logo b { color: var(--color-burgundy); }
+    .site-nav { display: none; align-items: center; gap: clamp(14px, 2vw, 28px); }
+    .site-nav a { font-size: var(--fs-small); font-weight: var(--fw-medium); transition: color .2s; }
+    .site-nav a:hover { color: var(--color-burgundy); }
+    .site-header__back { display: inline-flex; align-items: center; gap: 6px; padding: 9px 17px; border-radius: var(--radius-pill); background: var(--color-burgundy); color: #fff; font-size: var(--fs-small); font-weight: var(--fw-bold); transition: transform .25s; }
+    .site-header__back:hover { transform: translateY(-1px); }
+
+    .site-footer { background: var(--color-deep); color: rgba(255,255,255,0.7); padding: clamp(72px,9vw,104px) 0 48px; }
+    .site-footer .container { max-width: var(--container-wide); }
+    .site-footer__inner { display: flex; flex-wrap: wrap; gap: var(--block-gap); justify-content: space-between; align-items: flex-start; }
+    .site-footer__brand { font-size: 20px; font-weight: var(--fw-black); color: #fff; }
+    .site-footer__brand b { color: var(--color-soft-red); }
+    .site-footer__tag { margin-top: 12px; font-size: 18px; color: rgba(255,255,255,0.55); max-width: 40ch; line-height: 1.5; }
+    .site-footer__label { font-size: 15px; font-weight: var(--fw-bold); letter-spacing: 0.08em; color: rgba(255,255,255,0.4); margin-bottom: 4px; }
+    .site-footer__contact { display: flex; flex-direction: column; gap: 8px; font-size: 18px; }
+    .site-footer__contact a:hover { color: #fff; }
+    .site-footer__copy { width: 100%; margin-top: 48px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.12); font-size: 15px; color: rgba(255,255,255,0.45); display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .site-footer__copy .to-top { display: inline-flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-weight: var(--fw-bold); border: 1px solid rgba(255,255,255,0.12); border-radius: var(--radius-pill); padding: 9px 16px; white-space: nowrap; transition: all .25s; }
+    .site-footer__copy .to-top:hover { color: #fff; border-color: rgba(255,255,255,0.3); }
+
+    /* =================================================================
+       01) HERO — 풀 뷰포트, BEFORE/AFTER 디바이스 콜라주
+       ================================================================= */
+    .hero { position: relative; min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; overflow: hidden;
+      padding-top: clamp(20px, 3vh, 48px); padding-bottom: clamp(16px, 2vh, 32px);
+      background:
+        radial-gradient(46% 50% at 92% 14%, rgba(161,45,46,0.08), transparent 70%),
+        radial-gradient(40% 44% at 0% 96%, rgba(211,59,59,0.06), transparent 72%),
+        var(--color-bg); }
+    .hero > .container { flex: 1 1 auto; display: flex; flex-direction: column; }
+    .hero__top { flex: 1 1 auto; display: grid; grid-template-columns: 1fr; gap: var(--block-gap); align-items: center; }
+    .hero__copy { display: flex; flex-direction: column; align-items: flex-start; }
+    .hero__eyebrow { display: inline-flex; align-items: center; gap: 12px; font-size: 15px; font-weight: var(--fw-bold); letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-burgundy); margin-bottom: 24px; }
+    .hero__eyebrow .no { color: var(--color-burgundy); }
+    .hero__title { font-size: clamp(30px, 3.6vw, 48px); font-weight: var(--fw-semibold); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 24px; word-break: keep-all; }
+    .hero__title em { font-style: normal; background: var(--gradient-brand); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .hero__desc { font-size: clamp(17px, 1.35vw, 22px); font-weight: var(--fw-medium); margin-bottom: 48px; max-width: 520px; color: var(--color-text-muted); line-height: 1.6; word-break: keep-all; }
+    /* 스탯 카드 */
+    .hero__stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(12px, 1.4vw, 18px); width: 100%; max-width: 560px; }
+    .hstat { background: var(--color-white); border: 1px solid var(--color-line); border-radius: var(--radius-md); padding: clamp(16px, 1.6vw, 22px); box-shadow: var(--shadow-soft); transition: transform .3s var(--ease), box-shadow .3s; }
+    .hstat:hover { transform: translateY(-4px); box-shadow: var(--shadow-card); }
+    .hstat__ico { width: 38px; height: 38px; border-radius: 12px; /* 아이콘 박스만 이전 라운드(12px) 유지 */ background: var(--color-light-gray); color: var(--color-burgundy); display: grid; place-items: center; margin-bottom: 16px; }
+    .hstat__ico svg { width: 19px; height: 19px; }
+    .hstat__num { font-size: clamp(26px, 2.8vw, 36px); font-weight: var(--fw-black); color: var(--color-burgundy); line-height: 1; letter-spacing: -0.02em; }
+    .hstat__label { font-size: clamp(16px, 1.2vw, 18px); font-weight: var(--fw-bold); color: var(--color-text); margin-top: 8px; }
+    .hstat__desc { font-size: 13px; color: var(--color-text-muted); margin-top: 5px; line-height: 1.4; word-break: keep-all; }
+    /* 우측 디바이스 콜라주 (BEFORE 뒤 / AFTER 앞, 대각선 겹침) */
+    .hero__visual { position: relative; min-height: clamp(460px, 48vw, 620px); }
+    .hv-device { position: absolute; width: 52%; min-width: 190px; transition: transform .6s var(--ease), box-shadow .6s var(--ease); }
+    .hv-before { left: 0; top: 0; z-index: 1; }
+    .hv-after { right: 0; top: 16%; z-index: 2; }
+    .hv-device__frame { background: #1B1614; border-radius: 30px; padding: 13px 11px; box-shadow: var(--shadow-card), 0 0 0 1.5px rgba(255,255,255,0.06) inset; }
+    .hv-device__screen { border-radius: 16px; overflow: hidden; background: #fff; aspect-ratio: 3 / 4; }
+    .hv-device__screen img { width: 100%; height: 100%; object-fit: cover; object-position: center top; transition: object-position 7s linear; }
+    .hv-device:hover, .hv-device:focus-within { z-index: 6; transform: scale(1.06) translateY(-6px); }
+    .hv-device:hover .hv-device__screen img, .hv-device:focus-within .hv-device__screen img { object-position: center bottom; }
+    .hv-device__tag { position: absolute; top: -14px; right: 18px; z-index: 7; font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.14em; color: #fff; padding: 7px 16px; border-radius: var(--radius-pill); box-shadow: var(--shadow-soft); }
+    .hv-device__tag--before { background: var(--color-text-muted); }
+    .hv-device__tag--after { background: var(--color-burgundy); }
+    /* 스크롤 안내 */
+    .hero__scroll { flex: none; display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: clamp(12px, 2vh, 24px); color: var(--color-burgundy); font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.22em; }
+    .hero__scroll svg { width: 18px; height: 18px; animation: dHintBounce 1.6s var(--ease) infinite; }
+    @keyframes dHintBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
+    @media (prefers-reduced-motion: reduce) { .hv-device__screen img { transition: none; } .hero__scroll svg { animation: none; } }
+    @media (min-width: 1101px) { .hero__top { grid-template-columns: 0.86fr 1.14fr; gap: clamp(28px, 4vw, 64px); } }
+    @media (max-width: 1100px) { .hero__visual { order: -1; min-height: clamp(440px, 90vw, 620px); max-width: 560px; margin-inline: auto; width: 100%; } }
+    @media (max-width: 480px) { .hero__stats { grid-template-columns: 1fr; } }
+
+    /* =================================================================
+       02) WHY THIS PROJECT (stats)
+       ================================================================= */
+    /* Why This Project — 진료실 사진 배경 (어두운 오버레이 + 밝은 글자) */
+    #why { background-color: var(--color-deep); background-image: linear-gradient(90deg, rgba(18,8,8,0.90) 0%, rgba(18,8,8,0.74) 45%, rgba(18,8,8,0.45) 100%), url('./images/system_2_0.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; }
+    #why .label { color: var(--color-soft-red); }
+    #why .title { color: #fff; }
+    #why .lead { color: rgba(255,255,255,0.78); }
+    .why__grid { display: grid; grid-template-columns: 1fr; gap: var(--block-gap); align-items: start; }
+    .why__shot .img-slot { aspect-ratio: 4/3; box-shadow: var(--shadow-card); }
+    .why__cards .stats { grid-template-columns: 1fr; margin-top: 0; gap: clamp(12px,1.6vw,18px); }
+    /* 반투명 글래스 카드 (다크 배경 위) */
+    #why .stat { background: rgba(0,0,0,0.40); border: 1px solid rgba(255,255,255,0.16); box-shadow: 0 10px 30px rgba(0,0,0,0.32); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); transition: background .3s var(--ease), transform .3s var(--ease); }
+    #why .stat:hover { background: rgba(0,0,0,0.55); transform: translateY(-3px); }
+    #why .stat__num { color: #D33B3B;
+      background-image: linear-gradient(115deg, transparent 36%, rgba(255,240,214,0.16) 44%, rgba(255,248,234,0.82) 50%, rgba(255,240,214,0.16) 56%, transparent 64%), linear-gradient(#D33B3B, #D33B3B);
+      background-size: 280% 100%, 100% 100%; background-position: 200% 0, 0 0; background-repeat: no-repeat;
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+      animation: numShine 4s linear infinite; animation-play-state: paused; }
+    #why.is-inview .stat__num { animation-play-state: running; }
+    @keyframes numShine { 0% { background-position: 200% 0, 0 0; } 100% { background-position: -120% 0, 0 0; } }
+    @media (prefers-reduced-motion: reduce) { #why .stat__num { animation: none; } }
+    #why .stat__label { color: rgba(255,255,255,0.78); }
+    @media (max-width: 767px) { #why { background-image: linear-gradient(rgba(18,8,8,0.86), rgba(18,8,8,0.86)), url('./images/system_2_0.jpg'); } }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(12px,2vw,24px); margin-top: var(--block-gap); }
+    .stat { padding: clamp(18px,2.4vw,30px); border-radius: var(--radius-md); background: var(--color-white); border: 1px solid var(--color-line); box-shadow: var(--shadow-soft); }
+    .stat__num { font-size: clamp(30px,4.4vw,56px); font-weight: var(--fw-black); line-height: 1; color: var(--color-burgundy); letter-spacing: -0.02em; }
+    .stat__label { margin-top: 10px; font-size: var(--fs-small); font-weight: var(--fw-semibold); color: var(--color-text-muted); }
+
+    /* =================================================================
+       03) PROBLEM DISCOVERY (Bento 5 cards)
+       ================================================================= */
+    .bento { display: grid; grid-template-columns: 1fr; gap: clamp(14px,1.8vw,22px); }
+    .pcard { padding: clamp(26px,3vw,40px); border-radius: var(--radius-lg); background: var(--color-white); border: 1px solid var(--color-line); box-shadow: var(--shadow-soft); transition: transform var(--ease) .4s, box-shadow .3s, border-color .3s; }
+    .pcard:hover { transform: translateY(-6px); box-shadow: var(--shadow-card); border-color: rgba(161,45,46,0.3); }
+    .pcard__ico { width: 54px; height: 54px; border-radius: var(--radius-md); background: var(--color-light-gray); display: grid; place-items: center; color: var(--color-burgundy); margin-bottom: 20px; }
+    .pcard__ico svg { width: 26px; height: 26px; }
+    .pcard__no { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.12em; color: var(--color-soft-red); }
+    .pcard__title { margin-top: 8px; font-size: var(--fs-h3); font-weight: var(--fw-bold); word-break: keep-all; }
+
+    /* Problem Discovery — 이미지 위 주석형 인터랙션 */
+    .pdiscover { margin-top: var(--block-gap); }
+    .pdiscover__stage { position: relative; max-width: 960px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+    .pdiscover__img { width: clamp(260px, 72vw, 380px); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); border: 1px solid var(--color-line); }
+    .pann { width: 100%; max-width: 440px; background: var(--color-white); border: 1px solid var(--color-line); border-left: 3px solid var(--color-soft-red); border-radius: var(--radius-md); box-shadow: var(--shadow-soft); padding: 16px 18px; transition: transform .35s var(--ease), box-shadow .3s, border-color .3s; }
+    .pann:hover { transform: translateY(-4px); box-shadow: var(--shadow-card); border-left-color: var(--color-burgundy); }
+    .pann__no { display: inline-flex; align-items: center; gap: 8px; font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-soft-red); }
+    .pann__no i { width: 24px; height: 24px; border-radius: 50%; background: var(--color-light-gray); color: var(--color-burgundy); display: grid; place-items: center; font-style: normal; font-weight: var(--fw-black); font-size: 13px; transition: background .3s, color .3s, transform .3s; }
+    .pann:hover .pann__no i { background: var(--color-burgundy); color: #fff; transform: scale(1.1); }
+    .pann__title { margin-top: 6px; font-size: var(--fs-h3); font-weight: var(--fw-bold); word-break: keep-all; }
+    @media (min-width: 992px) {
+      .pdiscover__stage { display: block; min-height: clamp(480px, 40vw, 580px); }
+      .pdiscover__img { position: relative; z-index: 1; display: block; margin: 0 auto; width: clamp(300px, 28vw, 360px); }
+      .pann { position: absolute; width: clamp(200px, 21vw, 250px); margin: 0; }
+      .pann::after { content: ""; position: absolute; top: 30px; height: 2px; width: 32px; background: var(--color-soft-red); opacity: .45; transition: opacity .3s, background .3s; }
+      .pann::before { content: ""; position: absolute; top: 26px; width: 10px; height: 10px; border-radius: 50%; background: var(--color-soft-red); transition: background .3s, transform .3s; }
+      .pann:hover::after { opacity: 1; background: var(--color-burgundy); }
+      .pann:hover::before { background: var(--color-burgundy); transform: scale(1.35); }
+      .pann--1, .pann--2, .pann--3 { left: 0; }
+      .pann--1::after, .pann--2::after, .pann--3::after { right: -32px; }
+      .pann--1::before, .pann--2::before, .pann--3::before { right: -38px; }
+      .pann--4, .pann--5 { right: 0; }
+      .pann--4::after, .pann--5::after { left: -32px; }
+      .pann--4::before, .pann--5::before { left: -38px; }
+      .pann--1 { top: 4%; }
+      .pann--2 { top: 40%; }
+      .pann--3 { top: 76%; }
+      .pann--4 { top: 12%; }
+      .pann--5 { top: 46%; }
+    }
+
+    /* =================================================================
+       04) COMPETITIVE ANALYSIS (table)
+       ================================================================= */
+    .table-wrap { margin-top: var(--block-gap); overflow-x: auto; border-radius: var(--radius-lg); border: 1px solid var(--color-line); -webkit-overflow-scrolling: touch; }
+    .ctable { min-width: 640px; background: var(--color-white); }
+    .ctable th, .ctable td { padding: clamp(14px,1.8vw,22px); text-align: center; border-bottom: 1px solid var(--color-line); font-size: var(--fs-small); }
+    .ctable thead th { font-weight: var(--fw-bold); color: var(--color-text); background: var(--color-bg-soft); }
+    .ctable thead th.is-target { background: var(--color-burgundy); color: #fff; }
+    .ctable tbody th { text-align: left; font-weight: var(--fw-bold); color: var(--color-text); white-space: nowrap; }
+    .ctable td.is-target { background: rgba(161,45,46,0.05); font-weight: var(--fw-bold); }
+    .ctable tr:last-child td, .ctable tr:last-child th { border-bottom: none; }
+    .rate { letter-spacing: 2px; color: var(--color-soft-red); }
+    .rate--low { color: #C9C2BC; }
+    .tag-low { display: inline-block; margin-left: 6px; padding: 2px 8px; border-radius: var(--radius-pill); background: rgba(161,45,46,0.1); color: var(--color-burgundy); font-size: 11px; font-weight: var(--fw-bold); }
+    /* 경쟁사명 호버 시 화면 미리보기 */
+    .co { position: relative; display: inline-block; cursor: help; border-bottom: 1px dotted var(--color-text-muted); padding-bottom: 1px; }
+    .co-pop { position: absolute; top: calc(100% + 12px); left: 50%; transform: translateX(-50%) translateY(-6px); width: clamp(280px, 38vw, 480px); max-width: none; border-radius: var(--radius-md); border: 1px solid var(--color-line); box-shadow: var(--shadow-card); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .25s var(--ease), transform .25s var(--ease), visibility .25s; z-index: 30; }
+    .co-pop::after { content: ""; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); border: 7px solid transparent; border-bottom-color: var(--color-white); filter: drop-shadow(0 -1px 0 var(--color-line)); }
+    .co:hover .co-pop, .co:focus-visible .co-pop { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+    /* 데스크탑에서는 표 overflow를 풀어 미리보기 팝업이 잘리지 않도록 */
+    @media (min-width: 768px) { .table-wrap { overflow: visible; } }
+
+    /* =================================================================
+       05) UX STRATEGY (3 big before/after cards)
+       ================================================================= */
+    .strategies { display: grid; grid-template-columns: 1fr; gap: clamp(16px,2vw,26px); }
+    .scard { padding: clamp(28px,3.2vw,42px); border-radius: var(--radius-lg); background: var(--color-white); border: 1px solid var(--color-line); box-shadow: var(--shadow-card); }
+    .scard__no { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.14em; color: var(--color-soft-red); }
+    .scard__title { margin: 8px 0 22px; font-size: clamp(24px,3vw,34px); font-weight: var(--fw-black); }
+    .scard__ba { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    .ba-pill { padding: 16px 18px; border-radius: var(--radius-md); font-size: var(--fs-small); }
+    .ba-pill small { display: block; font-size: 11px; font-weight: var(--fw-black); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
+    .ba-pill--b { background: #F6EEEC; color: #9A6B68; }
+    .ba-pill--b small { color: #C0726F; }
+    .ba-pill--a { background: var(--color-light-gray); color: var(--color-text); font-weight: var(--fw-bold); }
+    .ba-pill--a small { color: var(--color-burgundy); }
+
+    /* =================================================================
+       06) INFORMATION ARCHITECTURE (before/after lists)
+       ================================================================= */
+    .ia { display: grid; grid-template-columns: 1fr; gap: clamp(20px,3vw,40px); align-items: stretch; margin-top: var(--block-gap); }
+    .ia__col { padding: clamp(24px,3vw,36px); border-radius: var(--radius-lg); border: 1px solid var(--color-line); background: var(--color-white); }
+    .ia__col--after { background: var(--color-deep); color: #fff; border-color: transparent; }
+    .ia__tag { font-size: var(--fs-small); font-weight: var(--fw-black); letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-text-muted); margin-bottom: 18px; }
+    .ia__col--after .ia__tag { color: var(--color-soft-red); }
+    .ia__list { display: flex; flex-direction: column; gap: 10px; counter-reset: ia; }
+    .ia__item { padding: 14px 18px; border-radius: var(--radius-md); background: var(--color-bg-soft); font-weight: var(--fw-semibold); font-size: var(--fs-small); }
+    .ia__col--after .ia__item { background: rgba(255,255,255,0.08); }
+    .ia__col--after .ia__item:first-child { background: var(--color-soft-red); }
+    .ia__col--after .ia__item:last-child { background: var(--color-burgundy); } /* 디지털 진료 시스템: 다른 레드(버건디)로 강조 */
+    .ia__arrow { display: grid; place-items: center; color: var(--color-burgundy); }
+    .ia__arrow svg { width: 26px; height: 26px; }
+
+    /* =================================================================
+       07) USER JOURNEY (가로 타임라인, ink)
+       ================================================================= */
+    /* 가로 타임라인 (5단계) */
+    .journey { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; margin-top: var(--block-gap); }
+    .jstep { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 6px; position: relative; }
+    .jstep:not(:last-child)::before { content: ""; position: absolute; top: 28px; left: calc(50% + 30px); right: calc(-50% + 30px); height: 2px; background: rgba(255,255,255,0.16); }
+    .jstep__node { width: 56px; height: 56px; border-radius: var(--radius-pill); background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.18); display: grid; place-items: center; color: var(--color-soft-red); position: relative; z-index: 1; margin-bottom: 16px; }
+    .jstep__node svg { width: 26px; height: 26px; }
+    .jstep__no { font-size: var(--fs-small); font-weight: var(--fw-bold); color: var(--color-soft-red); letter-spacing: 0.1em; }
+    .jstep__title { margin-top: 4px; font-size: clamp(15px, 1.4vw, 19px); font-weight: var(--fw-bold); word-break: keep-all; }
+    @media (max-width: 640px) {
+      .journey { grid-template-columns: 1fr; gap: 8px; }
+      .jstep { flex-direction: row; align-items: flex-start; text-align: left; gap: 16px; padding: 0 0 26px; }
+      .jstep__node { margin-bottom: 0; }
+      .jstep__body { padding-top: 6px; }
+      .jstep:not(:last-child)::before { top: 56px; bottom: -4px; left: 27px; right: auto; width: 2px; height: auto; }
+    }
+
+    /* Page Restructuring — BEFORE/AFTER 자동 스크롤 비교 */
+    .browser { border-radius: var(--radius-md); overflow: hidden; background: #fff; border: 1px solid var(--color-line); box-shadow: var(--shadow-card); }
+    .browser__bar { display: flex; align-items: center; gap: 12px; height: 42px; padding: 0 16px; background: #F2EFEC; border-bottom: 1px solid var(--color-line); }
+    .browser__dots { display: flex; gap: 7px; flex: none; }
+    .browser__dots i { width: 11px; height: 11px; border-radius: 50%; background: #D6CFC9; }
+    .browser__dots i:nth-child(1){ background: #FF5F57; } .browser__dots i:nth-child(2){ background: #FEBC2E; } .browser__dots i:nth-child(3){ background: #28C840; }
+    .browser__url { flex: 1; height: 24px; display: flex; align-items: center; padding: 0 12px; background: #fff; border: 1px solid var(--color-line); border-radius: var(--radius-pill); font-size: var(--fs-small); color: var(--color-text-muted); overflow: hidden; white-space: nowrap; }
+    .browser__body { background: #fff; display: block; }
+    .browser__body--scroll { height: clamp(360px,52vh,560px); overflow: hidden; position: relative; }
+    .browser__body--scroll img { width: 100%; display: block; will-change: transform; }
+    .tag { display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.12em; padding: 6px 14px; border-radius: var(--radius-pill); }
+    .tag--before { color: var(--color-text-muted); border: 1px solid var(--color-line); background: var(--color-bg-soft); }
+    .tag--after { color: #fff; background: var(--color-burgundy); }
+    .compare { display: grid; grid-template-columns: 1fr auto 1fr; gap: clamp(16px,2vw,24px); align-items: center; margin-top: var(--block-gap); }
+    .compare__col { display: flex; flex-direction: column; }
+    .compare__top { display: flex; justify-content: center; margin-bottom: 14px; }
+    .compare__arrow { width: 48px; height: 48px; border-radius: 50%; background: var(--color-burgundy); color: #fff; display: grid; place-items: center; font-size: 20px; box-shadow: 0 8px 20px rgba(161,45,46,0.3); flex: none; }
+    .frame-cap { font-size: var(--fs-small); color: var(--color-text-muted); margin-top: 14px; text-align: center; }
+    .case-sub { font-size: var(--fs-body); color: var(--color-text-muted); max-width: 64ch; margin: 16px auto 0; text-align: center; line-height: 1.6; word-break: keep-all; }
+    .case-hint { font-size: var(--fs-small); color: var(--color-text-muted); margin-top: 24px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .case-hint svg { width: 16px; height: 16px; flex: none; }
+    .restruct-head { max-width: 760px; margin: 0 auto; text-align: center; }
+    /* STEP 지그재그 (이미지/텍스트 교차) */
+    .restruct-rows { display: flex; flex-direction: column; gap: clamp(48px,7vw,96px); margin-top: clamp(48px,7vw,100px); }
+    .rrow { display: grid; grid-template-columns: 1fr; gap: clamp(20px,4vw,48px); align-items: center; }
+    .rslot { aspect-ratio: 4/3; border-radius: var(--radius-lg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; text-align: center; padding: 20px; background: #E7E3DE; background-image: repeating-linear-gradient(45deg, transparent, transparent 16px, rgba(161,45,46,0.04) 16px, rgba(161,45,46,0.04) 32px); box-shadow: var(--shadow-soft); }
+    .rslot__big { font-size: clamp(20px,2.4vw,30px); font-weight: var(--fw-black); color: #5A534E; letter-spacing: -0.01em; }
+    .rslot__cap { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.04em; color: #A89E97; }
+    .rvideo, .rimg { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: var(--radius-lg); box-shadow: var(--shadow-card); display: block; background: #000; }
+    .rstep { font-size: clamp(14px,1vw,16px); font-weight: var(--fw-bold); letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-soft-red); margin-bottom: 16px; }
+    .rtitle { font-size: clamp(26px,3vw,40px); font-weight: var(--fw-black); line-height: 1.3; color: var(--color-text); margin-bottom: 18px; word-break: keep-all; }
+    .rdesc { font-size: clamp(16px,1.35vw,20px); color: var(--color-text-muted); line-height: 1.8; word-break: keep-all; }
+    @media (min-width: 768px) {
+      .rrow { grid-template-columns: 1fr 1fr; gap: clamp(40px,5vw,80px); }
+      .rrow--rev .rrow__media { order: 2; }
+    }
+    .restruct-head .label { justify-content: center; }
+    @media (max-width: 767px) {
+      .compare { grid-template-columns: 1fr; gap: var(--block-gap); }
+      .compare__arrow { transform: rotate(90deg); margin-inline: auto; }
+    }
+
+    /* =================================================================
+       08) BEFORE & AFTER (slider, 가장 크게)
+       ================================================================= */
+    /* Before/After 캐러셀 (케이스 3개 슬라이드) */
+    .bacarousel { position: relative; max-width: 700px; margin: clamp(48px,7vw,100px) auto 0; }
+    .bacarousel__viewport { overflow: hidden; }
+    .bablock { display: flex; flex-wrap: nowrap; transition: transform .55s var(--ease); will-change: transform; }
+    .bacase { flex: 0 0 100%; max-width: 100%; }
+    .bacase__head { margin-bottom: 18px; }
+    .bacarousel__arrow { position: absolute; top: 58%; transform: translateY(-50%); z-index: 10; width: 44px; height: 44px; border-radius: 50%; background: var(--color-burgundy); border: 1px solid var(--color-burgundy); box-shadow: 0 6px 16px rgba(0,0,0,0.16); color: #fff; font-size: 24px; line-height: 1; display: grid; place-items: center; cursor: pointer; transition: background .2s, color .2s, border-color .2s, box-shadow .2s, transform .2s; }
+    .bacarousel__arrow:hover { background: var(--color-soft-red); border-color: var(--color-soft-red); color: #fff; box-shadow: 0 10px 22px rgba(0,0,0,0.22); transform: translateY(-50%) scale(1.06); }
+    .bacarousel__arrow--prev { left: -60px; }   /* 이미지 바깥 왼쪽 */
+    .bacarousel__arrow--next { right: -60px; }  /* 이미지 바깥 오른쪽 */
+    /* 좁은 화면: 양옆 공간 부족 → 다시 이미지 안쪽으로 */
+    @media (max-width: 880px) {
+      .bacarousel__arrow--prev { left: 8px; }
+      .bacarousel__arrow--next { right: 8px; }
+    }
+    .bacarousel__dots { display: flex; justify-content: center; gap: 8px; margin-top: 20px; }
+    .bacarousel__dot { width: 9px; height: 9px; border-radius: 50%; background: var(--color-line); border: none; padding: 0; cursor: pointer; transition: background .2s, width .2s; }
+    .bacarousel__dot.is-active { background: var(--color-burgundy); width: 24px; border-radius: 5px; }
+    /* AI 활용 — 캐러셀 우측 원형 로고 배지 */
+    .ba-top { display: flex; align-items: center; justify-content: space-between; gap: clamp(24px,4vw,56px); flex-wrap: wrap; }
+    .ba-top .head { margin-bottom: 0; flex: 1 1 380px; }
+    .ba-logos { display: flex; flex-direction: row; align-items: center; gap: clamp(16px,2vw,24px); flex: none; }
+    .ba-logos__label { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-text-muted); }
+    .ai-badge { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .ai-badge__circle { width: clamp(62px,6vw,88px); height: clamp(62px,6vw,88px); border-radius: 50%; display: grid; place-items: center; background: #fff; border: 1px solid var(--color-line); box-shadow: var(--shadow-card); transition: transform .3s var(--ease); }
+    .ai-badge:hover .ai-badge__circle { transform: translateY(-3px) scale(1.05); }
+    .ai-badge__circle img { width: 62%; height: 62%; object-fit: contain; }
+    .ai-badge--mj .ai-badge__circle img { width: 72%; height: 72%; }
+    .ai-badge--gpt .ai-badge__circle img { width: 46%; height: 46%; }
+    .ai-badge__name { font-size: 13px; font-weight: var(--fw-bold); color: var(--color-text); }
+    .bacase__no { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.12em; color: var(--color-soft-red); }
+    .bacase__title { margin-top: 6px; font-size: clamp(22px,3vw,34px); font-weight: var(--fw-black); }
+    .ba { position: relative; width: 100%; border-radius: var(--radius-lg); border: 1px solid #E9E6E2; overflow: hidden; box-shadow: var(--shadow-card); user-select: none; touch-action: pan-y; aspect-ratio: 16/9; background: #000; }
+    .ba__layer { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: var(--fs-h2); font-weight: var(--fw-black); letter-spacing: 0.1em; }
+    .ba__layer--before { background: #D8D2CD; color: #fff; }
+    .ba__after { position: absolute; inset: 0; width: 50%; overflow: hidden; }
+    .ba__after-inner { position: absolute; left: 0; top: 0; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--color-light-gray); color: var(--color-burgundy); font-size: var(--fs-h2); font-weight: var(--fw-black); letter-spacing: 0.1em; }
+    /* 슬라이더에 실제 이미지를 넣으면 영역을 꽉 채움 (Before/After 이미지는 같은 크기로 준비) */
+    .ba__layer img, .ba__after-inner img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .ba__tag { position: absolute; top: 16px; padding: 7px 16px; border-radius: var(--radius-pill); font-size: var(--fs-small); font-weight: var(--fw-bold); color: #fff; z-index: 3; }
+    .ba__tag--before { left: 16px; background: rgba(0,0,0,0.5); }
+    .ba__tag--after { right: 16px; background: var(--color-burgundy); }
+    .ba__handle { position: absolute; top: 0; bottom: 0; left: 50%; width: 3px; background: #fff; transform: translateX(-50%); z-index: 4; }
+    .ba__knob { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; border-radius: var(--radius-pill); background: #fff; box-shadow: 0 6px 18px rgba(0,0,0,0.28); display: grid; place-items: center; color: var(--color-burgundy); font-weight: var(--fw-bold); z-index: 5; }
+    .ba__range { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: ew-resize; z-index: 6; margin: 0; }
+
+    /* =================================================================
+       09) DESIGN SYSTEM (Bento)
+       ================================================================= */
+    .dsbento { display: grid; grid-template-columns: 1fr; gap: clamp(14px,1.8vw,22px); margin-top: var(--block-gap); }
+    .dspanel { background: var(--color-white); border: 1px solid var(--color-line); border-radius: var(--radius-lg); padding: clamp(24px,3vw,36px); box-shadow: var(--shadow-soft); }
+    .dspanel__label { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-soft-red); margin-bottom: 20px; }
+    .dscolors { display: flex; flex-direction: column; gap: 10px; }
+    .dscolor { display: flex; align-items: center; gap: 12px; font-size: var(--fs-small); font-weight: var(--fw-medium); }
+    .dsswatch { width: 40px; height: 40px; border-radius: var(--radius-sm); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.07); }
+    .dstype { font-size: clamp(28px,3.6vw,44px); font-weight: var(--fw-black); letter-spacing: -0.02em; }
+    .dstype small { display: block; margin-top: 8px; font-size: var(--fs-small); font-weight: var(--fw-medium); color: var(--color-text-muted); letter-spacing: 0; }
+    .dscomp { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+    .c-btn { padding: 11px 22px; border-radius: var(--radius-pill); background: var(--color-burgundy); color: #fff; font-weight: var(--fw-bold); font-size: var(--fs-small); }
+    .c-card { padding: 14px 20px; border-radius: var(--radius-md); background: var(--color-light-gray); font-weight: var(--fw-bold); font-size: var(--fs-small); }
+    .c-cta { padding: 11px 22px; border-radius: var(--radius-sm); border: 1.5px solid var(--color-burgundy); color: var(--color-burgundy); font-weight: var(--fw-bold); font-size: var(--fs-small); }
+    .c-ico { width: 44px; height: 44px; border-radius: var(--radius-md); background: var(--color-bg-soft); display: grid; place-items: center; color: var(--color-burgundy); }
+    .dsgrid8 { display: flex; align-items: flex-end; gap: 8px; height: 80px; }
+    .dsgrid8 i { display: block; width: 16px; background: var(--color-light-gray); border-radius: 4px; }
+
+    /* Design System — 모두매쓰 레이아웃 이식 (Color+Type 2단 → Components → Spacing) */
+    /* 내용은 A2Z 폰트 (제목/라벨이 들어있는 .head 는 제외) */
+    .ds-row, .ds-block { font-family: 'A2z', var(--font-base); }
+    .ds-row { display: grid; grid-template-columns: 1fr; gap: clamp(14px,1.8vw,22px); margin-bottom: clamp(14px,1.8vw,22px); align-items: stretch; }
+    .ds-block { border: 1px solid var(--color-line); border-radius: var(--radius-lg); padding: clamp(24px,3vw,40px); background: var(--color-white); display: flex; flex-direction: column; box-shadow: var(--shadow-soft); }
+    .ds-block > h3 { font-size: var(--fs-small); font-weight: var(--fw-bold); color: var(--color-text-muted); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 24px; }
+    .col-label { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: .14em; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 10px; }
+    .color-stack { display: flex; flex-direction: column; gap: 20px; flex: 1; justify-content: space-between; }
+    .swatch-primary { display: flex; align-items: flex-end; gap: 16px; min-height: 112px; border-radius: var(--radius-md); padding: 16px 20px; background: var(--color-burgundy); color: #fff; }
+    .swatch-primary .ph { font-size: 18px; font-weight: var(--fw-bold); }
+    .swatch-primary .ps { font-size: var(--fs-small); color: rgba(255,255,255,.92); margin-left: auto; text-align: right; line-height: 1.5; }
+    .swatch-primary .ps b { display: block; font-weight: var(--fw-bold); }
+    .swatches { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+    .swatch { border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--color-line); }
+    .swatch .chip-c { height: 60px; }
+    .swatch .meta { padding: 10px 12px; }
+    .swatch .hex { font-size: var(--fs-small); font-weight: var(--fw-bold); color: var(--color-text); }
+    .swatch .role { font-size: 13px; color: var(--color-text-muted); margin-top: 2px; }
+    .type-spec { font-size: clamp(40px,5vw,68px); font-weight: var(--fw-semibold); letter-spacing: -0.03em; color: var(--color-text); margin-bottom: 16px; line-height: 1; }
+    .type-weights { display: flex; flex-wrap: wrap; gap: 18px; font-size: 18px; color: var(--color-text); margin-bottom: 20px; }
+    .type-weights span:nth-child(1){ font-weight: 100; } .type-weights span:nth-child(2){ font-weight: 300; }
+    .type-weights span:nth-child(3){ font-weight: 400; } .type-weights span:nth-child(4){ font-weight: 500; }
+    .type-weights span:nth-child(5){ font-weight: 600; }
+    .type-scale { border-top: 1px solid var(--color-line); padding-top: 20px; display: flex; flex-direction: column; gap: 18px; }
+    .type-scale .ts { color: var(--color-text); line-height: 1.15; letter-spacing: -0.02em; word-break: keep-all; }
+    .type-scale .ts small { display: block; font-size: var(--fs-small); color: var(--color-text-muted); font-weight: 500; letter-spacing: .06em; margin-bottom: 7px; }
+    .type-scale .ts--hero { font-size: clamp(30px,3.2vw,44px); font-weight: 600; }
+    .type-scale .ts--title { font-size: clamp(20px,2vw,26px); font-weight: 500; }
+    .type-scale .ts--body { font-size: 16px; font-weight: 400; color: var(--color-text-muted); line-height: 1.6; }
+    .comp-grid { display: grid; grid-template-columns: 1fr; gap: clamp(14px,1.6vw,20px); }
+    .comp-card { border: 1px solid var(--color-line); border-radius: var(--radius-md); padding: 20px; background: var(--color-white); display: flex; flex-direction: column; gap: 16px; }
+    .comp-body { flex: 1; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; justify-content: center; min-height: 96px; }
+    .comp-cap { font-size: var(--fs-small); color: var(--color-text-muted); border-top: 1px solid var(--color-line); padding-top: 10px; }
+    .btn-ds { display: inline-flex; align-items: center; justify-content: center; font-weight: var(--fw-bold); font-size: var(--fs-small); border-radius: var(--radius-pill); padding: 11px 22px; line-height: 1; white-space: nowrap; }
+    .btn-ds--primary { background: var(--color-burgundy); color: #fff; }
+    .btn-ds--secondary { background: var(--color-light-gray); color: var(--color-burgundy); }
+    .btn-ds--ghost { background: none; color: var(--color-burgundy); border: 1.5px solid var(--color-burgundy); }
+    .mini-card { border: 1px solid var(--color-line); border-radius: var(--radius-md); padding: 14px; box-shadow: var(--shadow-soft); width: 100%; }
+    .mini-card strong { display: block; font-size: var(--fs-small); color: var(--color-text); margin-bottom: 4px; }
+    .mini-card span { font-size: 13px; color: var(--color-text-muted); }
+    .ds-ico { width: 48px; height: 48px; border-radius: var(--radius-md); background: var(--color-bg-soft); display: grid; place-items: center; color: var(--color-burgundy); }
+    @media (min-width: 768px) {
+      .ds-row { grid-template-columns: 1.25fr 1fr; }
+      .comp-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    /* =================================================================
+       10) DEVELOPMENT (tools + timeline)
+       ================================================================= */
+    .tools { display: flex; flex-wrap: wrap; gap: 12px; margin-top: var(--block-gap); }
+    .tool { display: inline-flex; align-items: center; gap: 8px; padding: 12px 18px; border-radius: var(--radius-pill); background: var(--color-white); border: 1px solid var(--color-line); box-shadow: var(--shadow-soft); font-size: var(--fs-small); font-weight: var(--fw-semibold); }
+    .tool i { width: 8px; height: 8px; border-radius: var(--radius-pill); background: var(--color-burgundy); }
+    .process { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: clamp(36px,5vw,64px); }
+    .pstep { padding: 14px 24px; border-radius: var(--radius-md); background: var(--color-light-gray); font-weight: var(--fw-bold); font-size: var(--fs-small); }
+    .pstep--last { background: var(--color-burgundy); color: #fff; }
+    .parrow { color: var(--color-soft-red); font-size: 18px; }
+
+    /* =================================================================
+       11) EXPECTED IMPACT (5 value cards)
+       ================================================================= */
+    .impact { background: var(--gradient-brand); color: #fff; }
+    .impact .label { color: rgba(255,255,255,0.9); }
+    .impact .label::before { background: rgba(255,255,255,0.9); }
+    .impact .title { color: #fff; }
+    .impacts { display: grid; grid-template-columns: 1fr; gap: clamp(14px,1.8vw,22px); margin-top: var(--block-gap); }
+    .icard { padding: clamp(24px,3vw,38px); border-radius: var(--radius-lg); background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.22); backdrop-filter: blur(4px); }
+    .icard__no { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.14em; color: rgba(255,255,255,0.8); }
+    .icard__title { margin-top: 10px; font-size: var(--fs-h3); font-weight: var(--fw-black); word-break: keep-all; }
+
+    /* =================================================================
+       12) RETROSPECTIVE
+       ================================================================= */
+    .retro__wrap { max-width: 64ch; margin-inline: auto; }
+    .retro__rule { width: 60px; height: 3px; background: var(--gradient-brand); border-radius: 3px; margin-bottom: 32px; }
+    .retro__quote { margin: 0 0 24px; font-size: clamp(28px, 3.6vw, 52px); font-weight: var(--fw-black); line-height: 1.28; letter-spacing: -0.02em; word-break: keep-all; }
+    .retro__quote b { color: var(--color-burgundy); }
+    .retro__sub { margin: 0; color: var(--color-text-muted); line-height: 1.72; font-size: clamp(17px, 1.35vw, 22px); word-break: keep-all; }
+    .retro__cta { margin-top: 48px; display: flex; gap: 12px; justify-content: flex-start; flex-wrap: wrap; }
+
+    /* =================================================================
+       REVEAL
+       ================================================================= */
+    .js [data-reveal] { opacity: 0; transform: translateY(42px); will-change: transform, opacity; }
+    .js [data-reveal-scale] { opacity: 0; transform: scale(0.94); will-change: transform, opacity; }
+    .no-anim [data-reveal], .no-anim [data-reveal-scale] { opacity: 1 !important; transform: none !important; }
+    @media (prefers-reduced-motion: reduce) { .js [data-reveal], .js [data-reveal-scale] { opacity: 1 !important; transform: none !important; } }
+
+    /* =================================================================
+       반응형 — 폭이 늘수록 폰트/간격/여백/그리드 확장
+       ================================================================= */
+    @media (min-width: 768px) {
+      .why__grid { grid-template-columns: 1.05fr 0.95fr; }
+      .bento { grid-template-columns: repeat(6, 1fr); }
+      .pcard { grid-column: span 2; }
+      .pcard:nth-child(1), .pcard:nth-child(2) { grid-column: span 3; } /* 상단 2개 큼 */
+      .strategies { grid-template-columns: repeat(3, 1fr); }
+      .scard__ba { grid-template-columns: 1fr; }
+      .ia { grid-template-columns: 1fr auto 1fr; }
+      .impacts { grid-template-columns: repeat(5, 1fr); }
+    }
+    @media (min-width: 1024px) {
+      .dsbento { grid-template-columns: repeat(12, 1fr); grid-auto-rows: minmax(0, auto); }
+      .dspanel--color { grid-column: span 4; grid-row: span 2; }
+      .dspanel--type { grid-column: span 8; }
+      .dspanel--comp { grid-column: span 5; }
+      .dspanel--space { grid-column: span 3; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ============ HEADER (공통) ============ -->
+  <header class="site-header" id="top">
+    <div class="container site-header__inner">
+      <a class="site-header__logo" href="./index.html#profile">PORT<b>FOLIO</b></a>
+      <nav class="site-nav" aria-label="섹션 이동">
+        <a href="#problem">Problem</a>
+        <a href="#strategy">Strategy</a>
+        <a href="#beforeafter">Before/After</a>
+        <a href="#impact">Impact</a>
+      </nav>
+      <a class="site-header__back" href="./index.html"><span aria-hidden="true">←</span> PORTFOLIO</a>
+    </div>
+  </header>
+
+  <!-- ============ 플로팅 메뉴 (우측 하단) ============ -->
+  <div class="float-menu" aria-label="바로가기">
+    <a class="float-menu__btn float-menu__btn--ghost" href="./index.html#dental" aria-label="시스템치과 파트로 가기">
+      <span class="fab__label">메인으로 가기</span>
+      <span class="fab__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></span>
+    </a>
+    <a class="float-menu__btn float-menu__btn--live" href="https://kkm15921598.github.io/system_dental/index.html" target="_blank" rel="noopener" aria-label="웹사이트 보기">
+      <span class="fab__label">웹사이트 보기</span>
+      <span class="fab__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+    </a>
+  </div>
+
+  <main>
+    <!-- ============ 01 HERO ============ -->
+    <section class="hero">
+      <div class="container container--wide">
+        <div class="hero__top">
+          <!-- 좌측: 카피 -->
+          <div class="hero__copy">
+            <span class="hero__eyebrow" data-reveal>Project Summary</span>
+            <h1 class="hero__title" data-reveal>가격이 아닌 <em>신뢰</em>를 전하는<br />시스템치과 UI/UX 리뉴얼</h1>
+            <p class="hero__desc" data-reveal>21년 운영된 시스템치과의 온라인 경험을 분석해,<br />브랜드 신뢰를 높인 UX/UI 리디자인 프로젝트입니다.</p>
+            <div class="hero__stats" data-reveal>
+              <div class="hstat">
+                <span class="hstat__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v9l7 4"/><circle cx="12" cy="12" r="9"/></svg></span>
+                <div class="hstat__num">50%</div>
+                <div class="hstat__label">기획</div>
+                <p class="hstat__desc">UX · 정보 구조 · CTA 개선</p>
+              </div>
+              <div class="hstat">
+                <span class="hstat__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span>
+                <div class="hstat__num">20%</div>
+                <div class="hstat__label">디자인</div>
+                <p class="hstat__desc">UI 디자인 · 프로토타입</p>
+              </div>
+              <div class="hstat">
+                <span class="hstat__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg></span>
+                <div class="hstat__num">30%</div>
+                <div class="hstat__label">퍼블리싱</div>
+                <p class="hstat__desc">HTML · CSS · JS 구현</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 우측: BEFORE / AFTER 디바이스 콜라주 -->
+          <div class="hero__visual" data-reveal-scale>
+            <figure class="hv-device hv-before" tabindex="0" aria-label="시스템치과 기존 전체 화면 — 마우스를 올리면 스크롤됩니다">
+              <span class="hv-device__tag hv-device__tag--before">BEFORE</span>
+              <div class="hv-device__frame"><div class="hv-device__screen"><img src="./images/system_Before_scroll.png" alt="시스템치과 기존 전체 화면" /></div></div>
+            </figure>
+            <div class="hv-device hv-after" tabindex="0" aria-label="시스템치과 리뉴얼 후 전체 화면 — 마우스를 올리면 스크롤됩니다">
+              <span class="hv-device__tag hv-device__tag--after">AFTER</span>
+              <div class="hv-device__frame"><div class="hv-device__screen"><img src="./images/system_After_scroll.png" alt="시스템치과 리뉴얼 후 전체 화면" /></div></div>
+            </div>
+          </div>
+        </div>
+
+        <a class="hero__scroll" href="#why" data-reveal>
+          SCROLL
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============ 02 WHY THIS PROJECT ============ -->
+    <section class="section section--soft" id="why">
+      <div class="container">
+        <div class="why__grid">
+          <div class="why__text">
+            <span class="label" data-reveal>Why This Project</span>
+            <h2 class="title" data-reveal>병원의 경쟁력은 충분했지만<br />온라인 경험은 그렇지 못했습니다.</h2>
+            <p class="lead" data-reveal>시스템치과는 21년 이상 운영된 치과로 풍부한 진료 경험과 다양한 콘텐츠를 보유하고 있었습니다. 하지만 홈페이지에서는 그 강점이 효과적으로 전달되지 않았고, 사용자가 신뢰를 형성하기 어려운 구조였습니다.</p>
+          </div>
+          <div class="why__cards" data-reveal-scale>
+            <div class="stats">
+              <div class="stat"><div class="stat__num">21년</div><p class="stat__label">한자리에서만 21년<br>경력의 치과 노하우</p></div>
+              <div class="stat"><div class="stat__num">0.1%</div><p class="stat__label">O사 임플란트<br>최다식립지표 최상위권</p></div>
+              <div class="stat"><div class="stat__num">4+</div><p class="stat__label">서울대 출신<br>치과 전문 의료진</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 03 PROBLEM DISCOVERY ============ -->
+    <section class="section" id="problem">
+      <div class="container">
+        <div class="head">
+          <span class="label" data-reveal>Problem Discovery</span>
+          <h2 class="title" data-reveal>강점은 분명했지만<br />사용자는 그것을 발견하기 어려웠습니다.</h2>
+        </div>
+        <div class="pdiscover" data-reveal-scale>
+          <div class="pdiscover__stage">
+            <img class="pdiscover__img" src="./images/system_3_1.jpg" alt="시스템치과 기존 메인 화면 — 문제 분석" />
+            <article class="pann pann--1"><p class="pann__no"><i>1</i> Problem 01</p><h3 class="pann__title">브랜드 표현 부족</h3></article>
+            <article class="pann pann--2"><p class="pann__no"><i>2</i> Problem 02</p><h3 class="pann__title">신뢰 형성 요소 부족</h3></article>
+            <article class="pann pann--3"><p class="pann__no"><i>3</i> Problem 03</p><h3 class="pann__title">CTA 설계 부족</h3></article>
+            <article class="pann pann--4"><p class="pann__no"><i>4</i> Problem 04</p><h3 class="pann__title">시각적 피로도 증가</h3></article>
+            <article class="pann pann--5"><p class="pann__no"><i>5</i> Problem 05</p><h3 class="pann__title">정보 구조 혼선</h3></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 04 COMPETITIVE ANALYSIS (숨김) ============ -->
+    <section class="section section--gray" style="display: none">
+      <div class="container">
+        <div class="head">
+          <span class="label" data-reveal>Competitive Analysis</span>
+          <h2 class="title" data-reveal>온라인에서의 첫인상은<br />진료 전 신뢰 형성의 시작입니다.</h2>
+        </div>
+        <div class="table-wrap" data-reveal>
+          <table class="ctable">
+            <thead>
+              <tr>
+                <th></th>
+                <th><span class="co" tabindex="0">서울하늘치과<img class="co-pop" src="./images/system_4_1.jpg" alt="서울하늘치과 홈페이지 화면" loading="lazy" /></span></th>
+                <th><span class="co" tabindex="0">UC강남치과<img class="co-pop" src="./images/system_4_2.jpg" alt="UC강남치과 홈페이지 화면" loading="lazy" /></span></th>
+                <th><span class="co" tabindex="0">W치과<img class="co-pop" src="./images/system_4_3.jpg" alt="W치과 홈페이지 화면" loading="lazy" /></span></th>
+                <th class="is-target">시스템치과</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>신뢰감</th>
+                <td><span class="rate">●●●</span></td>
+                <td><span class="rate">●●●</span></td>
+                <td><span class="rate">●●</span></td>
+                <td class="is-target"><span class="rate rate--low">●</span><span class="tag-low">개선 필요</span></td>
+              </tr>
+              <tr>
+                <th>정보 전달력</th>
+                <td><span class="rate">●●●</span></td>
+                <td><span class="rate">●●</span></td>
+                <td><span class="rate">●●●</span></td>
+                <td class="is-target"><span class="rate rate--low">●</span><span class="tag-low">개선 필요</span></td>
+              </tr>
+              <tr>
+                <th>모바일 UX</th>
+                <td><span class="rate">●●</span></td>
+                <td><span class="rate">●●●</span></td>
+                <td><span class="rate">●●</span></td>
+                <td class="is-target"><span class="rate rate--low">●</span><span class="tag-low">개선 필요</span></td>
+              </tr>
+              <tr>
+                <th>정보 탐색</th>
+                <td><span class="rate">●●</span></td>
+                <td><span class="rate">●●●</span></td>
+                <td><span class="rate">●●</span></td>
+                <td class="is-target"><span class="rate rate--low">●●</span></td>
+              </tr>
+              <tr>
+                <th>상담 유도 구조</th>
+                <td><span class="rate">●●●</span></td>
+                <td><span class="rate">●●●</span></td>
+                <td><span class="rate">●●</span></td>
+                <td class="is-target"><span class="rate rate--low">●</span><span class="tag-low">개선 필요</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ UX STRATEGY (숨김) ============ -->
+    <section class="section" id="strategy" style="display: none">
+      <div class="container">
+        <div class="head">
+          <span class="label" data-reveal>UX Strategy</span>
+          <h2 class="title" data-reveal>신뢰를 다시 설계하기 위한<br />3가지 원칙</h2>
+        </div>
+        <div class="strategies">
+          <article class="scard" data-reveal>
+            <p class="scard__no">STRATEGY 01</p>
+            <h3 class="scard__title">가독성</h3>
+            <div class="scard__ba">
+              <div class="ba-pill ba-pill--b"><small>Before</small>정보가 분산</div>
+              <div class="ba-pill ba-pill--a"><small>After</small>핵심 정보 집중</div>
+            </div>
+          </article>
+          <article class="scard" data-reveal>
+            <p class="scard__no">STRATEGY 02</p>
+            <h3 class="scard__title">통일성</h3>
+            <div class="scard__ba">
+              <div class="ba-pill ba-pill--b"><small>Before</small>콘텐츠 규칙 부재</div>
+              <div class="ba-pill ba-pill--a"><small>After</small>일관된 구조</div>
+            </div>
+          </article>
+          <article class="scard" data-reveal>
+            <p class="scard__no">STRATEGY 03</p>
+            <h3 class="scard__title">전문성</h3>
+            <div class="scard__ba">
+              <div class="ba-pill ba-pill--b"><small>Before</small>혜택 중심 구성</div>
+              <div class="ba-pill ba-pill--a"><small>After</small>전문 콘텐츠 중심</div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 06 INFORMATION ARCHITECTURE ============ -->
+    <section class="section section--soft">
+      <div class="container">
+        <div class="head">
+          <span class="label" data-reveal>Information Architecture</span>
+          <h2 class="title" data-reveal>사용자 중심으로<br />정보 구조를 재설계했습니다.</h2>
+        </div>
+        <div class="ia">
+          <div class="ia__col" data-reveal>
+            <p class="ia__tag">Before · 기존 구조</p>
+            <div class="ia__list">
+              <div class="ia__item">임플란트</div>
+              <div class="ia__item">치과소개</div>
+              <div class="ia__item">일반진료</div>
+              <div class="ia__item">심미보철</div>
+              <div class="ia__item">밀크네이트</div>
+            </div>
+          </div>
+          <div class="ia__arrow" data-reveal>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+          <div class="ia__col ia__col--after" data-reveal>
+            <p class="ia__tag">After · 개선 구조</p>
+            <div class="ia__list">
+              <div class="ia__item">치과소개</div>
+              <div class="ia__item">임플란트</div>
+              <div class="ia__item">심미보철</div>
+              <div class="ia__item">일반진료</div>
+              <div class="ia__item">디지털 진료 시스템</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 07 USER JOURNEY (ink) ============ -->
+    <section class="section section--ink">
+      <div class="container">
+        <div class="head">
+          <span class="label" data-reveal>User Journey</span>
+          <h2 class="title" data-reveal>신뢰 형성에서<br />예약까지의 흐름 설계</h2>
+        </div>
+        <div class="journey">
+          <div class="jstep" data-reveal>
+            <div class="jstep__node"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+            <div class="jstep__body"><p class="jstep__no">01</p><h3 class="jstep__title">브랜드 신뢰 형성</h3></div>
+          </div>
+          <div class="jstep" data-reveal>
+            <div class="jstep__node"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+            <div class="jstep__body"><p class="jstep__no">02</p><h3 class="jstep__title">전문성 확인</h3></div>
+          </div>
+          <div class="jstep" data-reveal>
+            <div class="jstep__node"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
+            <div class="jstep__body"><p class="jstep__no">03</p><h3 class="jstep__title">진료 정보 탐색</h3></div>
+          </div>
+          <div class="jstep" data-reveal>
+            <div class="jstep__node"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h4"/></svg></div>
+            <div class="jstep__body"><p class="jstep__no">04</p><h3 class="jstep__title">디지털 진료 시스템 확인</h3></div>
+          </div>
+          <div class="jstep" data-reveal>
+            <div class="jstep__node"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+            <div class="jstep__body"><p class="jstep__no">05</p><h3 class="jstep__title">상담 예약</h3></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PAGE RESTRUCTURING (BEFORE/AFTER 자동 스크롤) ============ -->
+    <section class="section section--soft" id="restructuring">
+      <div class="container">
+        <div class="head restruct-head" data-reveal>
+          <span class="label">Page Restructuring</span>
+          <h2 class="title">자극적인 콘텐츠를<br />안정적이고 신뢰감 있게</h2>
+        </div>
+        <div class="restruct-rows">
+          <!-- STEP 01 : 이미지 좌 / 텍스트 우 -->
+          <div class="rrow" data-reveal>
+            <div class="rrow__media">
+              <img class="rimg" src="./images/system_p_1-1.jpg" alt="사용자 중심으로 다시 짠 정보 구조" />
+            </div>
+            <div class="rrow__text">
+              <p class="rstep">STEP 01 — Information Architecture</p>
+              <h3 class="rtitle">사용자 중심으로<br />다시 짠 정보 구조</h3>
+              <p class="rdesc">전문 분야 위주의 메뉴를 사용자 언어로 바꾸고, 흩어져 있던 장비 콘텐츠를 ‘디지털 진료 시스템’으로 통합했습니다. ‘임플란트 → 심미보철’처럼 기능적 가치와 전문성이 함께 전달되도록 메뉴를 재구성했습니다.</p>
+            </div>
+          </div>
+          <!-- STEP 02 : 텍스트 좌 / 이미지 우 -->
+          <div class="rrow rrow--rev" data-reveal>
+            <div class="rrow__media">
+              <video class="rvideo" src="./videos/system_hero_01.mp4" muted loop playsinline preload="metadata" data-autoplay-inview aria-label="히어로 영상"></video>
+            </div>
+            <div class="rrow__text">
+              <p class="rstep">STEP 02 — Content Strategy</p>
+              <h3 class="rtitle">결과 사진에서<br />과정의 신뢰로</h3>
+              <p class="rdesc">전후 사진·할인 중심의 콘텐츠를, 서울대 출신 의료진·디지털 장비·진료 프로세스 중심으로 전환했습니다. AI로 수술 모션 영상과 장비 이미지를 제작해 더 전문적이고 신뢰감 있는 콘텐츠를 구성했습니다.</p>
+            </div>
+          </div>
+          <!-- STEP 03 : 이미지 좌 / 텍스트 우 -->
+          <div class="rrow" data-reveal>
+            <div class="rrow__media">
+              <img class="rimg" src="./images/system_p_3.jpg" alt="신뢰 형성에서 예약 전환까지 하나의 여정" />
+            </div>
+            <div class="rrow__text">
+              <p class="rstep">STEP 03 — User Flow &amp; CTA</p>
+              <h3 class="rtitle">신뢰 형성에서<br />예약 전환까지 하나의 여정</h3>
+              <p class="rdesc">병원 소개 → 의료진 신뢰 → 진료 강점 → 디지털 장비 → 환자 안심 콘텐츠 순으로 배치하고, 마지막에 상담 예약 CTA를 연결했습니다. 단순한 정보 나열이 아닌 ‘신뢰 → 전환’의 사용자 여정으로 설계했습니다.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ BEFORE & AFTER (slider, 가장 크게) ============ -->
+    <section class="section" id="beforeafter">
+      <div class="container">
+        <div class="ba-top" data-reveal>
+          <div class="head">
+            <span class="label">Before &amp; After</span>
+            <h2 class="title">전략에 생성형 AI를 더하다.</h2>
+            <p class="lead">생성형 AI(Midjourney, ChatGPT 등) 이미지·영상을 통해 고급스러운 디자인을 보완했습니다.</p>
+          </div>
+          <div class="ba-logos">
+            <div class="ai-badge ai-badge--mj">
+              <span class="ai-badge__circle"><img src="./images/Midjourney_Emblem.png" alt="Midjourney" /></span>
+              <span class="ai-badge__name">Midjourney</span>
+            </div>
+            <div class="ai-badge ai-badge--gpt">
+              <span class="ai-badge__circle"><img src="./images/ChatGPT_Logo.png" alt="ChatGPT" /></span>
+              <span class="ai-badge__name">ChatGPT</span>
+            </div>
+          </div>
+        </div>
+        <div class="bacarousel" data-reveal>
+          <button class="bacarousel__arrow bacarousel__arrow--prev" type="button" aria-label="이전 케이스">&#8249;</button>
+          <button class="bacarousel__arrow bacarousel__arrow--next" type="button" aria-label="다음 케이스">&#8250;</button>
+          <div class="bacarousel__viewport">
+        <div class="bablock">
+          <!-- CASE 01 -->
+          <div class="bacase" data-reveal-scale>
+            <div class="bacase__head"><p class="bacase__no">CASE 01</p><h3 class="bacase__title">메인페이지</h3></div>
+            <div class="ba">
+              <div class="ba__layer ba__layer--before"><img src="./images/system_6_1.2.jpg" alt="메인페이지 Before" /></div>
+              <span class="ba__tag ba__tag--before">BEFORE</span>
+              <div class="ba__after"><div class="ba__after-inner"><img src="./images/system_6_1.1.jpg" alt="메인페이지 After" /></div></div>
+              <span class="ba__tag ba__tag--after">AFTER</span>
+              <div class="ba__handle"></div>
+              <div class="ba__knob" aria-hidden="true">⟺</div>
+              <input class="ba__range" type="range" min="0" max="100" value="50" aria-label="메인페이지 Before/After" />
+            </div>
+          </div>
+          <!-- CASE 02 -->
+          <div class="bacase" data-reveal-scale>
+            <div class="bacase__head"><p class="bacase__no">CASE 02</p><h3 class="bacase__title">의료진 소개</h3></div>
+            <div class="ba">
+              <div class="ba__layer ba__layer--before"><img src="./images/system_6_2.2.jpg" alt="의료진 소개 Before" /></div>
+              <span class="ba__tag ba__tag--before">BEFORE</span>
+              <div class="ba__after"><div class="ba__after-inner"><img src="./images/system_6_2.1.jpg" alt="의료진 소개 After" /></div></div>
+              <span class="ba__tag ba__tag--after">AFTER</span>
+              <div class="ba__handle"></div>
+              <div class="ba__knob" aria-hidden="true">⟺</div>
+              <input class="ba__range" type="range" min="0" max="100" value="50" aria-label="의료진 소개 Before/After" />
+            </div>
+          </div>
+          <!-- CASE 03 -->
+          <div class="bacase" data-reveal-scale>
+            <div class="bacase__head"><p class="bacase__no">CASE 03</p><h3 class="bacase__title">진료 상세</h3></div>
+            <div class="ba">
+              <div class="ba__layer ba__layer--before"><img src="./images/system_6_3.2.jpg" alt="진료 상세 Before" /></div>
+              <span class="ba__tag ba__tag--before">BEFORE</span>
+              <div class="ba__after"><div class="ba__after-inner"><img src="./images/system_6_3.1.jpg" alt="진료 상세 After" /></div></div>
+              <span class="ba__tag ba__tag--after">AFTER</span>
+              <div class="ba__handle"></div>
+              <div class="ba__knob" aria-hidden="true">⟺</div>
+              <input class="ba__range" type="range" min="0" max="100" value="50" aria-label="진료 상세 Before/After" />
+            </div>
+          </div>
+        </div>
+          </div>
+          <div class="bacarousel__dots">
+            <button class="bacarousel__dot is-active" type="button" aria-label="CASE 01 메인페이지"></button>
+            <button class="bacarousel__dot" type="button" aria-label="CASE 02 의료진 소개"></button>
+            <button class="bacarousel__dot" type="button" aria-label="CASE 03 진료 상세"></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 09 DESIGN SYSTEM ============ -->
+    <section class="section section--gray">
+      <div class="container container--wide">
+        <div class="head">
+          <span class="label" data-reveal>Design System</span>
+          <h2 class="title" data-reveal>일관된 신뢰를 위한 시스템</h2>
+        </div>
+        <div class="ds-row">
+          <div class="ds-block" data-reveal>
+            <h3>Color System</h3>
+            <div class="color-stack">
+              <div>
+                <div class="col-label">Primary — 브랜드 · 주요 액션</div>
+                <div class="swatch-primary">
+                  <span class="ph">#A12D2E</span>
+                  <span class="ps"><b>Burgundy</b>버튼 · 강조 · CTA<br>신뢰감 · 전문성</span>
+                </div>
+              </div>
+              <div>
+                <div class="col-label">Supporting / Tertiary</div>
+                <div class="swatches">
+                  <div class="swatch"><div class="chip-c" style="background:#D33B3B"></div><div class="meta"><div class="hex">#D33B3B</div><div class="role">Soft Red · 포인트</div></div></div>
+                  <div class="swatch"><div class="chip-c" style="background:#E9E6E2"></div><div class="meta"><div class="hex">#E9E6E2</div><div class="role">Light Gray · 배경</div></div></div>
+                  <div class="swatch"><div class="chip-c" style="background:#2A1011"></div><div class="meta"><div class="hex">#2A1011</div><div class="role">Deep · 다크 섹션</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ds-block" data-reveal>
+            <h3>Typography — A2Z</h3>
+            <div class="type-spec">Aa 가나다</div>
+            <div class="type-weights">
+              <span>Thin</span><span>Light</span><span>Regular</span><span>Medium</span><span>SemiBold</span>
+            </div>
+            <div class="type-scale">
+              <div class="ts ts--hero"><small>HERO · SemiBold 600</small>시스템치과</div>
+              <div class="ts ts--title"><small>TITLE · Medium 500</small>가격이 아닌 신뢰를 전하는</div>
+              <div class="ts ts--body"><small>BODY · Regular 400</small>가독성과 전문성을 고려한 통일 타이포그래피</div>
+            </div>
+          </div>
+        </div>
+        <div class="ds-block" data-reveal>
+          <h3>Components</h3>
+          <div class="comp-grid">
+            <div class="comp-card">
+              <div class="comp-body">
+                <span class="btn-ds btn-ds--primary">상담 신청</span>
+                <span class="btn-ds btn-ds--secondary">더 알아보기</span>
+                <span class="btn-ds btn-ds--ghost">자세히 보기</span>
+              </div>
+              <div class="comp-cap">Button · Primary / Secondary / Ghost</div>
+            </div>
+            <div class="comp-card">
+              <div class="comp-body"><div class="mini-card"><strong>진료 안내</strong><span>임플란트 · 교정 · 일반진료</span></div></div>
+              <div class="comp-cap">Card · radius 2</div>
+            </div>
+            <div class="comp-card">
+              <div class="comp-body"><span class="btn-ds btn-ds--primary">상담 신청하기 →</span></div>
+              <div class="comp-cap">CTA · 상담 전환</div>
+            </div>
+            <div class="comp-card">
+              <div class="comp-body"><span class="ds-ico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.4 2.3 7.2-6.3-4.6L5.7 21l2.3-7.2-6-4.4h7.6z"/></svg></span></div>
+              <div class="comp-cap">Icon · 24px stroke</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 10 DEVELOPMENT & COLLABORATION ============ -->
+    <section class="section">
+      <div class="container">
+        <div class="head">
+          <span class="label" data-reveal>Development</span>
+          <h2 class="title" data-reveal>기획부터 디자인,<br />퍼블리싱까지 직접 진행했습니다.</h2>
+        </div>
+        <div class="tools" data-reveal>
+          <span class="tool"><i></i>Figma</span>
+          <span class="tool"><i></i>Photoshop</span>
+          <span class="tool"><i></i>Illustrator</span>
+          <span class="tool"><i></i>VS Code</span>
+          <span class="tool"><i></i>GitHub</span>
+          <span class="tool"><i></i>Claude Code</span>
+        </div>
+        <div class="process" data-reveal>
+          <span class="pstep">기획</span><span class="parrow">→</span>
+          <span class="pstep">디자인</span><span class="parrow">→</span>
+          <span class="pstep">퍼블리싱</span><span class="parrow">→</span>
+          <span class="pstep">배포</span><span class="parrow">→</span>
+          <span class="pstep pstep--last">제안
+
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 11 EXPECTED IMPACT ============ -->
+    <section class="section impact" id="impact">
+      <div class="container">
+        <div class="head">
+          <span class="label" data-reveal>Expected Impact</span>
+          <h2 class="title" data-reveal>병원의 브랜드 경쟁력을<br />온라인에서도 전달할 수 있도록</h2>
+        </div>
+        <div class="impacts">
+          <div class="icard" data-reveal><p class="icard__no">IMPACT 01</p><h3 class="icard__title">브랜드 신뢰도 향상</h3></div>
+          <div class="icard" data-reveal><p class="icard__no">IMPACT 02</p><h3 class="icard__title">정보 탐색 효율 향상</h3></div>
+          <div class="icard" data-reveal><p class="icard__no">IMPACT 03</p><h3 class="icard__title">모바일 UX 개선</h3></div>
+          <div class="icard" data-reveal><p class="icard__no">IMPACT 04</p><h3 class="icard__title">상담 전환 구조 최적화</h3></div>
+          <div class="icard" data-reveal><p class="icard__no">IMPACT 05</p><h3 class="icard__title">브랜드 이미지 강화</h3></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 12 RETROSPECTIVE ============ -->
+    <section class="section retro">
+      <div class="container">
+        <div class="retro__wrap">
+          <span class="label" data-reveal>Retrospective</span>
+          <div class="retro__rule" data-reveal aria-hidden="true"></div>
+          <p class="retro__quote" data-reveal>좋은 의료 웹사이트는 많은 정보를 보여주는 것이 아니라, 사용자가 <b>신뢰를 형성하는 과정</b>을 설계하는 것이었습니다.</p>
+          <p class="retro__sub" data-reveal>또한 UX는 화면을 꾸미는 작업이 아니라, 비즈니스 목표와 사용자를 연결하는 구조라는 점을 경험했습니다.</p>
+          <div class="retro__cta" data-reveal>
+            <a class="btn btn--ghost" href="./index.html#dental">← 포트폴리오로 돌아가기</a>
+            <a class="btn btn--primary" href="https://kkm15921598.github.io/system_dental/index.html" target="_blank" rel="noopener">시스템치과 사이트 가기 ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER (공통) ============ -->
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <div class="site-footer__brand-box">
+        <p class="site-footer__brand">PORT<b>FOLIO</b></p>
+        <p class="site-footer__tag">시스템치과 홈페이지 리뉴얼 Case Study.</p>
+      </div>
+      <address class="site-footer__contact">
+        <span class="site-footer__label">CONTACT</span>
+        <a href="mailto:ujin2019@gmail.com">ujin2019@gmail.com</a>
+        <a href="tel:01020774869">010.2077.4869</a>
+        <span>Seoul, Korea</span>
+      </address>
+      <p class="site-footer__copy"><span>© 2026 PORTFOLIO. System Dental Renewal Case Study.</span><a class="to-top" href="#" onclick="window.scrollTo({ top: 0, behavior: 'smooth' }); return false;">맨 위로 ↑</a></p>
+    </div>
+  </footer>
+
+  <!-- ===== GSAP (CDN) ===== -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script>
+    (function () {
+      /* ---- Before/After 슬라이더 (여러 개 지원, 자동 왕복) ---- */
+      function initBA() {
+        var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        document.querySelectorAll(".ba").forEach(function (ba) {
+          var after = ba.querySelector(".ba__after");
+          var inner = ba.querySelector(".ba__after-inner");
+          var handle = ba.querySelector(".ba__handle");
+          var knob = ba.querySelector(".ba__knob");
+          var range = ba.querySelector(".ba__range");
+          if (!after || !range) return;
+          function setPos(p) {
+            p = Math.max(0, Math.min(100, p));
+            after.style.width = p + "%";
+            inner.style.width = ba.clientWidth + "px";
+            handle.style.left = p + "%";
+            knob.style.left = p + "%";
+            range.value = p;
+          }
+          range.addEventListener("input", function () { setPos(parseFloat(range.value)); });
+          window.addEventListener("resize", function () { setPos(parseFloat(range.value)); });
+          setPos(50);
+
+          /* 자동 애니메이션 — 사인파로 15%~85% 좌우 왕복.
+             마우스/터치로 조작 중에는 멈추고, 벗어나면 다시 자동 재생 */
+          var auto = !reduce;
+          var period = 5200; // 한 번 왕복 주기(ms)
+          function tick(ts) {
+            if (auto) {
+              var p = 50 + 50 * Math.sin((ts % period) / period * Math.PI * 2);
+              setPos(p);
+            }
+            requestAnimationFrame(tick);
+          }
+          requestAnimationFrame(tick);
+
+          function pause() { auto = false; }
+          function resume() { if (!reduce) auto = true; }
+          range.addEventListener("pointerdown", pause);
+          range.addEventListener("pointerenter", pause);
+          ba.addEventListener("mouseenter", pause);
+          ba.addEventListener("mouseleave", resume);
+          range.addEventListener("touchstart", pause, { passive: true });
+        });
+      }
+
+      /* ---- 스크롤 리빌 ---- */
+      function initReveal() {
+        var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (typeof gsap === "undefined" || reduce) { document.documentElement.classList.add("no-anim"); return; }
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.utils.toArray("[data-reveal]").forEach(function (el) {
+          gsap.to(el, { opacity: 1, y: 0, duration: 1.1, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 88%", toggleActions: "play none none none" } });
+        });
+        gsap.utils.toArray("[data-reveal-scale]").forEach(function (el) {
+          gsap.to(el, { opacity: 1, scale: 1, duration: 1.1, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 90%", toggleActions: "play none none none" } });
+        });
+        gsap.to(".hero [data-reveal], .hero [data-reveal-scale]", { opacity: 1, y: 0, scale: 1, duration: 1, ease: "power3.out", stagger: 0.1 });
+      }
+
+      /* ---- Before/After 케이스 캐러셀 ---- */
+      function initBACarousel() {
+        document.querySelectorAll(".bacarousel").forEach(function (car) {
+          var track = car.querySelector(".bablock");
+          var slides = car.querySelectorAll(".bacase");
+          var dots = car.querySelectorAll(".bacarousel__dot");
+          var prev = car.querySelector(".bacarousel__arrow--prev");
+          var next = car.querySelector(".bacarousel__arrow--next");
+          if (!track || !slides.length) return;
+          var i = 0, n = slides.length;
+          function go(idx) {
+            i = (idx + n) % n;
+            track.style.transform = "translateX(" + (-i * 100) + "%)";
+            dots.forEach(function (d, k) { d.classList.toggle("is-active", k === i); });
+          }
+          if (prev) prev.addEventListener("click", function () { go(i - 1); });
+          if (next) next.addEventListener("click", function () { go(i + 1); });
+          dots.forEach(function (d, k) { d.addEventListener("click", function () { go(k); }); });
+          go(0);
+        });
+      }
+
+      /* ---- BEFORE/AFTER 자동 스크롤 (프레임 hover 시 정지) ---- */
+      function initAutoScroll() {
+        var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        document.querySelectorAll("[data-autoscroll]").forEach(function (img) {
+          var win = img.parentElement;
+          if (reduce) { win.style.overflowY = "auto"; return; }
+          function run() {
+            var dist = img.clientHeight - win.clientHeight;
+            if (dist <= 0) return;
+            img.style.transition = "none";
+            var pos = 0, dir = 1, paused = false, last = null, hold = 0;
+            var speed = dist / 16000; /* 16초에 전체 길이 1회 */
+            function frame(t) {
+              if (last === null) last = t;
+              var dt = t - last; last = t;
+              if (!paused) {
+                if (hold > 0) { hold -= dt; }
+                else {
+                  pos += dir * speed * dt;
+                  if (pos >= dist) { pos = dist; dir = -1; hold = 900; }
+                  else if (pos <= 0) { pos = 0; dir = 1; hold = 900; }
+                  img.style.transform = "translateY(" + (-pos) + "px)";
+                }
+              }
+              requestAnimationFrame(frame);
+            }
+            requestAnimationFrame(frame);
+            function pause() { paused = true; }
+            function resume() { paused = false; last = null; }
+            win.addEventListener("mouseenter", pause);
+            win.addEventListener("focusin", pause);
+            win.addEventListener("mouseleave", resume);
+            win.addEventListener("focusout", resume);
+          }
+          if (img.complete) { run(); } else { img.addEventListener("load", run); }
+        });
+      }
+
+      /* ---- 화면에 들어오면 영상 자동 재생, 벗어나면 일시정지 ---- */
+      function initInViewVideos() {
+        var vids = document.querySelectorAll("video[data-autoplay-inview]");
+        if (!vids.length) return;
+        vids.forEach(function (v) { v.muted = true; });
+        if (!("IntersectionObserver" in window)) {
+          vids.forEach(function (v) { v.play().catch(function () {}); });
+          return;
+        }
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { e.target.play().catch(function () {}); }
+            else { e.target.pause(); }
+          });
+        }, { threshold: 0.35 });
+        vids.forEach(function (v) { io.observe(v); });
+      }
+
+      /* ---- Why 섹션이 화면에 들어오면 숫자 라이트 스윕 시작 ---- */
+      function initWhyShine() {
+        var why = document.getElementById("why");
+        if (!why) return;
+        if (!("IntersectionObserver" in window)) { why.classList.add("is-inview"); return; }
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            why.classList.toggle("is-inview", e.isIntersecting);
+          });
+        }, { threshold: 0.3 });
+        io.observe(why);
+      }
+
+      initBA();
+      initBACarousel();
+      initAutoScroll();
+      initInViewVideos();
+      initWhyShine();
+      initReveal();
+    })();
+  </script>
+</body>
+</html>
