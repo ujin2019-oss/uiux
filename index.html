@@ -207,14 +207,14 @@
         <header class="ap-head" data-reveal>
           <p class="ap-eyebrow">ALL PROJECT</p>
           <div class="ap-tabs" role="tablist" aria-label="프로젝트 분류">
-            <button type="button" class="ap-tab is-active" data-tab="print" role="tab" aria-selected="false">PRINT</button>
+            <button type="button" class="ap-tab is-active" data-tab="uiux" role="tab" aria-selected="true">UIUX</button>
             <button type="button" class="ap-tab" data-tab="marketing" role="tab" aria-selected="false">WEB</button>
-            <button type="button" class="ap-tab" data-tab="uiux" role="tab" aria-selected="true">UIUX</button>
+            <button type="button" class="ap-tab" data-tab="print" role="tab" aria-selected="false">PRINT</button>
           </div>
         </header>
 
         <!-- ===== PRINT DESIGN ===== -->
-        <div class="ap-panel is-active" data-panel="print" role="tabpanel">
+        <div class="ap-panel" data-panel="print" role="tabpanel">
           <div class="print-showcase">
             <!-- <a class="print-hero" href="./images/print_hero.png" target="_blank" rel="noopener" aria-label="청우종합건설 건축박람회 부스 디자인">
               <img src="./images/print_hero.png" alt="청우종합건설 건축박람회 부스 디자인" />
@@ -615,7 +615,7 @@
         </div>
 
         <!-- ===== UIUX ===== -->
-        <div class="ap-panel" data-panel="uiux" role="tabpanel">
+        <div class="ap-panel is-active" data-panel="uiux" role="tabpanel">
           <div class="ap-grid">
             <a class="ap-card ap-card--browser" href="https://ujin2019-oss.github.io/jejustay/" target="_blank" rel="noopener"><!-- 1 -->
               <span class="ap-card__media">
@@ -784,398 +784,6 @@
         </div>
     </section>
   
-    <!-- =====================================================
-    SECTION 4 : PROJECT — JEJU STAY   ※ id="jejustay"
-    ===================================================== -->
-    <section class="project" id="jejustay" aria-label="디자인 프로젝트 - JEJU STAY">
-      <div class="project__inner">
-        <!-- 왼쪽: 프로젝트 비주얼 (자연스러운 겹침 슬라이더) -->
-        <div class="project__visual" data-reveal style="position: relative; overflow: hidden;">
-          <!-- 이미지 레이어들 (이미지 경로/개수 수정하는 곳) -->
-          <div class="js-slide-img" style="background-image: url('./images/booth_01.png'); opacity: 1;"></div>
-          <div class="js-slide-img" style="background-image: url('./images/booth_02.png'); opacity: 0;"></div>
-          <div class="js-slide-img" style="background-image: url('./images/booth_03.png'); opacity: 0;"></div>
-          <div class="js-slide-img" style="background-image: url('./images/booth_04.png'); opacity: 0;"></div>
-          <!-- <div class="js-slide-img" style="background-image: url('./images/booth_05.png'); opacity: 0;"></div> -->
-        </div>
-
-        <!-- 오른쪽: 프로젝트 정보 -->
-        <div class="project__info" data-reveal>
-          <h2 class="project__title">라이트 전시 부스</h2>
-
-          <dl class="project__list">
-            <div class="project__row">
-              <dt>Contribution</dt>
-              <dd>기획, 디자인 100%</dd>
-            </div>
-            <div class="project__row">
-              <dt>Project Purpose</dt>
-              <dd>기업 홍보를 위한 박람회 전시 wall 디자인</dd>
-            </div>
-            <div class="project__row">
-              <dt>Font Style</dt>
-              <dd>G마켓 산스</dd>
-            </div>
-            <div class="project__row">
-              <dt>Design Color</dt>
-              <dd>
-                <ul class="swatches">
-                  <li style="background:#25502e"></li>
-                  <li style="background:#10261a"></li>
-                </ul>
-              </dd>
-            </div>
-            <div class="project__row">
-              <dt>Tools Used</dt>
-              <dd>
-                <ul class="tools tools--sm">
-                  <li class="tool"><img src="./images/pro_ico02.png" alt="Adobe Illustrator" /></li>
-                </ul>
-              </dd>
-            </div>
-            <div class="project__row">
-              <dt>Material Stock</dt>
-              <dd>Backlit Fabric</dd>
-            </div>
-            <div class="project__row">
-              <dt>Duration</dt>
-              <dd>10일(집중작업)</dd>
-            </div>
-          </dl>
-
-          <div class="project__foot">
-            <a class="btn-outline" href="./images/booth_size.png" target="_blank" rel="noopener"><span class="btn-swap"><span class="btn-swap-en">View Details</span><span class="btn-swap-ko">자세히 보기</span></span> <span aria-hidden="true">→</span></a>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- 부드러운 전환 전용 스타일 & 스크립트 -->
-    <style>
-      /* 이미지 레이어 공통 스타일 지정 */
-      .project__visual .js-slide-img {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-size: cover;
-        background-position: center;
-        /* transition 시간을 0.5초로 설정하여 부드럽게 겹치도록 처리 */
-        transition: opacity 0.5s ease-in-out; 
-      }
-    </style>
-
-    <script>
-      (function() {
-        // 설정을 한눈에 모아두어 수정하기 쉽게 처리
-        const DISPLAY_TIME = 3500; // 이미지가 멈춰있는 시간 (3.5초)
-
-        const slides = document.querySelectorAll('#jejustay .js-slide-img');
-        if (!slides.length) return;
-
-        let currentIndex = 0;
-
-        setInterval(() => {
-          // 1. 현재 이미지는 서서히 사라짐
-          slides[currentIndex].style.opacity = '0';
-
-          // 2. 다음 이미지 인덱스 계산
-          currentIndex = (currentIndex + 1) % slides.length;
-
-          // 3. 다음 이미지는 서서히 나타남
-          slides[currentIndex].style.opacity = '1';
-        }, DISPLAY_TIME);
-      })();
-    </script>
-
-    <!-- =====================================================
-         SECTION 4 : PROJECT — JEJU STAY   ※ id="jejustay"
-         - 레이아웃: 왼쪽 비주얼 / 오른쪽 정보
-         - 배경 이미지: 아래 .project__visual 의 style url(...) 수정
-         - 텍스트·색상·툴: 아래 HTML에서 바로 수정
-         ===================================================== -->
-    <section class="project" id="jejustay" aria-label="디자인 프로젝트 - JEJU STAY">
-      <div class="project__inner" >
-        <!-- 왼쪽: 프로젝트 비주얼 (배경 이미지 교체: 아래 url(...) 부분 수정) -->
-        <div
-          class="project__visual"
-          data-reveal
-          style="background-image: url('./images/bb_mock01.png')"
-        ></div>
-
-        <!-- 오른쪽: 프로젝트 정보 -->
-        <div class="project__info" data-reveal>
-          <h2 class="project__title">기업 가이드북
-          </h2>
-
-          <dl class="project__list">
-            <div class="project__row">
-              <dt>Contribution</dt>
-              <dd>기획 100%, 디자인 50% (목차, 메인페이지 레이아웃)</dd>
-            </div>
-            <div class="project__row">
-              <dt>Project Purpose</dt>
-              <dd>자사 설계 및 시공 사례 모음으로 홍보를 위한 대책자</dd>
-            </div>
-            <div class="project__row">
-              <dt>Font Style</dt>
-              <dd>KoPubWorld 돋움체, KoPubWorld 바탕체</dd>
-              <!-- <dd>조선일보명조체，G마켓 산스</dd> -->
-            </div>
-            <div class="project__row">
-              <dt>Design Color</dt>
-              <dd>
-                <!-- 색상 스와치 (색상값 교체 가능) -->
-                <ul class="swatches">
-                  <li style="background:#305432"></li>
-                  <li style="background:#272727"></li>
-
-                </ul>
-              </dd>
-            </div>
-            <div class="project__row">
-              <dt>Tools Used</dt>
-              <dd>
-                <ul class="tools tools--sm">
-                  <li class="tool"><img src="./images/pro_ico01.png" alt="Figma" /></li>
-                  <li class="tool"><img src="./images/pro_ico02.png" alt="VS Code" /></li>
-                </ul>
-              </dd>
-            </div>
-            <div class="project__row">
-              <dt>Paper Stock</dt>
-              <dd>표지: 스노우 250g 무광코팅 / 내지: 스노우 150g</dd>
-            </div>
-            <div class="project__row">
-              <dt>Duration</dt>
-              <dd>14일(집중작업)</dd>
-            </div>
-          </dl>
-
-          <div class="project__foot">
-            <a class="btn-outline" href="./images/bb_pdf.pdf" target="_blank" rel="noopener"><span class="btn-swap"><span class="btn-swap-en">View Details</span><span class="btn-swap-ko">자세히 보기</span></span> <span aria-hidden="true">→</span></a>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- =====================================================
-         SECTION 4 : PROJECT — JEJU STAY   ※ id="jejustay"
-         - 레이아웃: 왼쪽 비주얼 / 오른쪽 정보
-         - 배경 이미지: 아래 .project__visual 의 style url(...) 수정
-         - 텍스트·색상·툴: 아래 HTML에서 바로 수정
-         ===================================================== -->
-    <section class="project" id="jejustay" aria-label="디자인 프로젝트 - JEJU STAY">
-      <div class="project__inner" >
-        <!-- 왼쪽: 프로젝트 비주얼 (배경 이미지 교체: 아래 url(...) 부분 수정) -->
-        <div
-          class="project__visual"
-          data-reveal
-          style="background-image: url('./images/bs_mock01.png')"
-        ></div>
-
-        <!-- 오른쪽: 프로젝트 정보 -->
-        <div class="project__info" data-reveal>
-          <h2 class="project__title">기업 브로셔
-          </h2>
-
-          <dl class="project__list">
-            <div class="project__row">
-              <dt>Contribution</dt>
-              <dd>기획, 디자인 100% </dd>
-            </div>
-            <div class="project__row">
-              <dt>Project Purpose</dt>
-              <dd>자사 설계 및 시공 사례 모음으로 홍보를 위한 소책자</dd>
-            </div>
-            <div class="project__row">
-              <dt>Font Style</dt>
-              <dd>조선일보명조체，G마켓 산스</dd>
-
-            </div>
-            <div class="project__row">
-              <dt>Design Color</dt>
-              <dd>
-                <!-- 색상 스와치 (색상값 교체 가능) -->
-                <ul class="swatches">
-                  <li style="background:#1e411a"></li>
-                  <li style="background:#e5f0d9"></li>
-                </ul>
-              </dd>
-            </div>
-            <div class="project__row">
-              <dt>Tools Used</dt>
-              <dd>
-                <ul class="tools tools--sm">
-                  <li class="tool"><img src="./images/pro_ico01.png" alt="Figma" /></li>
-                  <li class="tool"><img src="./images/pro_ico02.png" alt="VS Code" /></li>
-                </ul>
-              </dd>
-            </div>
-            <div class="project__row">
-              <dt>Paper Stock</dt>
-              <dd>스노우 200g</dd>
-            </div>
-            <div class="project__row">
-              <dt>Duration</dt>
-              <dd>14일(집중작업)</dd>
-            </div>
-          </dl>
-
-          <div class="project__foot">
-            <a class="btn-outline" href="./images/bs_pdf.pdf" target="_blank" rel="noopener"><span class="btn-swap"><span class="btn-swap-en">View Details</span><span class="btn-swap-ko">자세히 보기</span></span> <span aria-hidden="true">→</span></a>
-          </div>
-        </div>
-      </div>
-
-    </section>
-        <!-- =====================================================
-         SECTION 4 : PROJECT — JEJU STAY   ※ id="jejustay"
-         - 레이아웃: 왼쪽 비주얼 / 오른쪽 정보
-         - 배경 이미지: 아래 .project__visual 의 style url(...) 수정
-         - 텍스트·색상·툴: 아래 HTML에서 바로 수정
-         ===================================================== -->
-    <section class="project" id="jejustay" aria-label="디자인 프로젝트 - JEJU STAY">
-      <div class="project__inner" >
-        <!-- 왼쪽: 프로젝트 비주얼 (배경 이미지 교체: 아래 url(...) 부분 수정) -->
-        <div
-          class="project__visual"
-          data-reveal
-          style="background-image: url('./images/wee_mock.png')"
-        ></div>
-
-        <!-- 오른쪽: 프로젝트 정보 -->
-        <div class="project__info" data-reveal>
-          <h2 class="project__title">공공기관 교육자료
-          </h2>
-
-          <dl class="project__list">
-            <div class="project__row">
-              <dt>Contribution</dt>
-              <dd>디자인 100% </dd>
-            </div>
-            <div class="project__row">
-              <dt>Project Purpose</dt>
-              <dd>초등학교, 중학교 Wee 클래스 교육자료 디자인</dd>
-            </div>
-            <div class="project__row">
-              <dt>Font Style</dt>
-              <dd>KoPubWorld 돋움체, KoPubWorld 바탕체</dd>
-
-            </div>
-            <div class="project__row">
-              <dt>Design Color</dt>
-              <dd>
-                <!-- 색상 스와치 (색상값 교체 가능) -->
-                <ul class="swatches">
-                  <li style="background:#adbf5b"></li>
-                  <li style="background:#e27834"></li>
-                </ul>
-              </dd>
-            </div>
-            <div class="project__row">
-              <dt>Tools Used</dt>
-              <dd>
-                <ul class="tools tools--sm">
-                  <li class="tool"><img src="./images/pro_ico01.png" alt="Adobe Photoshop" /></li>
-                  <li class="tool"><img src="./images/pro_ico02.png" alt="Adobe Illustrator" /></li>
-                  <li class="tool"><img src="./images/ico_ppt.png" alt="PowerPoint" /></li>
-                </ul>
-              </dd>
-            </div>
-            <!-- <div class="project__row">
-              <dt>Paper Stock</dt>
-              <dd>스노우 200g</dd>
-            </div> -->
-            <div class="project__row">
-              <dt>Duration</dt>
-              <dd>10일(집중작업)</dd>
-            </div>
-          </dl>
-
-          <div class="project__foot">
-            <a class="btn-outline" href="./images/wee_middle.pdf" target="_blank" rel="noopener"><span class="btn-swap"><span class="btn-swap-en">View Details</span><span class="btn-swap-ko">자세히 보기</span></span> <span aria-hidden="true">→</span></a>
-          </div>
-        </div>
-      </div>
-    </section>
-      </section>
-        <!-- =====================================================
-         SECTION 4 : PROJECT — JEJU STAY   ※ id="jejustay"
-         - 레이아웃: 왼쪽 비주얼 / 오른쪽 정보
-         - 배경 이미지: 아래 .project__visual 의 style url(...) 수정
-         - 텍스트·색상·툴: 아래 HTML에서 바로 수정
-         ===================================================== -->
-    <section class="project" id="jejustay" aria-label="디자인 프로젝트 - JEJU STAY">
-      <div class="project__inner" >
-        <!-- 왼쪽: 프로젝트 비주얼 (배경 이미지 교체: 아래 url(...) 부분 수정) -->
-        <div
-          class="project__visual"
-          data-reveal
-          style="background-image: url('./images/pink_mock01.png')"
-        ></div>
-
-        <!-- 오른쪽: 프로젝트 정보 -->
-        <div class="project__info" data-reveal>
-          <h2 class="project__title">사회공헌 캠페인 제안서
-          </h2>
-
-          <dl class="project__list">
-            <div class="project__row">
-              <dt>Contribution</dt>
-              <dd>기획 30%, 디자인 100% </dd>
-            </div>
-            <div class="project__row">
-              <dt>Project Purpose</dt>
-              <dd>아모레퍼시픽 재단 핑크리본 캠페인 제안서</dd>
-            </div>
-            <div class="project__row">
-              <dt>Font Style</dt>
-              <dd>아리따 돋움, 아리따 부리</dd>
-
-            </div>
-            <div class="project__row">
-              <dt>Design Color</dt>
-              <dd>
-                <!-- 색상 스와치 (색상값 교체 가능) -->
-                <ul class="swatches">
-                  <li style="background:#e67298"></li>
-                  <li style="background:#a6a6a6"></li>
-                </ul>
-              </dd>
-            </div>
-            <div class="project__row">
-              <dt>Tools Used</dt>
-              <dd>
-                <ul class="tools tools--sm">
-                  <li class="tool"><img src="./images/ico_ppt.png" alt="PowerPoint" /></li>
-                  <li class="tool"><img src="./images/pro_ico01.png" alt="Adobe Photoshop" /></li>
-
-                </ul>
-              </dd>
-            </div>
-            <div class="project__row">
-              <dt>Paper Stock</dt>
-              <dd>백색 모조지 120g</dd>
-            </div>
-            <div class="project__row">
-              <dt>Duration</dt>
-              <dd>10일(집중작업)</dd>
-            </div>
-          </dl>
-
-          <div class="project__foot">
-            <a class="btn-outline" href="./images/pink_ribbon.pdf" target="_blank" rel="noopener"><span class="btn-swap"><span class="btn-swap-en">View Details</span><span class="btn-swap-ko">자세히 보기</span></span> <span aria-hidden="true">→</span></a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-
-
     <!-- =====================================================
          SECTION 4 : PROJECT — JEJU STAY   ※ id="jejustay"
          - 레이아웃: 왼쪽 비주얼 / 오른쪽 정보
@@ -1771,6 +1379,398 @@
         </div>
       </div>
     </section>
+
+
+    <!-- =====================================================
+    SECTION 4 : PROJECT — JEJU STAY   ※ id="jejustay"
+    ===================================================== -->
+    <section class="project" id="jejustay" aria-label="디자인 프로젝트 - JEJU STAY">
+      <div class="project__inner">
+        <!-- 왼쪽: 프로젝트 비주얼 (자연스러운 겹침 슬라이더) -->
+        <div class="project__visual" data-reveal style="position: relative; overflow: hidden;">
+          <!-- 이미지 레이어들 (이미지 경로/개수 수정하는 곳) -->
+          <div class="js-slide-img" style="background-image: url('./images/booth_01.png'); opacity: 1;"></div>
+          <div class="js-slide-img" style="background-image: url('./images/booth_02.png'); opacity: 0;"></div>
+          <div class="js-slide-img" style="background-image: url('./images/booth_03.png'); opacity: 0;"></div>
+          <div class="js-slide-img" style="background-image: url('./images/booth_04.png'); opacity: 0;"></div>
+          <!-- <div class="js-slide-img" style="background-image: url('./images/booth_05.png'); opacity: 0;"></div> -->
+        </div>
+
+        <!-- 오른쪽: 프로젝트 정보 -->
+        <div class="project__info" data-reveal>
+          <h2 class="project__title">라이트 전시 부스</h2>
+
+          <dl class="project__list">
+            <div class="project__row">
+              <dt>Contribution</dt>
+              <dd>기획, 디자인 100%</dd>
+            </div>
+            <div class="project__row">
+              <dt>Project Purpose</dt>
+              <dd>기업 홍보를 위한 박람회 전시 wall 디자인</dd>
+            </div>
+            <div class="project__row">
+              <dt>Font Style</dt>
+              <dd>G마켓 산스</dd>
+            </div>
+            <div class="project__row">
+              <dt>Design Color</dt>
+              <dd>
+                <ul class="swatches">
+                  <li style="background:#25502e"></li>
+                  <li style="background:#10261a"></li>
+                </ul>
+              </dd>
+            </div>
+            <div class="project__row">
+              <dt>Tools Used</dt>
+              <dd>
+                <ul class="tools tools--sm">
+                  <li class="tool"><img src="./images/pro_ico02.png" alt="Adobe Illustrator" /></li>
+                </ul>
+              </dd>
+            </div>
+            <div class="project__row">
+              <dt>Material Stock</dt>
+              <dd>Backlit Fabric</dd>
+            </div>
+            <div class="project__row">
+              <dt>Duration</dt>
+              <dd>10일(집중작업)</dd>
+            </div>
+          </dl>
+
+          <div class="project__foot">
+            <a class="btn-outline" href="./images/booth_size.png" target="_blank" rel="noopener"><span class="btn-swap"><span class="btn-swap-en">View Details</span><span class="btn-swap-ko">자세히 보기</span></span> <span aria-hidden="true">→</span></a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 부드러운 전환 전용 스타일 & 스크립트 -->
+    <style>
+      /* 이미지 레이어 공통 스타일 지정 */
+      .project__visual .js-slide-img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        /* transition 시간을 0.5초로 설정하여 부드럽게 겹치도록 처리 */
+        transition: opacity 0.5s ease-in-out; 
+      }
+    </style>
+
+    <script>
+      (function() {
+        // 설정을 한눈에 모아두어 수정하기 쉽게 처리
+        const DISPLAY_TIME = 3500; // 이미지가 멈춰있는 시간 (3.5초)
+
+        const slides = document.querySelectorAll('#jejustay .js-slide-img');
+        if (!slides.length) return;
+
+        let currentIndex = 0;
+
+        setInterval(() => {
+          // 1. 현재 이미지는 서서히 사라짐
+          slides[currentIndex].style.opacity = '0';
+
+          // 2. 다음 이미지 인덱스 계산
+          currentIndex = (currentIndex + 1) % slides.length;
+
+          // 3. 다음 이미지는 서서히 나타남
+          slides[currentIndex].style.opacity = '1';
+        }, DISPLAY_TIME);
+      })();
+    </script>
+
+    <!-- =====================================================
+         SECTION 4 : PROJECT — JEJU STAY   ※ id="jejustay"
+         - 레이아웃: 왼쪽 비주얼 / 오른쪽 정보
+         - 배경 이미지: 아래 .project__visual 의 style url(...) 수정
+         - 텍스트·색상·툴: 아래 HTML에서 바로 수정
+         ===================================================== -->
+    <section class="project" id="jejustay" aria-label="디자인 프로젝트 - JEJU STAY">
+      <div class="project__inner" >
+        <!-- 왼쪽: 프로젝트 비주얼 (배경 이미지 교체: 아래 url(...) 부분 수정) -->
+        <div
+          class="project__visual"
+          data-reveal
+          style="background-image: url('./images/bb_mock01.png')"
+        ></div>
+
+        <!-- 오른쪽: 프로젝트 정보 -->
+        <div class="project__info" data-reveal>
+          <h2 class="project__title">기업 가이드북
+          </h2>
+
+          <dl class="project__list">
+            <div class="project__row">
+              <dt>Contribution</dt>
+              <dd>기획 100%, 디자인 50% (목차, 메인페이지 레이아웃)</dd>
+            </div>
+            <div class="project__row">
+              <dt>Project Purpose</dt>
+              <dd>자사 설계 및 시공 사례 모음으로 홍보를 위한 대책자</dd>
+            </div>
+            <div class="project__row">
+              <dt>Font Style</dt>
+              <dd>KoPubWorld 돋움체, KoPubWorld 바탕체</dd>
+              <!-- <dd>조선일보명조체，G마켓 산스</dd> -->
+            </div>
+            <div class="project__row">
+              <dt>Design Color</dt>
+              <dd>
+                <!-- 색상 스와치 (색상값 교체 가능) -->
+                <ul class="swatches">
+                  <li style="background:#305432"></li>
+                  <li style="background:#272727"></li>
+
+                </ul>
+              </dd>
+            </div>
+            <div class="project__row">
+              <dt>Tools Used</dt>
+              <dd>
+                <ul class="tools tools--sm">
+                  <li class="tool"><img src="./images/pro_ico01.png" alt="Figma" /></li>
+                  <li class="tool"><img src="./images/pro_ico02.png" alt="VS Code" /></li>
+                </ul>
+              </dd>
+            </div>
+            <div class="project__row">
+              <dt>Paper Stock</dt>
+              <dd>표지: 스노우 250g 무광코팅 / 내지: 스노우 150g</dd>
+            </div>
+            <div class="project__row">
+              <dt>Duration</dt>
+              <dd>14일(집중작업)</dd>
+            </div>
+          </dl>
+
+          <div class="project__foot">
+            <a class="btn-outline" href="./images/bb_pdf.pdf" target="_blank" rel="noopener"><span class="btn-swap"><span class="btn-swap-en">View Details</span><span class="btn-swap-ko">자세히 보기</span></span> <span aria-hidden="true">→</span></a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         SECTION 4 : PROJECT — JEJU STAY   ※ id="jejustay"
+         - 레이아웃: 왼쪽 비주얼 / 오른쪽 정보
+         - 배경 이미지: 아래 .project__visual 의 style url(...) 수정
+         - 텍스트·색상·툴: 아래 HTML에서 바로 수정
+         ===================================================== -->
+    <section class="project" id="jejustay" aria-label="디자인 프로젝트 - JEJU STAY">
+      <div class="project__inner" >
+        <!-- 왼쪽: 프로젝트 비주얼 (배경 이미지 교체: 아래 url(...) 부분 수정) -->
+        <div
+          class="project__visual"
+          data-reveal
+          style="background-image: url('./images/bs_mock01.png')"
+        ></div>
+
+        <!-- 오른쪽: 프로젝트 정보 -->
+        <div class="project__info" data-reveal>
+          <h2 class="project__title">기업 브로셔
+          </h2>
+
+          <dl class="project__list">
+            <div class="project__row">
+              <dt>Contribution</dt>
+              <dd>기획, 디자인 100% </dd>
+            </div>
+            <div class="project__row">
+              <dt>Project Purpose</dt>
+              <dd>자사 설계 및 시공 사례 모음으로 홍보를 위한 소책자</dd>
+            </div>
+            <div class="project__row">
+              <dt>Font Style</dt>
+              <dd>조선일보명조체，G마켓 산스</dd>
+
+            </div>
+            <div class="project__row">
+              <dt>Design Color</dt>
+              <dd>
+                <!-- 색상 스와치 (색상값 교체 가능) -->
+                <ul class="swatches">
+                  <li style="background:#1e411a"></li>
+                  <li style="background:#e5f0d9"></li>
+                </ul>
+              </dd>
+            </div>
+            <div class="project__row">
+              <dt>Tools Used</dt>
+              <dd>
+                <ul class="tools tools--sm">
+                  <li class="tool"><img src="./images/pro_ico01.png" alt="Figma" /></li>
+                  <li class="tool"><img src="./images/pro_ico02.png" alt="VS Code" /></li>
+                </ul>
+              </dd>
+            </div>
+            <div class="project__row">
+              <dt>Paper Stock</dt>
+              <dd>스노우 200g</dd>
+            </div>
+            <div class="project__row">
+              <dt>Duration</dt>
+              <dd>14일(집중작업)</dd>
+            </div>
+          </dl>
+
+          <div class="project__foot">
+            <a class="btn-outline" href="./images/bs_pdf.pdf" target="_blank" rel="noopener"><span class="btn-swap"><span class="btn-swap-en">View Details</span><span class="btn-swap-ko">자세히 보기</span></span> <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </div>
+
+    </section>
+        <!-- =====================================================
+         SECTION 4 : PROJECT — JEJU STAY   ※ id="jejustay"
+         - 레이아웃: 왼쪽 비주얼 / 오른쪽 정보
+         - 배경 이미지: 아래 .project__visual 의 style url(...) 수정
+         - 텍스트·색상·툴: 아래 HTML에서 바로 수정
+         ===================================================== -->
+    <section class="project" id="jejustay" aria-label="디자인 프로젝트 - JEJU STAY">
+      <div class="project__inner" >
+        <!-- 왼쪽: 프로젝트 비주얼 (배경 이미지 교체: 아래 url(...) 부분 수정) -->
+        <div
+          class="project__visual"
+          data-reveal
+          style="background-image: url('./images/wee_mock.png')"
+        ></div>
+
+        <!-- 오른쪽: 프로젝트 정보 -->
+        <div class="project__info" data-reveal>
+          <h2 class="project__title">공공기관 교육자료
+          </h2>
+
+          <dl class="project__list">
+            <div class="project__row">
+              <dt>Contribution</dt>
+              <dd>디자인 100% </dd>
+            </div>
+            <div class="project__row">
+              <dt>Project Purpose</dt>
+              <dd>초등학교, 중학교 Wee 클래스 교육자료 디자인</dd>
+            </div>
+            <div class="project__row">
+              <dt>Font Style</dt>
+              <dd>KoPubWorld 돋움체, KoPubWorld 바탕체</dd>
+
+            </div>
+            <div class="project__row">
+              <dt>Design Color</dt>
+              <dd>
+                <!-- 색상 스와치 (색상값 교체 가능) -->
+                <ul class="swatches">
+                  <li style="background:#adbf5b"></li>
+                  <li style="background:#e27834"></li>
+                </ul>
+              </dd>
+            </div>
+            <div class="project__row">
+              <dt>Tools Used</dt>
+              <dd>
+                <ul class="tools tools--sm">
+                  <li class="tool"><img src="./images/pro_ico01.png" alt="Adobe Photoshop" /></li>
+                  <li class="tool"><img src="./images/pro_ico02.png" alt="Adobe Illustrator" /></li>
+                  <li class="tool"><img src="./images/ico_ppt.png" alt="PowerPoint" /></li>
+                </ul>
+              </dd>
+            </div>
+            <!-- <div class="project__row">
+              <dt>Paper Stock</dt>
+              <dd>스노우 200g</dd>
+            </div> -->
+            <div class="project__row">
+              <dt>Duration</dt>
+              <dd>10일(집중작업)</dd>
+            </div>
+          </dl>
+
+          <div class="project__foot">
+            <a class="btn-outline" href="./images/wee_middle.pdf" target="_blank" rel="noopener"><span class="btn-swap"><span class="btn-swap-en">View Details</span><span class="btn-swap-ko">자세히 보기</span></span> <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+      </section>
+        <!-- =====================================================
+         SECTION 4 : PROJECT — JEJU STAY   ※ id="jejustay"
+         - 레이아웃: 왼쪽 비주얼 / 오른쪽 정보
+         - 배경 이미지: 아래 .project__visual 의 style url(...) 수정
+         - 텍스트·색상·툴: 아래 HTML에서 바로 수정
+         ===================================================== -->
+    <section class="project" id="jejustay" aria-label="디자인 프로젝트 - JEJU STAY">
+      <div class="project__inner" >
+        <!-- 왼쪽: 프로젝트 비주얼 (배경 이미지 교체: 아래 url(...) 부분 수정) -->
+        <div
+          class="project__visual"
+          data-reveal
+          style="background-image: url('./images/pink_mock01.png')"
+        ></div>
+
+        <!-- 오른쪽: 프로젝트 정보 -->
+        <div class="project__info" data-reveal>
+          <h2 class="project__title">사회공헌 캠페인 제안서
+          </h2>
+
+          <dl class="project__list">
+            <div class="project__row">
+              <dt>Contribution</dt>
+              <dd>기획 30%, 디자인 100% </dd>
+            </div>
+            <div class="project__row">
+              <dt>Project Purpose</dt>
+              <dd>아모레퍼시픽 재단 핑크리본 캠페인 제안서</dd>
+            </div>
+            <div class="project__row">
+              <dt>Font Style</dt>
+              <dd>아리따 돋움, 아리따 부리</dd>
+
+            </div>
+            <div class="project__row">
+              <dt>Design Color</dt>
+              <dd>
+                <!-- 색상 스와치 (색상값 교체 가능) -->
+                <ul class="swatches">
+                  <li style="background:#e67298"></li>
+                  <li style="background:#a6a6a6"></li>
+                </ul>
+              </dd>
+            </div>
+            <div class="project__row">
+              <dt>Tools Used</dt>
+              <dd>
+                <ul class="tools tools--sm">
+                  <li class="tool"><img src="./images/ico_ppt.png" alt="PowerPoint" /></li>
+                  <li class="tool"><img src="./images/pro_ico01.png" alt="Adobe Photoshop" /></li>
+
+                </ul>
+              </dd>
+            </div>
+            <div class="project__row">
+              <dt>Paper Stock</dt>
+              <dd>백색 모조지 120g</dd>
+            </div>
+            <div class="project__row">
+              <dt>Duration</dt>
+              <dd>10일(집중작업)</dd>
+            </div>
+          </dl>
+
+          <div class="project__foot">
+            <a class="btn-outline" href="./images/pink_ribbon.pdf" target="_blank" rel="noopener"><span class="btn-swap"><span class="btn-swap-en">View Details</span><span class="btn-swap-ko">자세히 보기</span></span> <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
 
 
     <!-- =========================================================
