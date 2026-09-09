@@ -480,6 +480,110 @@ html {
   color: var(--color-white);
 }
 
+/* PROJECT : 떡선물세트 커머스 */
+.project--rice-gift {
+  background: linear-gradient(145deg, #fffaf4 0%, #f4efe8 100%);
+}
+.rice-gift__visual {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 0.78fr;
+  grid-template-rows: 1fr 1fr;
+  gap: clamp(14px, 1.8vw, 28px);
+  align-content: center;
+  padding: clamp(64px, 7vw, 120px) clamp(28px, 6vw, 96px);
+  background:
+    linear-gradient(90deg, rgba(122, 51, 34, 0.1) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(122, 51, 34, 0.08) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+.rice-gift__thumb {
+  position: relative;
+  display: block;
+  align-self: stretch;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #f7efe4;
+  border: 1px solid rgba(122, 51, 34, 0.12);
+  box-shadow: 0 24px 60px rgba(84, 40, 20, 0.13);
+  transition: transform var(--duration-normal) var(--ease-out),
+    box-shadow var(--duration-normal) var(--ease-out);
+}
+.rice-gift__thumb--main {
+  grid-row: 1 / span 2;
+  align-self: center;
+}
+.rice-gift__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--duration-slow) var(--ease-out);
+}
+.rice-gift__thumb:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 32px 72px rgba(84, 40, 20, 0.18);
+}
+.rice-gift__thumb:hover img {
+  transform: scale(1.035);
+}
+
+.rice-gift-detail {
+  padding-block: clamp(96px, 10vw, 160px);
+  background: #f8f5ef;
+}
+.rice-gift-detail__inner {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding-inline: var(--container-padding);
+}
+.rice-gift-detail__head {
+  margin-bottom: clamp(36px, 5vw, 72px);
+}
+.rice-gift-detail__back {
+  display: inline-flex;
+  margin-bottom: 28px;
+  color: #7a3322;
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.02em;
+}
+.rice-gift-detail__back:hover {
+  color: var(--color-main);
+}
+.rice-gift-detail__eyebrow {
+  color: #7a3322;
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.12em;
+}
+.rice-gift-detail__title {
+  margin-top: 10px;
+  color: var(--color-text);
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-bold);
+  line-height: 1.2;
+  word-break: keep-all;
+}
+.rice-gift-detail__pages {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.rice-gift-detail__page {
+  display: block;
+  width: min(100%, 860px);
+  background: var(--color-white);
+  box-shadow: 0 20px 60px rgba(44, 34, 23, 0.12);
+}
+.rice-gift-detail__page + .rice-gift-detail__page {
+  margin-top: 0;
+}
+.rice-gift-detail__page img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
 /* PROJECT 03 : MODOO 리뉴얼 섹션 (시스템치과와 동일 레이아웃) */
 .project--modoo {
   min-height: 100vh;
@@ -1229,6 +1333,27 @@ html {
   .project__foot {
     justify-content: flex-start;
   }
+  .project--rice-gift .project__info {
+    padding-top: 56px;
+  }
+  .rice-gift__visual {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto;
+    padding: 96px var(--container-padding) 36px;
+  }
+  .rice-gift__thumb--main {
+    grid-row: auto;
+  }
+  .rice-gift-detail__inner {
+    padding-inline: 0;
+  }
+  .rice-gift-detail__head {
+    padding-inline: var(--container-padding);
+  }
+  .rice-gift-detail__page {
+    width: 100%;
+    box-shadow: none;
+  }
 
   .project--modoo {
     min-height: auto;
@@ -1366,6 +1491,9 @@ html {
   }
   .project__list dt {
     margin-bottom: 4px;
+  }
+  .rice-gift__visual {
+    grid-template-columns: 1fr;
   }
   .project-modoo__details {
     grid-template-columns: 1fr;
