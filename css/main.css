@@ -482,7 +482,7 @@ html {
 
 /* PROJECT : 떡선물세트 커머스 */
 .project--rice-gift {
-  background: linear-gradient(145deg, #fffaf4 0%, #f4efe8 100%);
+  background: var(--color-white);
 }
 .rice-gift__visual {
   position: relative;
@@ -527,7 +527,7 @@ html {
   transform: scale(1.035);
 }
 .project--bug-commerce {
-  background: linear-gradient(145deg, #f7fcff 0%, #e4f3ff 100%);
+  background: var(--color-white);
 }
 .bug-commerce__visual {
   background:
@@ -612,7 +612,7 @@ html {
 
 /* PROJECT : 건축 광고 디자인 */
 .project--arch-ad {
-  background: linear-gradient(145deg, #fbf9ff 0%, #eee9ff 100%);
+  background: var(--color-white);
 }
 .arch-ad__visual {
   display: grid;
