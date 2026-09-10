@@ -527,16 +527,16 @@ html {
   transform: scale(1.035);
 }
 .project--bug-commerce {
-  background: linear-gradient(145deg, #f3fbfa 0%, #e7f0f3 100%);
+  background: linear-gradient(145deg, #f7fcff 0%, #e4f3ff 100%);
 }
 .bug-commerce__visual {
   background:
-    linear-gradient(90deg, rgba(16, 43, 60, 0.1) 1px, transparent 1px),
-    linear-gradient(0deg, rgba(16, 43, 60, 0.08) 1px, transparent 1px);
+    linear-gradient(90deg, rgba(82, 158, 215, 0.13) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(82, 158, 215, 0.1) 1px, transparent 1px);
   background-size: 42px 42px, 42px 42px;
 }
 .project--bug-commerce .rice-gift__thumb {
-  background: #e8f3f1;
+  background: #edf8ff;
   border-color: rgba(16, 43, 60, 0.14);
   box-shadow: 0 24px 60px rgba(16, 43, 60, 0.15);
 }
@@ -548,7 +548,7 @@ html {
   background: #f8f5ef;
 }
 .bug-detail {
-  background: #edf6f5;
+  background: linear-gradient(145deg, #f7fcff 0%, #e4f3ff 100%);
 }
 .rice-gift-detail__inner {
   max-width: 1040px;
@@ -571,10 +571,10 @@ html {
 }
 .bug-detail .rice-gift-detail__back,
 .bug-detail .rice-gift-detail__eyebrow {
-  color: #1f8a70;
+  color: #2f7fbd;
 }
 .bug-detail .rice-gift-detail__back:hover {
-  color: #102b3c;
+  color: #185a8d;
 }
 .rice-gift-detail__eyebrow {
   color: #7a3322;
@@ -608,6 +608,117 @@ html {
   width: 100%;
   height: auto;
   display: block;
+}
+
+/* PROJECT : 건축 광고 디자인 */
+.project--arch-ad {
+  background: linear-gradient(145deg, #fbf9ff 0%, #eee9ff 100%);
+}
+.arch-ad__visual {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(140px, 0.46fr);
+  gap: clamp(16px, 2vw, 32px);
+  align-items: center;
+  padding: clamp(64px, 7vw, 120px) clamp(28px, 6vw, 96px);
+  background:
+    linear-gradient(90deg, rgba(151, 128, 255, 0.13) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(151, 128, 255, 0.1) 1px, transparent 1px);
+  background-size: 46px 46px;
+}
+.arch-ad__hero,
+.arch-ad__stack a {
+  display: block;
+  overflow: hidden;
+  background: #f2f0e8;
+  border: 1px solid rgba(36, 48, 38, 0.12);
+  box-shadow: 0 24px 60px rgba(36, 48, 38, 0.14);
+  transition: transform var(--duration-normal) var(--ease-out),
+    box-shadow var(--duration-normal) var(--ease-out);
+}
+.arch-ad__hero {
+  aspect-ratio: 1 / 1;
+}
+.arch-ad__stack {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(10px, 1vw, 16px);
+}
+.arch-ad__stack a {
+  aspect-ratio: 1 / 1;
+}
+.arch-ad__hero img,
+.arch-ad__stack img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--duration-slow) var(--ease-out);
+}
+.arch-ad__hero:hover,
+.arch-ad__stack a:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 32px 72px rgba(36, 48, 38, 0.2);
+}
+.arch-ad__hero:hover img,
+.arch-ad__stack a:hover img {
+  transform: scale(1.035);
+}
+
+.ad-detail {
+  padding-block: clamp(96px, 10vw, 160px);
+  background: var(--color-white);
+}
+.ad-detail__inner {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding-inline: var(--container-padding);
+}
+.ad-detail__head {
+  margin-bottom: clamp(36px, 5vw, 72px);
+}
+.ad-detail__back {
+  display: inline-flex;
+  margin-bottom: 28px;
+  color: #243026;
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.02em;
+}
+.ad-detail__back:hover {
+  color: var(--color-main);
+}
+.ad-detail__eyebrow {
+  color: #6f644b;
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.12em;
+}
+.ad-detail__title {
+  margin-top: 10px;
+  color: var(--color-text);
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-bold);
+  line-height: 1.2;
+}
+.ad-detail__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 1.7vw, 28px);
+}
+.ad-detail__grid a {
+  display: block;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #e7e2d5;
+  box-shadow: 0 18px 48px rgba(36, 48, 38, 0.12);
+}
+.ad-detail__grid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--duration-slow) var(--ease-out);
+}
+.ad-detail__grid a:hover img {
+  transform: scale(1.035);
 }
 
 /* PROJECT 03 : MODOO 리뉴얼 섹션 (시스템치과와 동일 레이아웃) */
@@ -1380,6 +1491,17 @@ html {
     width: 100%;
     box-shadow: none;
   }
+  .arch-ad__visual {
+    grid-template-columns: 1fr;
+    padding: 96px var(--container-padding) 36px;
+  }
+  .arch-ad__stack {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .ad-detail__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
 
   .project--modoo {
     min-height: auto;
@@ -1519,6 +1641,10 @@ html {
     margin-bottom: 4px;
   }
   .rice-gift__visual {
+    grid-template-columns: 1fr;
+  }
+  .arch-ad__stack,
+  .ad-detail__grid {
     grid-template-columns: 1fr;
   }
   .project-modoo__details {
