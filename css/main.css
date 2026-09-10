@@ -526,10 +526,29 @@ html {
 .rice-gift__thumb:hover img {
   transform: scale(1.035);
 }
-
+.project--bug-commerce {
+  background: linear-gradient(145deg, #f3fbfa 0%, #e7f0f3 100%);
+}
+.bug-commerce__visual {
+  background:
+    linear-gradient(90deg, rgba(16, 43, 60, 0.1) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(16, 43, 60, 0.08) 1px, transparent 1px);
+  background-size: 42px 42px, 42px 42px;
+}
+.project--bug-commerce .rice-gift__thumb {
+  background: #e8f3f1;
+  border-color: rgba(16, 43, 60, 0.14);
+  box-shadow: 0 24px 60px rgba(16, 43, 60, 0.15);
+}
+.project--bug-commerce .rice-gift__thumb:hover {
+  box-shadow: 0 32px 72px rgba(16, 43, 60, 0.2);
+}
 .rice-gift-detail {
   padding-block: clamp(96px, 10vw, 160px);
   background: #f8f5ef;
+}
+.bug-detail {
+  background: #edf6f5;
 }
 .rice-gift-detail__inner {
   max-width: 1040px;
@@ -549,6 +568,13 @@ html {
 }
 .rice-gift-detail__back:hover {
   color: var(--color-main);
+}
+.bug-detail .rice-gift-detail__back,
+.bug-detail .rice-gift-detail__eyebrow {
+  color: #1f8a70;
+}
+.bug-detail .rice-gift-detail__back:hover {
+  color: #102b3c;
 }
 .rice-gift-detail__eyebrow {
   color: #7a3322;
