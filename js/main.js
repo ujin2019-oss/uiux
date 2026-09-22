@@ -441,24 +441,146 @@
 })();
 
 /* =====================================================
-   ALL PROJECT — 탭 전환 (UIUX / MARKETING / PRINT DESIGN)
-   - .ap-tab[data-tab] 클릭 → 같은 data-panel 패널만 활성화
+   CAREER TYPE ORDER + ALL PROJECT FILTER
+   - type is not a filter. It only changes category priority.
+   - Change this object when category priority changes later.
    ===================================================== */
 (() => {
-  const tabs = document.querySelectorAll(".ap-tab");
-  const panels = document.querySelectorAll(".ap-panel");
-  if (!tabs.length) return;
-  tabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      const target = tab.dataset.tab;
-      tabs.forEach((t) => {
-        const on = t === tab;
-        t.classList.toggle("is-active", on);
-        t.setAttribute("aria-selected", on ? "true" : "false");
+  const categoryOrder = {
+    uiux: ["uiux", "web", "print"],
+    web: ["web", "uiux", "print"],
+    print: ["print", "web", "uiux"],
+  };
+
+  const supportedTypes = Object.keys(categoryOrder);
+  const panelAlias = {
+    marketing: "web",
+  };
+  let currentFilter = null;
+
+  function getCareerType() {
+    const params = new URLSearchParams(window.location.search);
+    const type = (params.get("type") || "uiux").toLowerCase();
+    return supportedTypes.includes(type) ? type : "uiux";
+  }
+
+  function getCategory(el) {
+    const raw = el.dataset.category || el.dataset.tab || el.dataset.panel || "";
+    return panelAlias[raw] || raw;
+  }
+
+  function getOrderMap() {
+    return categoryOrder[getCareerType()].reduce((map, category, index) => {
+      map[category] = index;
+      return map;
+    }, {});
+  }
+
+  function sortByCategory(elements, parent, beforeNode) {
+    const orderMap = getOrderMap();
+    elements
+      .map((el, index) => ({ el, index, category: getCategory(el) }))
+      .sort((a, b) => {
+        const orderA = orderMap[a.category] ?? Number.MAX_SAFE_INTEGER;
+        const orderB = orderMap[b.category] ?? Number.MAX_SAFE_INTEGER;
+        return orderA - orderB || a.index - b.index;
+      })
+      .forEach(({ el }) => {
+        parent.insertBefore(el, beforeNode || null);
       });
-      panels.forEach((p) => {
-        p.classList.toggle("is-active", p.dataset.panel === target);
+  }
+
+  function applyAllProjectTabOrder() {
+    const tabList = document.querySelector(".ap-tabs");
+    const tabs = Array.from(document.querySelectorAll(".ap-tab"));
+    if (!tabList || !tabs.length) return;
+
+    sortByCategory(tabs, tabList);
+  }
+
+  function applyAllProjectOrder() {
+    const allProject = document.querySelector(".all-project__inner");
+    const panels = Array.from(document.querySelectorAll(".ap-panel"));
+    if (!allProject || !panels.length) return;
+
+    panels.forEach((panel) => {
+      const category = getCategory(panel);
+      panel.dataset.category = category;
+      panel
+        .querySelectorAll(".ap-card, .print-card, .fb-card, .commerce-card")
+        .forEach((item) => {
+          if (!item.dataset.category) item.dataset.category = category;
+        });
+    });
+
+    sortByCategory(panels, allProject);
+  }
+
+  function applyDetailProjectOrder() {
+    const main = document.querySelector("#main");
+    const bridge = document.querySelector("#main > .bridge");
+    const projects = Array.from(
+      document.querySelectorAll("#main > .project[data-category]")
+    );
+    if (!main || !bridge || !projects.length) return;
+
+    sortByCategory(projects, main, bridge);
+  }
+
+  function setProjectFilter(target) {
+    const normalizedTarget = target === "marketing" ? "web" : target;
+    const tabs = Array.from(document.querySelectorAll(".ap-tab"));
+    const panels = Array.from(document.querySelectorAll(".ap-panel"));
+    if (!tabs.length || !panels.length) return;
+    currentFilter = normalizedTarget;
+
+    tabs.forEach((tab) => {
+      const tabTarget = tab.dataset.tab === "marketing" ? "web" : tab.dataset.tab;
+      const on = tabTarget === normalizedTarget;
+      tab.classList.toggle("is-active", on);
+      tab.setAttribute("aria-selected", on ? "true" : "false");
+    });
+
+    panels.forEach((panel) => {
+      panel.classList.toggle("is-active", getCategory(panel) === normalizedTarget);
+    });
+
+    if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+  }
+
+  function initAllProjectFilter() {
+    const tabs = Array.from(document.querySelectorAll(".ap-tab"));
+    if (!tabs.length) return;
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        setProjectFilter(tab.dataset.tab || getCareerType());
       });
     });
-  });
+
+    setProjectFilter(categoryOrder[getCareerType()][0]);
+  }
+
+  function applyCareerProjectOrder() {
+    applyAllProjectTabOrder();
+    applyAllProjectOrder();
+    applyDetailProjectOrder();
+    setProjectFilter(currentFilter || categoryOrder[getCareerType()][0]);
+  }
+
+  function initCareerProjectOrder() {
+    applyCareerProjectOrder();
+    initAllProjectFilter();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initCareerProjectOrder, {
+      once: true,
+    });
+  } else {
+    initCareerProjectOrder();
+  }
+
+  document.addEventListener("components:loaded", applyCareerProjectOrder);
+  window.addEventListener("pageshow", applyCareerProjectOrder);
 })();
